@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    
+
+
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">MyLogo</div>
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">&#9776;</label>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to My Portfolio</h1>
+            <p>Hi, I'm [Your Name], a [Your Profession].</p>
+            <a href="#projects" class="cta">View My Work</a>
+        </div>
+    </section>
+    <section id="about" class="about">
+        <div class="about-content">
+            <img src="data:image/jpeg;base64,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" alt="Profile Picture" class="profile-pic">
+            <div class="bio">
+                <h2>About Me</h2>
+                <p>Hello! I'm [Your Name], a [Your Profession] with a passion for [Your Passion]. I specialize in [Your Specialization] and have [X] years of experience in the field. My goal is to [Your Goal].</p>
+            </div>
+        </div>
+    </section>
+    <section class="education-section">
+        <div class="container8">
+            <h1 class="section-title">Education</h1>
+            <div class="card">
+                <i class="fa fa-graduation-cap"></i>
+                <h2>High School</h2>
+                <p>Graduated from XYZ High School with honors in 2015.</p>
+            </div>
+            <div class="card">
+                <i class="fa fa-university"></i>
+                <h2>Bachelor's Degree</h2>
+                <p>Completed a Bachelor's degree in Computer Science from ABC University in 2019.</p>
+            </div>
+            <div class="card">
+                <i class="fa fa-laptop-code"></i>
+                <h2>Online Courses</h2>
+                <p>Completed various online courses in web development, data science, and machine learning.</p>
+            </div>
+        </div>
+    </section>
+    <section class="skills">
+        <div class="container2">
+            <h2>Skills</h2>
+            <div class="skill-item">
+                <div class="skill-name">HTML</div>
+                <div class="skill-bar">
+                    <div class="skill-level html">100%</div>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">CSS</div>
+                <div class="skill-bar">
+                    <div class="skill-level css">100%</div>
+                </div>
+            </div>
+            <div class="skill-item">
+                <div class="skill-name">JavaScript</div>
+                <div class="skill-bar">
+                    <div class="skill-level javascript">50%</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="services">
+        <div class="container3">
+            <h2>Our Services</h2>
+            <div class="service">
+                <i class="fas fa-code"></i>
+                <h3>Frontend Development</h3>
+                <p>We specialize in building responsive and user-friendly frontend interfaces using the latest technologies.</p>
+            </div>
+            <div class="service">
+                <i class="fas fa-paint-brush"></i>
+                <h3>Graphic Designing</h3>
+                <p>Our graphic design team creates stunning visuals that communicate your brand's message effectively.</p>
+            </div>
+            <div class="service">
+                <i class="fas fa-cogs"></i>
+                <h3>Programming</h3>
+                <p>We offer custom programming solutions tailored to your specific needs, ensuring optimal performance and functionality.</p>
+            </div>
+        </div>
+    </section>
+    <section class="blog-section">
+        <div class="container">
+            <h1 class="section-title">Our Blog</h1>
+            <div class="blog-cards">
+                <div class="blog-card">
+                    <img src="https://via.placeholder.com/400x300?text=Web+Development" alt="Web Development">
+                    <div class="blog-content">
+                        <h2>Web Development Tips</h2>
+                        <p>Stay updated with the latest web development trends and tips. Learn how to create responsive and modern websites.</p>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <img src="https://via.placeholder.com/400x300?text=Web+Design" alt="Web Design">
+                    <div class="blog-content">
+                        <h2>Web Design Best Practices</h2>
+                        <p>Discover the best practices in web design to create visually appealing and user-friendly websites.</p>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <img src="https://via.placeholder.com/400x300?text=UI+UX" alt="UI/UX Design">
+                    <div class="blog-content">
+                        <h2>UI/UX Design Trends</h2>
+                        <p>Learn about the latest trends in UI/UX design and how to apply them to improve user experience.</p>
+                    </div>
+                </div>
+                <div class="blog-card">
+                    <img src="https://via.placeholder.com/400x300?text=Graphic+Design" alt="Graphic Design">
+                    <div class="blog-content">
+                        <h2>Graphic Design Tips</h2>
+                        <p>Get insights on the latest graphic design tips and techniques to enhance your creative projects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="freelancing-section">
+        <div class="container">
+            <h1 class="title">I'm Available for Freelancing</h1>
+            <p class="description">A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+            <button class="submit-btn">Submit</button>
+        </div>
+    </section>
+    <section class="contact-section">
+        <div class="container">
+            <h1 class="section-title">Contact Me</h1>
+            <p class="section-subtitle">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia</p>
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h2>Address</h2>
+                    <p>University of Swat Charbagh</p>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-phone-alt"></i>
+                    <h2>Contact Number</h2>
+                    <p>+ 1235 2355 98</p>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-envelope"></i>
+                    <h2>Email Address</h2>
+                    <p>info@yoursite.com</p>
+                </div>
+                <div class="contact-card">
+                    <i class="fas fa-globe"></i>
+                    <h2>Website</h2>
+                    <p>yoursite.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+        <section class="contact">
+            <div class="container6">
+                <h2>Contact Us</h2>
+                <form action="#" method="post" class="contact-form">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <input type="text" name="address" placeholder="Address">
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <input type="tel" name="phone" placeholder="Phone Number">
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" name="email" placeholder="Email">
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit</button>
+                </form>
+            </div>
+        </section>
+    </body>
+    </html>
+    
+      <!--footer section-->
+      <footer class="footer">
+        <div class="container1">
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Projects</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-logo">
+                <p>your logo</p>
+            </div>
+            <div class="social-icons">
+                <a href="https://facebook.com/saifxeven"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://x.com/saifxeven"><i class="fab fa-twitter"></i></a>
+                <a href="https://instagram.com/saifsui7"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/saifxeven"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
