@@ -3,101 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hamster Key Generator</title>
+    <title>Game Promo Code Generator</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
 </head>
 <body>
     <div class="container">
-        <h1>Hamster Key Generator</h1>
-        <div id="gameSelectContainer" class="grid-container">
-	<div class="game-option" data-game="15">
-                <img src="https://cdn.hamsterkombat.io/hide_balls/image.webp" alt="Hide Ball">
-                <p>Hide Ball</p>
-            </div>
-            <div class="game-option" data-game="14">
-                <img src="https://cdn.hamsterkombat.io/bouncemasters/image.webp" alt="Bouncemasters">
-                <p>Bouncemasters</p>
-            </div>
-            <div class="game-option" data-game="13">
-                <img src="https://cdn.hamsterkombat.io/stone_age/image.webp" alt="Stone Age">
-                <p>Stone Age</p>
-            </div>
-            <div class="game-option" data-game="12">
-                <img src="https://cdn.hamsterkombat.io/fluff/image.webp" alt="Fluff Crusade">
-                <p>Fluff Crusade</p>
-            </div>
-            <div class="game-option" data-game="10">
-                <img src="https://cdn.hamsterkombat.io/tile_trio/image.webp" alt="Tile Trio">
-                <p>Tile Trio</p>
-            </div>
-            <div class="game-option" data-game="11">
-                <img src="https://cdn.hamsterkombat.io/zoopolis/image.webp" alt="Zoopolis">
-                <p>Zoopolis</p>
-            </div>
-            <div class="game-option" data-game="8">
-                <img src="https://cdn.hamsterkombat.io/mow_trim/image.webp" alt="Mow and Trim">
-                <p>Mow and Trim</p>
-            </div>
-            <div class="game-option" data-game="7">
-                <img src="https://cdn.hamsterkombat.io/polysphere/image.webp" alt="Polysphere">
-                <p>Polysphere</p>
-            </div>
-            <div class="game-option" data-game="6">
-                <img src="https://cdn.hamsterkombat.io/twerk/image.webp" alt="Twerk Race 3D">
-                <p>Twerk Race 3D</p>
-            </div>
-            <div class="game-option" data-game="5">
-                <img src="https://cdn.hamsterkombat.io/merge_away/image.webp" alt="Merge Away">
-                <p>Merge Away</p>
-            </div>
-            <div class="game-option" data-game="2">
-                <img src="https://cdn.hamsterkombat.io/chain_cube/image.webp" alt="Chain Cube 2048">
-                <p>Chain Cube 2048</p>
-            </div>
-            <div class="game-option" data-game="4">
-                <img src="https://cdn.hamsterkombat.io/train_miner/image.webp" alt="Train Miner">
-                <p>Train Miner</p>
-            </div>
+        <h1>Game Promo Code Generator</h1>
+        <div class="form-group">
+            <label for="gameSelect">Select Game</label>
+            <select id="gameSelect">
+                <option value="1">ZooPolis </option>
+                <option value="2">Chain Cube 2048</option>
+                <option value="3">Fluff Crusade (new)</option>
+                <option value="4">Train Miner</option>
+                <option value="5">Merge Away </option>
+                <option value="6">Twerk Race</option>
+                <option value="7">Polysphere</option>
+                <option value="8">Mow and Trim</option>
+                <option value="9">Tile Trio </option>
+                <option value="10">Stone Age </option>
+                <option value="11">Bouncemasters </option>
+                <option value="12">Hide Ball </option>
+                <option value="13">Pin Out Master </option>
+                <option value="14">Count Masters </option>
+                <option value="15">Infected Frontier (NEW) </option>
+                <option value="16">Among Water (NEW) </option>
+                <option value="17">Factory World (NEW) </option>
+                
+                
+
+            </select>
         </div>
 
-        <div class="form-group hidden" id="keyCountGroup">
-            <label for="keyCountSelect">Select Number of Keys:</label>
-            <div id="keyCountSelect" class="key-slider">
-                <input type="range" min="1" max="4" value="1" id="keyRange">
-                <span id="keyValue">1</span>
-            </div>
-        </div>
-        <button id="startBtn" class="hidden">Generate Keys</button>
+        <div id="google_translate_element"></div>
+        <script type="text/javascript">
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({
+                    pageLanguage: 'en', 
+                    includedLanguages: 'en,hi,ta,ru,id,ha,pt', 
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+                }, 'google_translate_element');
+            }
+            
+        </script>
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        
 
+        
+        <div class="form-group">
+            <label id="keyCountLabel" for="keyCountSelect">Number of keys:</label>
+            <select id="keyCountSelect">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="8">8</option>
+                
+            </select>
+        </div>
+        <button id="startBtn">Generate Keys</button>
+        
         <div id="progressContainer" class="hidden">
             <div class="progress-bar">
                 <div id="progressBar"></div>
             </div>
-            <p id="progressText">0%</p>
-            <p id="progressLog">Starting...</p>
+            <div id="progressText">0%</div>
+            <div id="progressLog">Starting...</div>
+            <div id="countdownContainer">
+            <p>Next Step will start in: <span id="countdownTimer"></span> seconds </p>
+            </div>
         </div>
-
         <div id="keyContainer" class="hidden">
-            <h2 id="generatedKeysTitle" class="hidden">Generated Keys</h2>
+            <h3 id="generatedKeysTitle" class="hidden">Generated Keys:</h3>
             <div id="keysList"></div>
             <button id="copyAllBtn" class="hidden">Copy All Keys</button>
+            <div id="copyStatus" class="hidden">Copied!</div>
+            <!-- <button id="generateMoreBtn">Generate More Keys</button> -->
         </div>
 
-        <p id="keyCountLabel">Number of keys:</p>
 
-        <button id="generateMoreBtn" class="hidden">Generate More Keys</button>
-        <p id="copyStatus" class="hidden">Keys copied to clipboard!</p>
-        
+        <label>
+            <input type="checkbox" id="logCheckbox"> Enable Logs
+        </label>
+        <textarea id="logArea" rows="3" readonly style="width: 100%; resize: none; font-size: 12px; display: none;"></textarea>
+
+        <div class="mycodes">
+            <p>
+                The Key Generation may take upto 10 mins<br>
+                Wanna Earn More on Crypto AirDrop for FREE 👉<a href="https://t.me/airdrops_mine7">Join  🔜 </a>
+            </p>
+            <button id="ShowKeysBtn">My Codes</button>
+            <div id="generatedCodesContainer" style="display:none;">
+                <h3>Today's Generated Codes:</h3>
+                <ul id="generatedCodesList"></ul>
+            </div>
+
+        </div>
         <div class="footer">
-            <p>Disclaimer: This tool is for educational purposes only. Use responsibly.</p>
-            <button id="sourceCode">Source code</button>
-			<button id="themeToggleBtn" onclick="toggleTheme()"><i id="themeIcon" class="fas fa-sun"></i></button>
+            <p>Disclaimer: This tool is for educational purposes only. Use responsibly.
+                Any Issues in the Key Generation 👉<a href="https://t.me/airdrops_mine7"> Check FAQ'S </a>
+            <button id="telegramChannelBtn">Check out Our Telegram Channel 🆔</button></p>
+            <button id="creatorChannelBtn">Contact Creator 🤖</button> 
+            
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
+
 </html>
