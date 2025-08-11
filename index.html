@@ -1,96 +1,600 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Hand Gesture Brightness Control</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>GreenLine Hand Tracker</title>
+<meta name="description" content="Allow camera → move your fingers → watch green trails. All processing client-side." />
 <style>
-    body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #111;
-        color: white;
-        font-family: Arial, sans-serif;
-        transition: filter 0.1s ease;
-    }
-    video {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw;
-        height: 100vh;
-        object-fit: cover;
-        transform: scaleX(-1);
-        opacity: 0.3;
-    }
-    canvas {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw;
-        height: 100vh;
-        pointer-events: none;
-    }
+  :root{
+    --bg:#0b0b0d;
+    --panel:#0f1720;
+    --accent:#00ff66;
+    --muted:#9aa4ad;
+    --glass: rgba(255,255,255,0.03);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#020204 0%, #07101a 100%);color:#e6eef6}
+  .app{
+    display:grid;
+    grid-template-columns: 1fr 320px;
+    gap:18px;
+    height:100vh;
+    padding:18px;
+    box-sizing:border-box;
+  }
+  header{
+    grid-column: 1 / -1;
+    display:flex;align-items:center;gap:12px;
+  }
+  header h1{margin:0;font-size:20px;letter-spacing:0.3px}
+  header p{margin:0;color:var(--muted);font-size:13px}
+  .viewer{
+    position:relative;
+    border-radius:12px;
+    overflow:hidden;
+    background:#000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:320px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+  video#videoEl{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform: scaleX(-1); /* mirror */
+    -webkit-transform: scaleX(-1);
+    display:block;
+  }
+  canvas#overlay{
+    position:absolute;
+    left:0;top:0;width:100%;height:100%;
+    pointer-events:none;
+  }
+  .controls{
+    background:var(--panel);
+    border-radius:12px;
+    padding:14px;
+    width:100%;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    align-self:start;
+    min-height:120px;
+  }
+  .row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+  label{font-size:13px;color:var(--muted)}
+  input[type=range]{width:100%}
+  .btn{
+    background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.04);
+    color:var(--accent);
+    padding:8px 10px;border-radius:8px;font-weight:600;cursor:pointer;
+  }
+  .btn.primary{background:linear-gradient(90deg, rgba(0,255,102,0.08), rgba(0,255,102,0.04)); color:#dfffe6}
+  .finger-toggles{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+  .small{font-size:12px;color:var(--muted)}
+  footer{grid-column:1/-1;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;padding:8px 18px 0}
+  select,button{font-family:inherit}
+  .status{font-size:13px;color:var(--muted)}
+  @media(max-width:980px){
+    .app{grid-template-columns:1fr; padding:12px;}
+    .controls{order:3;width:100%}
+  }
 </style>
 </head>
 <body>
-<h1>Move your hand up/down to change brightness</h1>
-<video id="video" autoplay playsinline></video>
-<canvas id="output"></canvas>
+  <div class="app" role="application" aria-label="GreenLine Hand Tracker">
+    <header>
+      <div>
+        <h1>GreenLine Hand Tracker</h1>
+        <p class="small">Allow camera → move your fingers → watch green trails (processed locally)</p>
+      </div>
+      <div style="margin-left:auto" class="status" id="status">Stopped</div>
+    </header>
 
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.min.js"></script>
+    <main class="viewer" id="viewer" aria-live="polite">
+      <video id="videoEl" playsinline></video>
+      <canvas id="overlay" aria-hidden="true"></canvas>
+      <div style="position:absolute;left:12px;top:12px;color:var(--muted);font-size:13px;backdrop-filter: blur(6px);padding:6px;border-radius:8px;background:rgba(0,0,0,0.25)">
+        <span id="fps">FPS: —</span>
+      </div>
+    </main>
 
-<script>
-const video = document.getElementById('video');
-const canvas = document.getElementById('output');
-const ctx = canvas.getContext('2d');
+    <aside class="controls" role="region" aria-label="Controls">
+      <div class="row">
+        <div style="display:flex;gap:8px">
+          <button id="startBtn" class="btn primary" aria-pressed="false">Start</button>
+          <button id="stopBtn" class="btn" disabled>Stop</button>
+        </div>
+        <div style="text-align:right">
+          <select id="cameraSelect" aria-label="Camera source">
+            <option value="">Default camera</option>
+          </select>
+        </div>
+      </div>
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+      <div>
+        <label for="trailLength">Trail length: <span id="trailLenLabel">120</span></label>
+        <input id="trailLength" type="range" min="0" max="200" value="120" />
+      </div>
 
-// MediaPipe Hands Setup
-const hands = new Hands({
-  locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+      <div>
+        <label for="trailThickness">Thickness: <span id="thicknessLabel">3</span> px</label>
+        <input id="trailThickness" type="range" min="1" max="12" value="3" />
+      </div>
+
+      <div>
+        <label for="smoothing">Smoothing (EMA alpha): <span id="smoothLabel">0.70</span></label>
+        <input id="smoothing" type="range" min="0" max="1" step="0.01" value="0.7" />
+      </div>
+
+      <div>
+        <label>Enable fingers</label>
+        <div class="finger-toggles" role="group" aria-label="Finger toggles">
+          <label><input type="checkbox" class="fingerToggle" data-finger="thumb" checked /> Thumb</label>
+          <label><input type="checkbox" class="fingerToggle" data-finger="index" checked /> Index</label>
+          <label><input type="checkbox" class="fingerToggle" data-finger="middle" checked /> Middle</label>
+          <label><input type="checkbox" class="fingerToggle" data-finger="ring" checked /> Ring</label>
+          <label><input type="checkbox" class="fingerToggle" data-finger="pinky" checked /> Pinky</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div style="display:flex;gap:8px">
+          <button id="clearBtn" class="btn">Clear trails</button>
+          <button id="snapBtn" class="btn">Snapshot</button>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="recordBtn" class="btn">Start recording</button>
+        </div>
+      </div>
+
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">
+        <div><strong>Privacy:</strong> All processing stays in your browser.</div>
+        <div class="small" style="margin-top:6px">Model: MediaPipe Hands (client-side). Try to keep trail length low on mobile for better performance.</div>
+      </div>
+    </aside>
+
+    <footer>
+      <div>Model: MediaPipe Hands — local only</div>
+      <div>About: Trails per fingertip, smoothing, snapshot & client-side recording</div>
+    </footer>
+  </div>
+
+<script type="module">
+/* GreenLine Hand Tracker — single-file
+   Uses MediaPipe Hands via CDN, camera_utils for camera integration.
+   Mirrors video for user-facing mode and maps normalized landmarks to canvas coordinates.
+*/
+
+import {Hands} from "https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js";
+import {Camera} from "https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js";
+
+const videoEl = document.getElementById('videoEl');
+const canvas = document.getElementById('overlay');
+const ctx = canvas.getContext('2d', { willReadFrequently: false });
+
+const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn');
+const trailLengthInput = document.getElementById('trailLength');
+const trailLenLabel = document.getElementById('trailLenLabel');
+const thicknessInput = document.getElementById('trailThickness');
+const thicknessLabel = document.getElementById('thicknessLabel');
+const smoothingInput = document.getElementById('smoothing');
+const smoothLabel = document.getElementById('smoothLabel');
+const cameraSelect = document.getElementById('cameraSelect');
+const clearBtn = document.getElementById('clearBtn');
+const snapBtn = document.getElementById('snapBtn');
+const recordBtn = document.getElementById('recordBtn');
+const fpsEl = document.getElementById('fps');
+const statusEl = document.getElementById('status');
+
+const fingerIndices = { thumb:4, index:8, middle:12, ring:16, pinky:20 };
+const fingerKeys = Object.keys(fingerIndices);
+
+let perFingerEnabled = { thumb:true, index:true, middle:true, ring:true, pinky:true };
+
+document.querySelectorAll('.fingerToggle').forEach(cb=>{
+  cb.addEventListener('change', (e)=> {
+    perFingerEnabled[e.target.dataset.finger] = e.target.checked;
+    // no state reset required
+  });
 });
 
-hands.setOptions({
-  maxNumHands: 1,
-  modelComplexity: 1,
-  minDetectionConfidence: 0.7,
-  minTrackingConfidence: 0.7
+// UI sync
+trailLengthInput.addEventListener('input', ()=> trailLenLabel.textContent = trailLengthInput.value);
+thicknessInput.addEventListener('input', ()=> thicknessLabel.textContent = thicknessInput.value);
+smoothingInput.addEventListener('input', ()=> smoothLabel.textContent = Number(smoothingInput.value).toFixed(2));
+
+let camera = null;
+let mpHands = null;
+let mpCamera = null;
+let running = false;
+let lastProcessTime = 0;
+let targetFps = 25;
+let lastFrameTime = performance.now();
+let fpsHistory = [];
+let recorder = null;
+let recording = false;
+let recordedChunks = [];
+
+function setStatus(text){
+  statusEl.textContent = text;
+}
+
+// trails: structure: trails[handId][fingerName] = [{x,y,t,smoothedX,smoothedY},...]
+let trails = {}; // map handIndex -> fingerName -> Array
+let smoothingAlpha = parseFloat(smoothingInput.value);
+let maxTrailPoints = parseInt(trailLengthInput.value);
+let thickness = parseInt(thicknessInput.value);
+let mirrorVideo = true; // user-facing
+
+// maintain previous smoothed positions to apply EMA
+let prevSmoothed = {}; // prevSmoothed[handIndex][fingerName] = {x,y}
+
+function ensureTrail(handIndex, fingerName){
+  if(!trails[handIndex]) trails[handIndex] = {};
+  if(!trails[handIndex][fingerName]) trails[handIndex][fingerName] = [];
+  if(!prevSmoothed[handIndex]) prevSmoothed[handIndex] = {};
+  if(!prevSmoothed[handIndex][fingerName]) prevSmoothed[handIndex][fingerName] = null;
+}
+
+function clearTrails(){
+  trails = {};
+  prevSmoothed = {};
+}
+
+clearBtn.addEventListener('click', ()=>{
+  clearTrails();
 });
 
-hands.onResults(onResults);
+async function listCameras(){
+  try{
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    cameraSelect.innerHTML = '<option value="">Default camera</option>';
+    devices.filter(d=>d.kind==='videoinput').forEach((d, i)=>{
+      const label = d.label || `Camera ${i+1}`;
+      const opt = document.createElement('option');
+      opt.value = d.deviceId;
+      opt.textContent = label;
+      cameraSelect.appendChild(opt);
+    });
+  }catch(e){
+    console.warn('Could not list cameras', e);
+  }
+}
 
-function onResults(results) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+async function initHands(){
+  mpHands = new Hands({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+  });
+  mpHands.setOptions({
+    maxNumHands: 2,
+    modelComplexity: 1, // 0..1 (tradeoff)
+    minDetectionConfidence: 0.6,
+    minTrackingConfidence: 0.6
+  });
+  mpHands.onResults(onResults);
+}
 
-  // Draw landmarks
-  if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-    for (const landmarks of results.multiHandLandmarks) {
-      drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {color: '#00ff00', lineWidth: 3});
-      drawLandmarks(ctx, landmarks, {color: '#00ff00', lineWidth: 2});
+let pendingResult = null;
+function onResults(results){
+  // MediaPipe provides landmark arrays for each detected hand
+  // We'll store landmarks in pendingResult for the render loop to use
+  pendingResult = results;
+}
 
-      // Index finger tip is landmark[8]
-      const indexFinger = landmarks[8];
-      const yPos = indexFinger.y; // 0 (top) to 1 (bottom)
-      const brightness = 0.5 + (0.5 - yPos) * 1.5; // Map to brightness range
-      document.body.style.filter = `brightness(${Math.max(0.1, Math.min(2, brightness))})`;
+// adaptively throttle inference to target FPS
+async function processFrameThrottle(){
+  if(!mpHands) return;
+  const now = performance.now();
+  const dt = now - lastProcessTime;
+  const minDt = 1000 / targetFps;
+  if(dt < minDt) return; // skip this frame
+  lastProcessTime = now;
+  try{
+    await mpHands.send({image: videoEl});
+  }catch(e){
+    // ignore send errors when stopping
+  }
+}
+
+function updateCanvasSize(){
+  const w = videoEl.videoWidth || videoEl.clientWidth || 640;
+  const h = videoEl.videoHeight || videoEl.clientHeight || 480;
+  canvas.width = w;
+  canvas.height = h;
+  canvas.style.width = videoEl.clientWidth + 'px';
+  canvas.style.height = videoEl.clientHeight + 'px';
+}
+
+function normToCanvas(normX, normY){
+  // MediaPipe landmarks: x,y in [0,1] relative to video frame's coordinate when not mirrored
+  // but because we mirror the video for user-facing, we flip x
+  const cw = canvas.width, ch = canvas.height;
+  let x = normX * cw;
+  let y = normY * ch;
+  if(mirrorVideo){
+    x = cw - x;
+  }
+  return {x, y};
+}
+
+function pushPoint(handIndex, fingerName, x, y){
+  ensureTrail(handIndex, fingerName);
+  const t = performance.now();
+  // smoothing via EMA (exponential moving average)
+  const prev = prevSmoothed[handIndex][fingerName];
+  let sx = x, sy = y;
+  if(prev){
+    sx = smoothingAlpha * x + (1 - smoothingAlpha) * prev.x;
+    sy = smoothingAlpha * y + (1 - smoothingAlpha) * prev.y;
+  }
+  prevSmoothed[handIndex][fingerName] = {x: sx, y: sy};
+  trails[handIndex][fingerName].push({x, y, sx, sy, t});
+  // enforce max length
+  const arr = trails[handIndex][fingerName];
+  if(arr.length > maxTrailPoints) arr.splice(0, arr.length - maxTrailPoints);
+}
+
+function drawTrails(){
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+  // subtle background overlay optionally (commented out)
+  // ctx.fillStyle = 'rgba(0,0,0,0.10)'; ctx.fillRect(0,0,w,h);
+
+  // draw trails per hand/finger
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  const now = performance.now();
+
+  for(const handIndexStr of Object.keys(trails)){
+    const handIndex = Number(handIndexStr);
+    const fingerMap = trails[handIndex];
+    for(const fn of Object.keys(fingerMap)){
+      if(!perFingerEnabled[fn]) continue;
+      const pts = fingerMap[fn];
+      if(!pts || pts.length < 2) continue;
+
+      // draw a smooth polyline using quadratic smoothing between EMA positions (sx,sy)
+      ctx.beginPath();
+      for(let i=0;i<pts.length;i++){
+        const p = pts[i];
+        const alpha = Math.max(0, 1 - (now - p.t)/4000); // optional fade
+        // thickness with slight taper: older points thinner
+        const thicknessFactor = (i+1)/pts.length;
+        ctx.lineWidth = Math.max(1, thickness * thicknessFactor);
+        // green color with alpha
+        ctx.strokeStyle = `rgba(0,255,102,${0.85 * alpha})`;
+        if(i===0){
+          ctx.moveTo(p.sx, p.sy);
+        }else{
+          const prev = pts[i-1];
+          // quadratic curve mid-point
+          const cx = (prev.sx + p.sx)/2;
+          const cy = (prev.sy + p.sy)/2;
+          ctx.quadraticCurveTo(prev.sx, prev.sy, cx, cy);
+        }
+      }
+      ctx.stroke();
+    }
+  }
+
+  // optionally draw small circles at finger tips
+  for(const handIndexStr of Object.keys(trails)){
+    const handIndex = Number(handIndexStr);
+    const fingerMap = trails[handIndex];
+    for(const fn of Object.keys(fingerMap)){
+      if(!perFingerEnabled[fn]) continue;
+      const pts = fingerMap[fn];
+      if(!pts || pts.length===0) continue;
+      const p = pts[pts.length-1];
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(0,255,102,0.95)';
+      ctx.arc(p.sx, p.sy, Math.max(2, thickness+1), 0, Math.PI*2);
+      ctx.fill();
     }
   }
 }
 
-// Camera input
-const camera = new Camera(video, {
-  onFrame: async () => {
-    await hands.send({image: video});
-  },
-  width: 640,
-  height: 480
+function handlePendingResultAndRender(){
+  // called on RAF loop
+  if(pendingResult){
+    // update trails from pending result
+    const res = pendingResult;
+    const hands = res.multiHandLandmarks || [];
+    // res.multiHandedness provides classification (Left/Right)
+    // We'll use index order as hand ID (0,1). To keep trails stable across small swaps,
+    // we could use handedness label; for simplicity we'll keep index as handId.
+    // more robust approach would track via palm center matching across frames.
+    // For each detected hand:
+    for(let h=0;h<hands.length;h++){
+      const handLandmarks = hands[h];
+      const handIndex = h; // 0 or 1
+      for(const fingerName of fingerKeys){
+        const li = fingerIndices[fingerName];
+        const lm = handLandmarks[li];
+        if(!lm) continue;
+        const {x: nx, y: ny} = lm;
+        const {x,y} = normToCanvas(nx, ny);
+        pushPoint(handIndex, fingerName, x, y);
+      }
+    }
+
+    // If zero hands -> nothing to push; but trails persist
+    pendingResult = null;
+  }
+
+  // draw trails
+  drawTrails();
+}
+
+let rafId = null;
+function renderLoop(){
+  const now = performance.now();
+  // fps calc
+  const dt = now - lastFrameTime;
+  lastFrameTime = now;
+  const fps = 1000 / dt;
+  fpsHistory.push(fps);
+  if(fpsHistory.length > 30) fpsHistory.shift();
+  const avgFps = Math.round(fpsHistory.reduce((a,b)=>a+b,0)/fpsHistory.length);
+  fpsEl.textContent = `FPS: ${avgFps}`;
+
+  // keep config up-to-date
+  smoothingAlpha = parseFloat(smoothingInput.value);
+  maxTrailPoints = parseInt(trailLengthInput.value);
+  thickness = parseInt(thicknessInput.value);
+
+  handlePendingResultAndRender();
+  rafId = requestAnimationFrame(renderLoop);
+}
+
+async function start(){
+  if(running) return;
+  running = true;
+  setStatus('Starting…');
+
+  if(!mpHands) await initHands();
+
+  // set up camera with selected device
+  const constraints = {
+    video: {
+      width: { ideal: 1280 },
+      height: { ideal: 720 },
+      deviceId: cameraSelect.value || undefined,
+      facingMode: 'user'
+    },
+    audio: false
+  };
+
+  // create stream and set video srcObject (Camera helper will handle)
+  // Use MediaPipe Camera helper to continuously send frames to mpHands
+  mpCamera = new Camera(videoEl, {
+    onFrame: async () => {
+      // throttle model calls for target FPS
+      await processFrameThrottle();
+    },
+    width: 1280,
+    height: 720,
+  });
+
+  try{
+    await mpCamera.start();
+  }catch(e){
+    console.error('Camera start error', e);
+    alert('Could not start camera. Check permissions and camera connection.');
+    running = false;
+    setStatus('Stopped');
+    return;
+  }
+
+  updateCanvasSize();
+  window.addEventListener('resize', updateCanvasSize);
+
+  // begin RAF render loop
+  lastFrameTime = performance.now();
+  fpsHistory = [];
+  if(rafId) cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(renderLoop);
+
+  startBtn.disabled = true;
+  stopBtn.disabled = false;
+  startBtn.setAttribute('aria-pressed','true');
+  setStatus('Running');
+}
+
+async function stop(){
+  if(!running) return;
+  running = false;
+  setStatus('Stopping…');
+  if(mpCamera) {
+    try{ await mpCamera.stop(); }catch(e){}
+    mpCamera = null;
+  }
+  if(rafId) cancelAnimationFrame(rafId);
+  rafId = null;
+  startBtn.disabled = false;
+  stopBtn.disabled = true;
+  startBtn.setAttribute('aria-pressed','false');
+  setStatus('Stopped');
+}
+
+startBtn.addEventListener('click', ()=> start());
+stopBtn.addEventListener('click', ()=> stop());
+
+// snapshot: draw video + overlay into a temporary canvas and download PNG
+snapBtn.addEventListener('click', ()=>{
+  const out = document.createElement('canvas');
+  out.width = canvas.width;
+  out.height = canvas.height;
+  const octx = out.getContext('2d');
+
+  // draw mirrored video: since video is mirrored using CSS, we need to flip when drawing
+  octx.save();
+  if(mirrorVideo){
+    octx.translate(out.width,0);
+    octx.scale(-1,1);
+  }
+  octx.drawImage(videoEl, 0,0, out.width, out.height);
+  octx.restore();
+
+  // draw trails on top
+  octx.drawImage(canvas, 0,0);
+
+  out.toBlob((blob)=>{
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `greenline_snapshot_${Date.now()}.png`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }, 'image/png');
 });
-camera.start();
-</script>
-</body>
-</html>
+
+// Recording: capture canvas frames (video + overlay) by drawing video->canvas + overlay and using canvas.captureStream
+let captureStream = null;
+let captureInterval = null;
+recordBtn.addEventListener('click', async ()=>{
+  if(recording){
+    // stop recording
+    recorder.stop();
+    recordBtn.textContent = 'Start recording';
+    recording = false;
+    return;
+  }
+
+  // ensure canvas size is set
+  updateCanvasSize();
+  // create an offscreen recorder canvas that composes video + overlay
+  const comp = document.createElement('canvas');
+  comp.width = canvas.width;
+  comp.height = canvas.height;
+  const cctx = comp.getContext('2d');
+
+  // draw loop to composite into comp canvas
+  captureInterval = setInterval(()=>{
+    // draw mirrored video
+    cctx.save();
+    if(mirrorVideo){
+      cctx.translate(comp.width, 0);
+      cctx.scale(-1, 1);
+    }
+    cctx.drawImage(videoEl, 0, 0, comp.width, comp.height);
+    cctx.restore();
+    // overlay trails
+    cctx.drawImage(canvas, 0, 0);
+  }, 1000 / 30); // 30fps composition
+
+  captureStream = comp.captureStream(30);
+  recorder = new MediaRecorder(captureStream, { mimeType: 'video/webm;codecs=vp8' });
+  recordedChunks = [];
+  recorder.ondataavailable = (ev)=> { if(ev.data && ev.data.size) recordedChunks.push(ev.data); };
+  recorder.onstop = ()=>{
+    clearInterval(captureInterval);
+    captureInterval = null;
+    const blob = new Blob(recordedChunks, {type: 'video/webm'});
+    const a = document.cr
