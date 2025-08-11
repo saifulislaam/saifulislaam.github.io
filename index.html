@@ -1,428 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saif || Portfolio</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        
-           </style>
+<meta charset="UTF-8">
+<title>Hand Gesture Brightness Control</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #111;
+        color: white;
+        font-family: Arial, sans-serif;
+        transition: filter 0.1s ease;
+    }
+    video {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover;
+        transform: scaleX(-1);
+        opacity: 0.3;
+    }
+    canvas {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+    }
+</style>
 </head>
 <body>
-    <!-- header section -->
-     <section>
-    <nav class="navbar">
-        <div class="logo">
-            <img src="assets/img/logo.png" alt="Logo">
-        </div>
-        <ul class="nav-links" id="nav-links">
-            <li><a href="#hero">01 Home</a></li>
-            <li><a href="#about">02 About</a></li>
-            <li><a href="#projects">03 Projects</a></li>
-            <li><a href="#skills">04 Skills</a></li>
-            <li><a href="#blogs">05 Blogs</a></li>
-            <li><a href="#contact">06 Contact Us</a></li>
-        </ul>
-        <div class="nav-right">
-            <div class="download-cv">
-                <a href="#" class="download-button">
-                    <i class="fas fa-cloud-download-alt"></i> Download CV
-                </a>
-            </div>
-            <div class="menu-icon" id="menu-icon">
-                <i class="fas fa-bars"></i>
-            </div>
-        </div>
-    </nav>
-</section>
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <div class="profile-pic-container">
-            <img src="assets/img/msg7349087004-544.jpg" alt="Profile Picture" class="profile-pic">
-        </div>
-        <div class="hero-content">
-            <h1>Hi, I’m SAIF UL ISLAM.<br>Front-End Developer</h1>
-            <p>Hello! I'm Saif ul islam, a passionate front-end web developer specializing in creating interactive and responsive websites. Let's build something amazing together!</p>
-            <div class="cta-buttons">
-                <a href="#project" class="btn">View My Work</a>
-                <a href="#contact" class="btn">Contact Me</a>
-            </div>
-        </div>
-    </section>
+<h1>Move your hand up/down to change brightness</h1>
+<video id="video" autoplay playsinline></video>
+<canvas id="output"></canvas>
 
-    <!-- About Section -->
-<section id="about" class="about">
-    <h2>About Me</h2>
-    <div class="about-content">
-        <div class="about-details">
-            <h3>My Journey into Web Development</h3>
-            <p>I've always been fascinated by technology and its potential to solve real-world problems. My journey into web development began in college, where I pursued a degree in Computer Science. Over the years, I've honed my skills through various projects and internships, constantly learning and adapting to new technologies and trends.</p>
-            <p>With a strong foundation in front-end development, I specialize in creating responsive, user-friendly websites. My background in design allows me to bring a unique perspective to my projects, ensuring both functionality and aesthetic appeal.</p>
-        </div>
-        <div class="personal-statement">
-            <h3>Personal Statement</h3>
-            <p>My philosophy is simple: build with passion and purpose. I'm driven by the challenge of solving complex problems and the satisfaction of creating something that people will use and appreciate. Every project is an opportunity to learn and grow, and I'm always looking for new ways to push the boundaries of what's possible on the web.</p>
-        </div>
-        <div class="resume-download">
-            <a href="assets/resume.pdf" class="download-resume" download>
-                <i class="fas fa-cloud-download-alt"></i> Download Resume
-            </a>
-        </div>
-    </div>
-</section>
-    <!-- Projects Section -->
-<section id="projects" class="projects-page">
-    <h2>My Projects</h2>
-    <div class="featured-projects">
-        <div class="project-item">
-            <img src="assets/img/responsivewebdesign.jpg" alt="Project 1" class="project-image">
-            <div class="project-details">
-                <h3>Web Designing</h3>
-                <p>This project is a responsive web application that helps users manage their tasks efficiently. It features user authentication, task categorization, and deadline tracking.</p>
-                <p><strong>Technologies Used:</strong> HTML, CSS, JavaScript, React, Node.js</p>
-                <div class="project-links">
-                    <a href="#" class="project-link">Live Demo</a>
-                    <a href="#" class="project-link">GitHub</a>
-                </div>
-            </div>
-        </div>
-        <div class="project-item">
-            <img src="assets/img/ecommereweb.jpg" alt="Project 2" class="project-image">
-            <div class="project-details">
-                <h3>Web Development</h3>
-                <p>A mobile-friendly e-commerce website that allows users to browse products, add items to the cart, and complete purchases. It includes a product search feature and secure payment integration.</p>
-                <p><strong>Technologies Used:</strong> HTML, CSS, JavaScript, Vue.js, Firebase</p>
-                <div class="project-links">
-                    <a href="#" class="project-link">Live Demo</a>
-                    <a href="#" class="project-link">GitHub</a>
-                </div>
-            </div>
-        </div>
-        <div class="project-item">
-            <img src="assets/img/portfolio.jpg" alt="Project 3" class="project-image">
-            <div class="project-details">
-                <h3>Web App Development</h3>
-                <p>This is a portfolio website designed to showcase my skills, experience, and projects. It features a blog section, contact form, and an interactive gallery of my work.</p>
-                <p><strong>Technologies Used:</strong> HTML, CSS, JavaScript, Angular, MongoDB</p>
-                <div class="project-links">
-                    <a href="#" class="project-link">Live Demo</a>
-                    <a href="#" class="project-link">GitHub</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="additional-projects">
-        <h3>Additional Projects</h3>
-        <div class="additional-projects-list">
-            <div class="additional-project-item">
-                <a href="#" class="additional-project-link">Project 4</a>
-            </div>
-            <div class="additional-project-item">
-                <a href="#" class="additional-project-link">Project 5</a>
-            </div>
-            <div class="additional-project-item">
-                <a href="#" class="additional-project-link">Project 6</a>
-            </div>
-            <div class="additional-project-item">
-                <a href="#" class="additional-project-link">Project 7</a>
-            </div>
-        </div>
-    </div>
-</section>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.min.js"></script>
 
-    <!-- Skills section -->
-    <section id="skills" class="skills-page">
-        <h2>My Skills</h2>
-        <div class="skills-section">
-            <h3>Technical Skills</h3>
-            <div class="skills-list">
-                <div class="skill-item">
-                    <i class="fab fa-html5 skill-icon"></i>
-                    <h4>HTML</h4>
-                    <div class="skill-bar" style="--skill-level: 90%;"></div>
-                    <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-css3-alt skill-icon"></i>
-                    <h4>CSS</h4>
-                    <div class="skill-bar" style="--skill-level: 85%;"></div>
-                    <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-js skill-icon"></i>
-                    <h4>JavaScript</h4>
-                    <div class="skill-bar" style="--skill-level: 80%;"></div>
-                    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-react skill-icon"></i>
-                    <h4>React</h4>
-                    <div class="skill-bar" style="--skill-level: 75%;"></div>
-                    <a href="https://reactjs.org/" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-angular skill-icon"></i>
-                    <h4>Angular</h4>
-                    <div class="skill-bar" style="--skill-level: 70%;"></div>
-                    <a href="https://angular.io/" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-vuejs skill-icon"></i>
-                    <h4>Vue</h4>
-                    <div class="skill-bar" style="--skill-level: 65%;"></div>
-                    <a href="https://vuejs.org/" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-git-alt skill-icon"></i>
-                    <h4>Git</h4>
-                    <div class="skill-bar" style="--skill-level: 80%;"></div>
-                    <a href="https://git-scm.com/" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-cube skill-icon"></i> <!-- Alternative icon for Webpack -->
-                    <h4>Webpack</h4>
-                    <div class="skill-bar" style="--skill-level: 70%;"></div>
-                    <a href="https://webpack.js.org/" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-npm skill-icon"></i>
-                    <h4>npm</h4>
-                    <div class="skill-bar" style="--skill-level: 75%;"></div>
-                    <a href="https://www.npmjs.com/" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-figma skill-icon"></i>
-                    <h4>Figma</h4>
-                    <div class="skill-bar" style="--skill-level: 60%;"></div>
-                    <a href="https://www.figma.com/" target="_blank">Learn more</a>
-                </div>
-                <div class="skill-item">
-                    <i class="fab fa-adobe skill-icon"></i>
-                    <h4>Adobe XD</h4>
-                    <div class="skill-bar" style="--skill-level: 65%;"></div>
-                    <a href="https://www.adobe.com/products/xd.html" target="_blank">Learn more</a>
-                </div>
-            </div>
-        </div>
-        <div class="skills-section">
-            <h3>Soft Skills</h3>
-            <div class="skills-list">
-                <div class="skill-item">
-                    <i class="fas fa-comments skill-icon"></i>
-                    <h4>Communication</h4>
-                    <p>Excellent written and verbal communication skills.</p>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-lightbulb skill-icon"></i>
-                    <h4>Problem-Solving</h4>
-                    <p>Ability to solve complex problems efficiently.</p>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-users skill-icon"></i>
-                    <h4>Teamwork</h4>
-                    <p>Experience working collaboratively in teams.</p>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-random skill-icon"></i>
-                    <h4>Adaptability</h4>
-                    <p>Quick to adapt to new tools and technologies.</p>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-user-tie skill-icon"></i>
-                    <h4>Leadership</h4>
-                    <p>Proven leadership experience in various projects.</p>
-                </div>
-                <div class="skill-item">
-                    <i class="fas fa-brain skill-icon"></i>
-                    <h4>Creativity</h4>
-                    <p>Innovative and creative approach to problem-solving.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<script>
+const video = document.getElementById('video');
+const canvas = document.getElementById('output');
+const ctx = canvas.getContext('2d');
 
-<!-- blog section -->
-<section id="blogs" class="blog-page">
-    <h2>Blog</h2>
-    <div class="posts-list">
-        <div class="post-item">
-            <i class="fas fa-book-open post-icon"></i>
-            <h3 class="post-title">Understanding CSS Grid</h3>
-            <p class="post-date">June 10, 2024</p>
-            <p class="post-summary">CSS Grid is a powerful layout system available in CSS. It's a two-dimensional system, meaning it can handle both columns and rows...</p>
-            <a class="read-more" href="#">Read more</a>
-        </div>
-        <div class="post-item">
-            <i class="fas fa-code post-icon"></i>
-            <h3 class="post-title">JavaScript ES6 Features</h3>
-            <p class="post-date">May 22, 2024</p>
-            <p class="post-summary">ES6 brought significant changes to JavaScript. It introduced new syntax and features, making the language more powerful and easier to work with...</p>
-            <a class="read-more" href="#">Read more</a>
-        </div>
-        <div class="post-item">
-            <i class="fas fa-mobile-alt post-icon"></i>
-            <h3 class="post-title">Building Responsive Websites</h3>
-            <p class="post-date">April 14, 2024</p>
-            <p class="post-summary">Responsive web design is about creating web pages that look good on all devices. It provides an optimal viewing experience across a wide range of devices...</p>
-            <a class="read-more" href="#">Read more</a>
-        </div>
-        <div class="post-item">
-            <i class="fab fa-react post-icon"></i>
-            <h3 class="post-title">Introduction to React Hooks</h3>
-            <p class="post-date">March 30, 2024</p>
-            <p class="post-summary">React Hooks are functions that let you use state and other React features without writing a class. Hooks are a new addition in React 16.8...</p>
-            <a class="read-more" href="#">Read more</a>
-        </div>
-        <div class="post-item">
-            <i class="fas fa-box post-icon"></i>
-            <h3 class="post-title">Mastering Flexbox</h3>
-            <p class="post-date">February 15, 2024</p>
-            <p class="post-summary">Flexbox is a one-dimensional layout method for laying out items in rows or columns. Items flex to fill additional space and shrink to fit into smaller spaces...</p>
-            <a class="read-more" href="#">Read more</a>
-        </div>
-        <div class="post-item">
-            <i class="fas fa-tachometer-alt post-icon"></i>
-            <h3 class="post-title">Web Performance Optimization</h3>
-            <p class="post-date">January 8, 2024</p>
-            <p class="post-summary">Optimizing web performance is crucial for improving the speed and responsiveness of your website. Learn key techniques and best practices for performance...</p>
-            <a class="read-more" href="#">Read more</a>
-        </div>
-    </div>
-</section>
-    <!-- Contact Section -->
-    <div id="contact" class="contact-section">
-        <h2>Contact Me</h2>
-        <br>
-        <br>
-        <div class="form-container">
-            <form>
-                <div class="form-field">
-                    <label for="name"><i class="fas fa-user"></i> Name</label>
-                    <input type="text" id="name" name="name" placeholder="Enter your name">
-                </div>
-                <div class="form-field">
-                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email">
-                </div>
-                <div class="form-field">
-                    <label for="subject"><i class="fas fa-pencil-alt"></i> Subject</label>
-                    <input type="text" id="subject" name="subject" placeholder="Enter subject">
-                </div>
-                <div class="form-field">
-                    <label for="message"><i class="fas fa-comment-dots"></i> Message</label>
-                    <textarea id="message" name="message" rows="5" placeholder="Enter your message"></textarea>
-                </div>
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
-        <div class="contact-info">
-            <h3>Direct Communication</h3>
-            <br>
-            <div class="contact-boxes">
-                <div class="contact-box">
-                    <p><i class="fas fa-envelope"></i> saifsm7@yahoo.com</p>
-                </div>
-                <div class="contact-box">
-                    <p><i class="fas fa-phone"></i> +923442864308</p>
-                </div>
-            </div>
-        </div>
-        <div class="social-media">
-            <h3>Follow Me</h3>
-            <div class="social-boxes">
-                <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="social-box">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                </a>
-                <a href="https://github.com/saifulislaam" target="_blank" class="social-box">
-                    <i class="fab fa-github"></i> GitHub
-                </a>
-                <a href="https://twitter.com/saifxeven" target="_blank" class="social-box">
-                    <i class="fab fa-twitter"></i> Twitter
-                </a>
-                <a href="https://www.facebook.com/saifxeven" target="_blank" class="social-box">
-                    <i class="fab fa-facebook"></i> Facebook
-                </a>
-                <a href="https://www.instagram.com/saifsui7" target="_blank" class="social-box">
-                    <i class="fab fa-instagram"></i> Instagram
-                </a>
-            </div>
-        </div>
-    </div>
-    <!-- Footer Section >-- -->
-<footer class="footer-section">
-    <div class="footer-content">
-        <div class="quick-links">
-            <h3>Quick Links</h3>
-            <ul>
-                <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="#about"><i class="fas fa-user"></i> About</a></li>
-                <li><a href="#projects"><i class="fas fa-briefcase"></i> Projects</a></li>
-                <li><a href="#skills"><i class="fas fa-cogs"></i> Skills</a></li>
-                <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
-            </ul>
-        </div>
-        <div class="social-media-icons">
-            <h3>Follow Me</h3>
-            <div class="social-icons">
-                <a href="https://www.linkedin.com/in/saifxeven/" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/saifulislaam" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://twitter.com/saifxeven" target="_blank"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.facebook.com/saifxeven" target="_blank"><i class="fab fa-facebook"></i></a>
-                <a href="https://www.instagram.com/saifsui7" target="_blank"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-        <div class="copyright-info">
-            <p>© 2024 Saif Ul Islam. All Rights Reserved.</p>
-        </div>
-    </div>
-</footer>
-    <script src="assets/js/scripts.js">document.getElementById('contact-form').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-    
-        const formData = new FormData(this);
-    
-        fetch('https://your-server-endpoint.com/submit-form', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Message sent successfully!');
-            } else {
-                alert('There was an error sending your message.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an error sending your message.');
-        });
-    });
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuIcon = document.getElementById('menu-icon');
-            const navLinks = document.getElementById('nav-links');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-            // Toggle nav visibility when menu icon is clicked
-            menuIcon.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
+// MediaPipe Hands Setup
+const hands = new Hands({
+  locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+});
 
-            // Hide nav when clicking on a link
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.classList.remove('active');
-                });
-            });
+hands.setOptions({
+  maxNumHands: 1,
+  modelComplexity: 1,
+  minDetectionConfidence: 0.7,
+  minTrackingConfidence: 0.7
+});
 
-            // Hide nav when clicking outside of it
-            document.addEventListener('click', (event) => {
-                if (!menuIcon.contains(event.target) && !navLinks.contains(event.target)) {
-                    navLinks.classList.remove('active');
-                }
-            });
-        });
-    </script>
+hands.onResults(onResults);
+
+function onResults(results) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw landmarks
+  if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+    for (const landmarks of results.multiHandLandmarks) {
+      drawConnectors(ctx, landmarks, HAND_CONNECTIONS, {color: '#00ff00', lineWidth: 3});
+      drawLandmarks(ctx, landmarks, {color: '#00ff00', lineWidth: 2});
+
+      // Index finger tip is landmark[8]
+      const indexFinger = landmarks[8];
+      const yPos = indexFinger.y; // 0 (top) to 1 (bottom)
+      const brightness = 0.5 + (0.5 - yPos) * 1.5; // Map to brightness range
+      document.body.style.filter = `brightness(${Math.max(0.1, Math.min(2, brightness))})`;
+    }
+  }
+}
+
+// Camera input
+const camera = new Camera(video, {
+  onFrame: async () => {
+    await hands.send({image: video});
+  },
+  width: 640,
+  height: 480
+});
+camera.start();
+</script>
 </body>
 </html>
