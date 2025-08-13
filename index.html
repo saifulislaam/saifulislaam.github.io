@@ -1,9 +1,8 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Saif — Software Engineer Portfolio</title>
-  <meta name="description" content="Saif — Software Engineer | Retro Hacking Console / Tool‑X Inspired Portfolio" />
+  <title>SAIF — Software Engineer Portfolio</title>
   <style>
     :root{
       --bg:#000000;
@@ -11,232 +10,179 @@
       --neon-green:#00FF00;
       --bright-red:#FF0000;
       --cyan-blue:#00FFFF;
-      --white-text:#FFFFFF;
-      --highlight-magenta:#FF00FF;
-      --muted:#9aa0a6;
-      --card:#0b0b0b;
-      --border:#1c1c1c;
-      --glow:0 0 8px rgba(0,255,0,.7),0 0 18px rgba(0,255,0,.35);
-      --glow-cyan:0 0 8px rgba(0,255,255,.7),0 0 18px rgba(0,255,255,.35);
-      --glow-red:0 0 8px rgba(255,0,0,.7),0 0 18px rgba(255,0,0,.35);
-      --glow-yellow:0 0 8px rgba(255,215,0,.8),0 0 20px rgba(255,215,0,.4);
-      --radius:18px;
-      --pad:18px;
-      --transition:200ms ease;
+      --white:#FFFFFF;
+      --magenta:#FF00FF;
     }
-    html,body{height:100%}
+    html,body{height:100%;}
     body{
-      margin:0; background:var(--bg); color:var(--white-text); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      line-height:1.6; overflow-x:hidden;
-    }/* Subtle moving scanlines */
-body::before{
-  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(255,255,255,.03) 0px,
-    rgba(255,255,255,.03) 1px,
-    transparent 2px,
-    transparent 4px
-  );
-  animation:scan 6s linear infinite;
-  mix-blend-mode:overlay;
+      margin:0; background:var(--bg); color:var(--white); font-family:monospace; line-height:1.6; overflow-x:hidden;
+    }
+    /* Subtle moving scanlines */
+    body::before{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+      background: repeating-linear-gradient(
+        to bottom, rgba(255,255,255,0.03), rgba(255,255,255,0.03) 1px,
+        transparent 1px, transparent 3px
+      );
+      animation: scan 6s linear infinite;
+    }
+    @keyframes scan{0%{transform:translateY(0)}100%{transform:translateY(3px)}}.container{position:relative; z-index:1;}
+
+/* NAV */
+header{position:sticky; top:0; z-index:5; background:rgba(0,0,0,0.9); backdrop-filter:saturate(140%) blur(2px); border-bottom:1px solid var(--cyan-blue);}
+.nav{max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:10px 16px;}
+.brand{display:flex; align-items:center; gap:10px; color:var(--primary-yellow); text-shadow:0 0 8px var(--primary-yellow); font-weight:bold;}
+.brand .ascii{font-size:12px; line-height:1;}
+.brand .name{font-size:14px;}
+.menu{display:flex; gap:14px; flex-wrap:wrap;}
+.menu a{position:relative; text-decoration:none; color:var(--white); padding:6px 8px; border:1px dashed rgba(0,255,255,0.35); border-radius:6px;}
+.menu a:hover{color:var(--neon-green); text-shadow:0 0 8px var(--neon-green); border-color:var(--neon-green);}    
+.hamburger{display:none; cursor:pointer; border:1px solid var(--cyan-blue); padding:6px 8px; border-radius:6px;}
+.hamburger span{display:block; width:22px; height:2px; background:var(--cyan-blue); margin:4px 0; box-shadow:0 0 6px var(--cyan-blue);}    
+
+@media (max-width: 980px){
+  .menu{display:none; width:100%; flex-direction:column; margin-top:10px;}
+  .menu a{border-style:solid;}
+  .hamburger{display:block;}
+  .nav{flex-wrap:wrap;}
 }
-@keyframes scan{0%{transform:translateY(0)}100%{transform:translateY(4px)}}
+.menu.open{display:flex;}
 
-a{color:var(--cyan-blue); text-decoration:none}
-a:hover{ text-shadow: var(--glow-cyan); }
+/* Sections */
+section{max-width:1100px; margin:0 auto; padding:56px 16px; opacity:0; transform:translateY(8px); transition:opacity .6s ease, transform .6s ease;}
+section.visible{opacity:1; transform:translateY(0);}    
+.section-title{color:var(--primary-yellow); text-shadow:0 0 8px var(--primary-yellow); margin-bottom:16px;}
+.ascii-block{white-space:pre-wrap; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.15); padding:16px; border-radius:10px; box-shadow:0 0 18px rgba(255,255,255,0.06) inset;}
 
-/* Container */
-.wrap{max-width:1100px; margin:0 auto; padding:80px 18px}
+.neon{color:var(--neon-green); text-shadow:0 0 8px var(--neon-green);}    
+.cyan{color:var(--cyan-blue); text-shadow:0 0 8px var(--cyan-blue);}    
+.red{color:var(--bright-red); text-shadow:0 0 8px var(--bright-red);}    
+.magenta{color:var(--magenta); text-shadow:0 0 8px var(--magenta);}    
 
-/* ASCII nav bar */
-header{position:sticky; top:0; z-index:50; background:linear-gradient(180deg, rgba(0,0,0,.95), rgba(0,0,0,.75)); border-bottom:1px solid var(--border); backdrop-filter: blur(6px)}
-.nav{
-  display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 18px; max-width:1100px; margin:0 auto; color:var(--primary-yellow)
-}
-.brand{
-  font-weight:700; letter-spacing:.5px; display:flex; align-items:center; gap:10px
-}
-.brand .lamp{ width:8px; height:8px; border-radius:50%; background:var(--bright-red); box-shadow: var(--glow-red); display:inline-block }
-.brand .ascii{ white-space:pre; font-size:12px; color:var(--primary-yellow) }
-
-/* Hamburger */
-.hamburger{ display:none; flex-direction:column; gap:4px; cursor:pointer }
-.hamburger span{ width:26px; height:2px; background:var(--primary-yellow); box-shadow: var(--glow-yellow); transition: transform var(--transition) }
-.hamburger:focus{ outline:2px dashed var(--neon-green) }
-
-nav ul{ list-style:none; display:flex; gap:18px; padding:0; margin:0 }
-nav a{ color:var(--primary-yellow); padding:6px 8px; border-radius:10px }
-nav a:hover, nav a:focus{ color:var(--white-text); text-shadow: var(--glow-yellow) }
-
-@media (max-width: 860px){
-  nav ul{ display:none; position:absolute; left:0; right:0; top:60px; background:#050505; border-top:1px solid var(--border); padding:12px 18px; flex-direction:column }
-  nav ul.open{ display:flex }
-  .hamburger{ display:flex }
-  .brand .ascii{ display:none }
-}
-
-/* Section cards */
-section{ position:relative; z-index:1 }
-.card{
-  background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:var(--pad); box-shadow: 0 0 0 1px rgba(255,255,255,.02) inset; margin-bottom:26px
-}
-
-/* Reveal on scroll */
-.reveal{ opacity:0; transform:translateY(8px); transition: 600ms ease }
-.reveal.visible{ opacity:1; transform:none }
-
-/* HOME */
-.ascii-heading{ color:var(--white-text); white-space:pre; overflow:auto; border-left:3px solid var(--neon-green); padding-left:12px; margin:0 0 10px 0; text-shadow: var(--glow) }
-.subtitle{ color:var(--neon-green); font-weight:700; margin:6px 0 10px 0; text-shadow: var(--glow) }
-
-.terminal{ background:#030303; border:1px solid var(--border); border-radius:12px; padding:14px; box-shadow: 0 0 0 1px rgba(0,255,0,.1) inset }
-.prompt{ color:var(--cyan-blue) }
-.cursor{ display:inline-block; width:10px; height:1.1em; background:var(--neon-green); vertical-align:bottom; margin-left:2px; animation:blink 1s steps(1) infinite }
+/* Terminal typing + cursor */
+.typing{display:inline-block;}
+.cursor{display:inline-block; width:10px; height:1.2em; background:var(--neon-green); margin-left:6px; animation:blink 1s steps(1) infinite; box-shadow:0 0 8px var(--neon-green);}    
 @keyframes blink{50%{opacity:0}}
 
-.kbd-help{ font-size:13px; color:var(--muted); margin-top:8px }
+/* Cards / grids */
+.grid{display:grid; gap:16px;}
+@media(min-width: 720px){.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(min-width: 960px){.grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr));}}
+.card{background:rgba(255,255,255,0.03); border:1px solid rgba(0,255,255,0.35); border-radius:14px; padding:16px; box-shadow:0 0 16px rgba(0,255,255,0.2);}    
+.card h3{margin:0 0 8px 0;}
 
-/* ABOUT */
-.cmd{ color:var(--cyan-blue) }
-.resp{ color:var(--neon-green) }
-.warn{ color:var(--bright-red); text-shadow: var(--glow-red) }
+/* Skill bars (ASCII look) */
+.skill{margin:6px 0;}
+.bar{font-family:monospace; letter-spacing:1px;}
+.bar .fill{color:var(--primary-yellow);}    
+.bar .empty{color:#444;}
 
-/* SKILLS */
-.matrix-title{ color:var(--primary-yellow); text-shadow: var(--glow-yellow); margin-bottom:10px; font-weight:700 }
-.skill{ margin:10px 0 }
-.bar{ font-family:inherit; color:var(--neon-green) }
-.bar .track{ display:inline-block; padding:2px 6px; background:#050505; border:1px solid var(--border); border-radius:10px; min-width:260px; }
-.bar .fill{ display:inline-block; white-space:pre; }
+/* Experience */
+.xp-company{border:1px dashed var(--cyan-blue); padding:12px; border-radius:12px;}
 
-/* PROJECTS */
-.proj-title{ color:var(--primary-yellow); text-shadow: var(--glow-yellow); font-weight:700; margin-bottom:10px }
-.projects{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:16px }
-@media (max-width:820px){ .projects{ grid-template-columns: 1fr } }
-.project{ border:1px dashed var(--cyan-blue); border-radius:16px; padding:14px; background:#040404; transition: transform var(--transition), box-shadow var(--transition); cursor:default }
-.project:hover{ transform: translateY(-2px); box-shadow: 0 0 0 1px rgba(0,255,255,.15) inset, 0 6px 18px rgba(0,255,255,.08) }
-.project h4{ margin:0 0 8px 0; color:var(--cyan-blue); text-shadow: var(--glow-cyan) }
-.project p{ margin:0; color:#cde7e7 }
+/* Blog & Stats tags */
+.tag{display:inline-block; border:1px solid var(--magenta); padding:2px 6px; border-radius:8px; margin-left:6px; font-size:.9em;}
 
-.proj-cmd{ margin-top:8px; font-size:13px; color:var(--muted) }
+/* Links */
+a.inline{color:var(--cyan-blue);} a.inline:hover{color:var(--neon-green); text-shadow:0 0 8px var(--neon-green);}    
 
-/* EXPERIENCE */
-.exp{ border:1px solid var(--cyan-blue); border-radius:16px; padding:14px; background:#040404; margin-bottom:12px }
-.exp h4{ margin:0 0 6px 0; color:var(--cyan-blue) }
-.exp .when{ color:var(--highlight-magenta) }
-
-/* CONTACT */
-.contact-title{ color:var(--primary-yellow); text-shadow: var(--glow-yellow); font-weight:700 }
-.form{ display:grid; gap:10px; max-width:680px }
-.label{ color:var(--cyan-blue) }
-.input{ width:100%; background:#030303; border:1px solid var(--neon-green); color:var(--white-text); border-radius:10px; padding:12px; caret-color:var(--neon-green) }
-.input:focus{ outline:none; box-shadow: var(--glow) }
-.send{ background:transparent; color:var(--primary-yellow); border:1px solid var(--primary-yellow); border-radius:12px; padding:12px 16px; font-weight:700; cursor:pointer }
-.send:hover, .send:focus{ text-shadow: var(--glow-yellow); box-shadow: var(--glow-yellow) }
+/* Contact */
+form input, form textarea{width:100%; background:transparent; color:var(--white); border:1px solid var(--neon-green); border-radius:10px; padding:10px; outline:none;}
+form input:focus, form textarea:focus{box-shadow:0 0 12px var(--neon-green);}    
+.btn{display:inline-block; border:1px solid var(--primary-yellow); padding:10px 14px; border-radius:10px; color:var(--primary-yellow); background:transparent; cursor:pointer; text-shadow:0 0 8px var(--primary-yellow);}    
+.btn:hover{filter:brightness(1.2);}    
 
 /* Footer */
-footer{ text-align:center; color:var(--muted); padding:28px 12px; border-top:1px solid var(--border) }
+footer{border-top:1px solid rgba(255,255,255,0.18); padding:24px 16px; text-align:center; color:#bbb;}
 
-/* Link hover neon glow for nav */
-.neon-hover:hover{ text-shadow: var(--glow-yellow) }
-
-/* Visually hidden (accessibility) */
-.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0 }
-
-/* Modal for project open */
-.modal{ position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.7); z-index:60 }
-.modal.open{ display:grid }
-.modal-card{ background:#050505; border:1px solid var(--border); border-radius:16px; max-width:720px; width:min(92vw,720px); padding:18px }
-.modal-card h3{ margin:0 0 8px 0; color:var(--primary-yellow); text-shadow: var(--glow-yellow) }
-.close-btn{ float:right; background:transparent; color:var(--bright-red); border:1px solid var(--bright-red); border-radius:10px; padding:6px 10px; cursor:pointer }
-.close-btn:hover{ box-shadow: var(--glow-red) }
+/* Modals */
+.modal{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,0.7); z-index:20;}
+.modal.active{display:grid;}
+.modal .content{max-width:720px; margin:12px; background:#020202; border:1px solid var(--magenta); border-radius:14px; padding:18px; box-shadow:0 0 24px var(--magenta);}    
+.modal .close{float:right; cursor:pointer;}
 
   </style>
 </head>
 <body>
-  <!-- Header / Navigation -->
-  <header>
-    <div class="nav" role="navigation" aria-label="Main Navigation">
-      <div class="brand" aria-label="Saif brand">
-        <span class="lamp" aria-hidden="true"></span>
-        <span>SAIF</span>
-        <span class="ascii" aria-hidden="true">[=]====[ Home | About | Skills | Projects | Experience | Contact ]====[=]</span>
-      </div>
-      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
-        <span></span><span></span><span></span>
-      </button>
-      <nav>
-        <ul id="menu">
-          <li><a class="neon-hover" href="#home">Home</a></li>
-          <li><a class="neon-hover" href="#about">About Me</a></li>
-          <li><a class="neon-hover" href="#skills">Skills</a></li>
-          <li><a class="neon-hover" href="#projects">Projects</a></li>
-          <li><a class="neon-hover" href="#experience">Experience</a></li>
-          <li><a class="neon-hover" href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>  <main class="wrap">
-    <!-- HOME -->
-    <section id="home">
-      <div class="card reveal">
-        <pre class="ascii-heading" aria-label="ASCII heading">
-███████╗ █████╗ ██╗███████╗    ███████╗███╗   ██╗██╗   ██╗
-██╔════╝██╔══██╗██║██╔════╝    ██╔════╝████╗  ██║██║   ██║
-███████╗███████║██║███████╗    █████╗  ██╔██╗ ██║██║   ██║
-╚════██║██╔══██║██║╚════██║    ██╔══╝  ██║╚██╗██║██║   ██║
-███████║██║  ██║██║███████║    ███████╗██║ ╚████║╚██████╔╝
-╚══════╝╚═╝  ╚═╝╚═╝╚══════╝    ╚══════╝╚═╝  ╚═══╝ ╚═════╝
-        </pre>
-        <div class="subtitle">Software Engineer | Code Craftsman | Problem Solver</div>
-        <div class="terminal" aria-live="polite">
-          <div><span class="prompt">[+]</span> Welcome to Saif’s Portfolio — Type <kbd>help</kbd> to explore.<span class="cursor" aria-hidden="true"></span></div>
-          <div id="term-output" style="margin-top:8px"></div>
-          <label for="term-input" class="sr-only">Terminal input</label>
-          <div style="display:flex; gap:8px; align-items:center; margin-top:8px">
-            <span class="prompt">user@saif:~$</span>
-            <input id="term-input" class="input" style="max-width:520px" placeholder="help | open projects | open CyberScan" autocomplete="off" />
-          </div>
-          <div class="kbd-help">Keyboard: <strong>H</strong> help • <strong>J/K</strong> next/prev section • <strong>G</strong> top • <strong>/</strong> focus command</div>
+  <div class="container">
+    <header>
+      <nav class="nav">
+        <div class="brand" aria-label="SAIF Brand">
+          <div class="ascii">[=]</div>
+          <div class="name">SAIF // RETRO CONSOLE</div>
         </div>
-      </div>
-    </section><!-- ABOUT -->
+        <div class="hamburger" id="hamburger" aria-label="Toggle menu" tabindex="0">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="menu" id="menu">
+          <a href="#home">Home</a>
+          <a href="#about">About Me</a>
+          <a href="#skills">Skills</a>
+          <a href="#projects">Projects</a>
+          <a href="#experience">Experience</a>
+          <a href="#certs">Certifications</a>
+          <a href="#testimonials">Testimonials</a>
+          <a href="#blog">Blog</a>
+          <a href="#achievements">Achievements</a>
+          <a href="#stats">Stats</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+    </header><!-- HOME -->
+<section id="home">
+  <h2 class="section-title">HOME</h2>
+  <div class="ascii-block" style="border-color:var(--primary-yellow);">
+    <pre class="magenta" style="color:var(--primary-yellow); text-shadow:0 0 10px var(--primary-yellow)">███████╗ █████╗ ██╗███████╗     ███████╗ █████╗ ██╗███████╗
+
+██╔════╝██╔══██╗██║██╔════╝     ██╔════╝██╔══██╗██║██╔════╝ ███████╗███████║██║███████╗     █████╗  ███████║██║███████╗ ╚════██║██╔══██║██║╚════██║     ██╔══╝  ██╔══██║██║╚════██║ ███████║██║  ██║██║███████║     ███████╗██║  ██║██║███████║ ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝     ╚══════╝╚═╝  ╚═╝╚═╝╚══════╝</pre> <p class="neon" id="subtitle"></p> <p id="welcome">[+] Welcome to SAIF’s Portfolio — Navigate using the menu or commands.<span class="cursor"></span></p> </div> </section>
+
+<!-- ABOUT -->
 <section id="about">
-  <div class="card reveal">
-    <div class="cmd">root@saif:~# whoami</div>
-    <div class="resp">I’m Saif, a passionate Software Engineer with a love for clean, efficient, and scalable code.</div>
-    <div class="warn">Warning: May spend excessive hours perfecting algorithms.</div>
-    <p>
-      I have 5+ years of experience in developing web, mobile, and system applications. My journey started with curiosity about how software works, and over the years, I’ve built solutions ranging from small tools to enterprise-grade platforms. I thrive in problem-solving, automation, and secure software development.
-    </p>
+  <h2 class="section-title">ABOUT ME</h2>
+  <div class="ascii-block">
+    <p class="cyan">root@SAIF:~# whoami</p>
+    <p class="neon">I am SAIF, a Software Engineer dedicated to building secure, scalable, and user-friendly software.</p>
+    <p>With over 6 years of professional experience, I specialize in full-stack web development, automation tools, and penetration testing. My work blends functionality with creativity, always ensuring the highest standards of security and performance.</p>
+    <p class="red">Warning: Code perfectionist at work — proceed with caution.</p>
+    <p>In my free time, I contribute to open-source projects, experiment with AI-driven tools, and write blogs on modern development practices.</p>
   </div>
 </section>
 
 <!-- SKILLS -->
 <section id="skills">
-  <div class="card reveal">
-    <div class="matrix-title">[ SKILLS MATRIX ]</div>
-    <div><strong>Programming Languages:</strong> Python, JavaScript, TypeScript, C++, PHP</div>
-    <div><strong>Frameworks & Libraries:</strong> React, Node.js, Express, Django, Flask, Laravel</div>
-    <div><strong>Tools & Platforms:</strong> Docker, Git, GitHub Actions, Linux, AWS, Firebase</div>
-    <div><strong>Security & Testing:</strong> Penetration Testing, OWASP Standards, Unit & Integration Testing</div>
+  <h2 class="section-title">SKILLS</h2>
+  <div class="ascii-block" style="border-color:var(--primary-yellow)">
+    <p class="section-title" style="margin:0">[ SKILL MATRIX — SAIF ]</p>
+    <p class="neon">Programming Languages: Python, JavaScript, TypeScript, C++, PHP, Bash, SQL</p>
+    <p class="cyan">Frameworks & Libraries: React, Next.js, Node.js, Express, Django, Flask, Laravel, Bootstrap, Tailwind CSS</p>
+    <p class="neon">DevOps & Tools: Docker, Kubernetes, Jenkins, GitHub Actions, AWS, Firebase, Linux</p>
+    <p class="red">Security & Testing: Penetration Testing, Ethical Hacking, OWASP Standards, Unit Testing, Selenium Automation</p>
+    <p class="magenta">Databases: PostgreSQL, MySQL, MongoDB, SQLite</p>
 
-    <div class="skill">
-      <div>Python</div>
-      <div class="bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
-        <span class="track"><span class="fill" data-ascii="███████████---">███████████---</span></span> 85%
+    <div class="skills">
+      <div class="skill">
+        <span>Python:</span>
+        <span class="bar">
+          <span class="fill">[███████████████--]</span> 90%
+        </span>
       </div>
-    </div>
-    <div class="skill">
-      <div>JavaScript</div>
-      <div class="bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
-        <span class="track"><span class="fill" data-ascii="████████----">████████----</span></span> 80%
+      <div class="skill">
+        <span>JavaScript:</span>
+        <span class="bar">
+          <span class="fill">[████████████---]</span> 85%
+        </span>
       </div>
-    </div>
-    <div class="skill">
-      <div>Linux</div>
-      <div class="bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">
-        <span class="track"><span class="fill" data-ascii="████████████--">████████████--</span></span> 90%
+      <div class="skill">
+        <span>Linux:</span>
+        <span class="bar">
+          <span class="fill">[████████████████]</span> 95%
+        </span>
+      </div>
+      <div class="skill">
+        <span>Cybersecurity:</span>
+        <span class="bar">
+          <span class="fill">[██████████████]</span> 88%
+        </span>
       </div>
     </div>
   </div>
@@ -244,28 +190,34 @@ footer{ text-align:center; color:var(--muted); padding:28px 12px; border-top:1px
 
 <!-- PROJECTS -->
 <section id="projects">
-  <div class="card reveal">
-    <div class="proj-title">[ PROJECT REPOSITORY ]</div>
-    <div class="projects" id="project-grid" aria-label="Project list">
-      <div class="project" tabindex="0" data-project="CyberScan">
-        <h4>CyberScan</h4>
-        <p>A network vulnerability scanner with real-time reporting and exploit suggestions.</p>
-        <div class="proj-cmd">Try: <code>open CyberScan</code></div>
+  <h2 class="section-title">PROJECTS</h2>
+  <div class="ascii-block">
+    <p class="section-title" style="margin:0">[ PROJECT REPOSITORY — SAIF ]</p>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3 class="neon">CyberScan</h3>
+        <p>A real-time vulnerability scanner with AI-driven threat detection.</p>
+        <button class="btn" data-open="cyberscan">user@SAIF:~$ open CyberScan</button>
       </div>
-      <div class="project" tabindex="0" data-project="DevOps Automator">
-        <h4>DevOps Automator</h4>
-        <p>Automates deployment pipelines for web applications with Docker and CI/CD integration.</p>
-        <div class="proj-cmd">Try: <code>open DevOps Automator</code></div>
+      <div class="card">
+        <h3 class="neon">DevOps Automator</h3>
+        <p>Pipeline automation tool with Docker, Kubernetes, and CI/CD integration.</p>
+        <button class="btn" data-open="devops">user@SAIF:~$ open DevOps-Automator</button>
       </div>
-      <div class="project" tabindex="0" data-project="SecurePass">
-        <h4>SecurePass</h4>
-        <p>A password manager with AES-256 encryption and zero-knowledge architecture.</p>
-        <div class="proj-cmd">Try: <code>open SecurePass</code></div>
+      <div class="card">
+        <h3 class="neon">SecurePass</h3>
+        <p>AES-256 encrypted password manager with zero-knowledge proof security.</p>
+        <button class="btn" data-open="securepass">user@SAIF:~$ open SecurePass</button>
       </div>
-      <div class="project" tabindex="0" data-project="CodeVision">
-        <h4>CodeVision</h4>
-        <p>AI-assisted code review and optimization tool for developers.</p>
-        <div class="proj-cmd">Try: <code>open CodeVision</code></div>
+      <div class="card">
+        <h3 class="neon">CodeVision</h3>
+        <p>AI-powered code analysis and optimization platform.</p>
+        <button class="btn" data-open="codevision">user@SAIF:~$ open CodeVision</button>
+      </div>
+      <div class="card">
+        <h3 class="neon">NetTrack</h3>
+        <p>IP and geo-location tracker for cybersecurity investigations.</p>
+        <button class="btn" data-open="nettrack">user@SAIF:~$ open NetTrack</button>
       </div>
     </div>
   </div>
@@ -273,196 +225,190 @@ footer{ text-align:center; color:var(--muted); padding:28px 12px; border-top:1px
 
 <!-- EXPERIENCE -->
 <section id="experience">
-  <div class="card reveal">
-    <div class="exp">
-      <h4>TechHive Solutions <span class="when">— Senior Software Engineer (2021 - Present)</span></h4>
-      <p>Led a team of developers building secure, scalable SaaS platforms. Optimized cloud infrastructure and reduced deployment times by 40%.</p>
+  <h2 class="section-title">EXPERIENCE</h2>
+  <div class="grid cols-2">
+    <div class="xp-company">
+      <p class="cyan"><strong>TechHive Solutions — Senior Software Engineer (2021 - Present)</strong></p>
+      <ul>
+        <li>Led development of high-security SaaS applications.</li>
+        <li>Reduced server response times by 40%.</li>
+        <li>Built automated deployment pipelines.</li>
+      </ul>
     </div>
-    <div class="exp">
-      <h4>CyberNet Systems <span class="when">— Software Engineer (2018 - 2021)</span></h4>
-      <p>Developed enterprise-level applications and conducted penetration testing for client networks.</p>
+    <div class="xp-company">
+      <p class="cyan"><strong>CyberNet Systems — Software Engineer (2018 - 2021)</strong></p>
+      <ul>
+        <li>Developed enterprise applications.</li>
+        <li>Performed network penetration tests.</li>
+        <li>Increased platform stability by 35%.</li>
+      </ul>
     </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs">
+  <h2 class="section-title">CERTIFICATIONS</h2>
+  <div class="grid cols-2">
+    <div class="card">Certified Ethical Hacker (CEH)</div>
+    <div class="card">AWS Certified Solutions Architect</div>
+    <div class="card">Google Cloud Professional Developer</div>
+    <div class="card">Cisco Certified Network Associate (CCNA)</div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <h2 class="section-title">TESTIMONIALS</h2>
+  <div class="grid cols-3">
+    <div class="card">Client — Sarah J.: <em>"SAIF delivered an incredibly secure and fast web app ahead of schedule."</em></div>
+    <div class="card">Colleague — Ahmed R.: <em>"His attention to detail in code is unmatched."</em></div>
+    <div class="card">Manager — John D.: <em>"SAIF is the go-to engineer for critical security issues."</em></div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section id="blog">
+  <h2 class="section-title">BLOG</h2>
+  <div class="grid cols-3">
+    <div class="card">
+      <strong>Mastering Terminal UI for Modern Websites</strong>
+      <span class="tag">1200+ reads</span>
+    </div>
+    <div class="card">
+      <strong>Top 10 Cybersecurity Practices for Developers</strong>
+      <span class="tag">3K+ reads</span>
+    </div>
+    <div class="card">
+      <strong>Automating DevOps with Docker and Kubernetes</strong>
+      <span class="tag">2.2K+ reads</span>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements">
+  <h2 class="section-title">ACHIEVEMENTS</h2>
+  <ul class="ascii-block">
+    <li>Built a SaaS platform used by 100,000+ users worldwide</li>
+    <li>Won 1st place in National Hackathon 2023</li>
+    <li>Discovered & reported 15+ security vulnerabilities in public systems</li>
+  </ul>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <h2 class="section-title">STATS</h2>
+  <div class="grid cols-4">
+    <div class="card"><strong>Projects Completed</strong><div class="neon count" data-count="150">0</div>+</div>
+    <div class="card"><strong>Hours of Coding</strong><div class="neon count" data-count="10000">0</div>+</div>
+    <div class="card"><strong>Open Source Contributions</strong><div class="neon count" data-count="200">0</div>+ commits</div>
+    <div class="card"><strong>Bug Bounties Won</strong><div class="neon count" data-count="25">0</div>+</div>
   </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="card reveal">
-    <div class="contact-title">[ CONTACT ME ]</div>
-    <form class="form" id="contact-form" novalidate>
-      <label class="label" for="name">Name &gt;</label>
-      <input class="input" id="name" name="name" placeholder="Your name" required/>
-
-      <label class="label" for="email">Email &gt;</label>
-      <input class="input" id="email" name="email" type="email" placeholder="you@example.com" required/>
-
-      <label class="label" for="message">Message &gt;</label>
-      <textarea class="input" id="message" name="message" rows="5" placeholder="Hi Saif, ..." required></textarea>
-
-      <button class="send" type="submit">[ SEND MESSAGE ]</button>
-      <div id="form-status" aria-live="polite"></div>
+  <h2 class="section-title">CONTACT</h2>
+  <div class="ascii-block">
+    <p class="section-title" style="margin:0">[ CONTACT — SAIF ]</p>
+    <form id="contactForm">
+      <label>Name &gt;</label>
+      <input type="text" name="name" required />
+      <br><br>
+      <label>Email &gt;</label>
+      <input type="email" name="email" required />
+      <br><br>
+      <label>Message &gt;</label>
+      <textarea name="message" rows="5" required></textarea>
+      <br><br>
+      <button class="btn" type="submit">[ SEND MESSAGE ]</button>
     </form>
-    <pre style="margin-top:16px; text-align:center">--------------------------------------------------
+    <pre style="margin-top:16px;">-----------------------------------
 
-© 2025 Saif | Designed in Retro Terminal Style --------------------------------------------------</pre> </div> </section>
+© <span id="year"></span> SAIF | Retro Terminal Theme -----------------------------------</pre> </div> </section>
 
-  </main>  <footer>
-    <pre>
-  ___  _     _     _       _____            _           _            
- / __|| |___| |___| |_ ___| __  |___ ___   | |_ ___ ___| |_ ___ ___  
- \__ \| / -_) / -_)  _/ -_) __ -| .'|  _|  |  _| .'|   |  _| -_|_ -| 
- |___/|_\___|_\___|\__\___|_____|__,|_|    |_| |__,|_|_|_| |___|___| 
-    </pre>
-  </footer>  <!-- Modal -->  <div class="modal" id="modal">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <button class="close-btn" id="modal-close" aria-label="Close">close</button>
-      <h3 id="modal-title">Project</h3>
-      <div id="modal-body"></div>
-    </div>
-  </div>  <script>
-    // --- Small WebAudio click for navigation ---
-    const clickSound = (()=>{
-      let ctx; return ()=>{ try{ ctx = ctx || new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.type='square'; o.frequency.value=440; g.gain.setValueAtTime(0.0001, ctx.currentTime); g.gain.linearRampToValueAtTime(0.03, ctx.currentTime+0.005); g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.06); o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime+0.07);}catch(e){} }
-    })();
+<footer>
+  <pre class="ascii-block" style="display:inline-block; text-align:left;">
 
-    // --- Hamburger menu ---
-    const hamburger = document.getElementById('hamburger');
-    const menu = document.getElementById('menu');
-    hamburger.addEventListener('click', ()=>{
-      menu.classList.toggle('open');
-      const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-      hamburger.setAttribute('aria-expanded', String(!expanded));
-      clickSound();
-    });
 
-    // Click sound for nav links
-    menu.querySelectorAll('a').forEach(a=>a.addEventListener('click', clickSound));
+---
 
-    // --- Reveal on scroll ---
-    const io = new IntersectionObserver(entries=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
-    },{ threshold:.1 });
-    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+/ / /   | / / / / _ \ / /| | _ \ / /
+/ // ___ |/ // __/
+////  |/__///    © <span id="year2"></span> SAIF </pre> </footer>
 
-    // --- Keyboard navigation ---
-    const sections = Array.from(document.querySelectorAll('main section'));
-    function scrollToSection(idx){
-      if(idx<0||idx>=sections.length) return;
-      sections[idx].scrollIntoView({behavior:'smooth', block:'start'});
-    }
-    document.addEventListener('keydown', (e)=>{
-      const active = sections.findIndex(s=>{
-        const rect = s.getBoundingClientRect();
-        return rect.top <= 100 && rect.bottom > 100;
-      });
-      if(e.key.toLowerCase()==='j'){ scrollToSection(Math.min(active+1, sections.length-1)); }
-      if(e.key.toLowerCase()==='k'){ scrollToSection(Math.max(active-1, 0)); }
-      if(e.key.toLowerCase()==='g'){ scrollToSection(0); }
-      if(e.key==='/'){ e.preventDefault(); termInput.focus(); termInput.select(); }
-      if(e.key.toLowerCase()==='h'){ showHelp(); }
-    });
+  </div>  <!-- PROJECT MODALS -->  <div class="modal" id="modal-cyberscan"><div class="content"><span class="close" data-close>✕</span><h3 class="magenta">CyberScan</h3><p>Real-time vulnerability scanning with ML-based anomaly detection, auto-reporting, and OWASP mapping.</p></div></div>
+  <div class="modal" id="modal-devops"><div class="content"><span class="close" data-close>✕</span><h3 class="magenta">DevOps Automator</h3><p>Automates CI/CD pipelines with Docker builds, K8s deploys, and GitHub Actions workflows.</p></div></div>
+  <div class="modal" id="modal-securepass"><div class="content"><span class="close" data-close>✕</span><h3 class="magenta">SecurePass</h3><p>Password manager using AES-256 with zero-knowledge design, local encryption, and breach alerts.</p></div></div>
+  <div class="modal" id="modal-codevision"><div class="content"><span class="close" data-close>✕</span><h3 class="magenta">CodeVision</h3><p>Static + dynamic analysis to optimize code paths, complexity, and performance with AI hints.</p></div></div>
+  <div class="modal" id="modal-nettrack"><div class="content"><span class="close" data-close>✕</span><h3 class="magenta">NetTrack</h3><p>IP and geo-tracking toolkit for investigations, with multi-source enrichment and mapping.</p></div></div>  <script>
+    // Responsive menu toggle
+    const hamburger=document.getElementById('hamburger');
+    const menu=document.getElementById('menu');
+    const toggleMenu=()=>menu.classList.toggle('open');
+    hamburger.addEventListener('click',toggleMenu);
+    hamburger.addEventListener('keypress',e=>{if(e.key==='Enter') toggleMenu();});
 
-    // --- Terminal simulation ---
-    const termOut = document.getElementById('term-output');
-    const termInput = document.getElementById('term-input');
+    // Typing effect for subtitle
+    const subtitle = document.getElementById('subtitle');
+    const subtitleText = 'Software Engineer | Cybersecurity Enthusiast | Full-Stack Developer';
+    let i=0; function type(){ if(i<=subtitleText.length){ subtitle.textContent = subtitleText.slice(0,i); i++; setTimeout(type, 20);} }
+    type();
 
-    function printLine(text, color){
-      const div = document.createElement('div');
-      if(color) div.style.color = color;
-      div.textContent = text;
-      termOut.appendChild(div);
-      termOut.scrollTop = termOut.scrollHeight;
-    }
+    // Fade-in on scroll (section_transition)
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach((e)=>{ if(e.isIntersecting){ e.target.classList.add('visible'); }});
+    },{threshold:0.15});
+    document.querySelectorAll('section').forEach(s=>io.observe(s));
 
-    function showHelp(){
-      printLine('Available commands:','var(--cyan-blue)');
-      printLine('  help               — show this help');
-      printLine('  open projects      — jump to Projects');
-      printLine('  open <name>        — open a project modal (CyberScan | DevOps Automator | SecurePass | CodeVision)');
-      printLine('  about              — jump to About Me');
-      printLine('  skills             — jump to Skills');
-      printLine('  contact            — jump to Contact');
-    }
+    // Link hover glow already via CSS (link_hover_glow)
 
-    const projectData = {
-      'CyberScan': {
-        title:'CyberScan',
-        body:`A network vulnerability scanner with real-time reporting and exploit suggestions.\n\nFeatures:\n• Fast TCP/UDP scanning\n• CVE mapping & export\n• HTML reports with risk scoring\n• Scriptable rules`
-      },
-      'DevOps Automator': {
-        title:'DevOps Automator',
-        body:`Automates deployment pipelines for web apps with Docker and CI/CD integration.\n\nHighlights:\n• GitHub Actions templates\n• Blue/Green & Canary helpers\n• Infra-as-Code scaffolds`
-      },
-      'SecurePass': {
-        title:'SecurePass',
-        body:`Password manager with AES-256 and zero-knowledge design.\n\nHighlights:\n• Local-first encryption\n• Hardware key support\n• Secure sharing channels`
-      },
-      'CodeVision': {
-        title:'CodeVision',
-        body:`AI-assisted code review and optimization tool.\n\nHighlights:\n• Lint + static analysis fusion\n• Complexity & cost hints\n• PR comment generator`
-      }
+    // Console sound effect (simple WebAudio click)
+    const clickSound = ()=>{
+      try{
+        const ctx = new (window.AudioContext||window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type='square'; o.frequency.value=600; g.gain.value=0.02; o.connect(g); g.connect(ctx.destination); o.start(); setTimeout(()=>{o.stop(); ctx.close();}, 80);
+      }catch(err){/* ignore */}
     };
+    document.addEventListener('click', clickSound, {passive:true});
 
-    function openProject(name){
-      const data = projectData[name];
-      if(!data){ printLine(`Project not found: ${name}`, 'var(--bright-red)'); return; }
-      const m = document.getElementById('modal');
-      document.getElementById('modal-title').textContent = data.title;
-      document.getElementById('modal-body').innerText = data.body;
-      m.classList.add('open');
-    }
+    // Smooth scroll for menu links
+    document.querySelectorAll('#menu a').forEach(a=>{
+      a.addEventListener('click', e=>{ e.preventDefault(); const href=a.getAttribute('href'); document.querySelector(href).scrollIntoView({behavior:'smooth'}); if(menu.classList.contains('open')) menu.classList.remove('open'); });
+    });
 
-    termInput.addEventListener('keydown', (e)=>{
-      if(e.key==='Enter'){
-        const cmd = termInput.value.trim();
-        if(!cmd) return;
-        printLine(`user@saif:~$ ${cmd}`, 'var(--highlight-magenta)');
-        termInput.value='';
-        if(cmd==='help'){ showHelp(); return; }
-        if(cmd==='open projects'){ document.getElementById('projects').scrollIntoView({behavior:'smooth'}); return; }
-        if(cmd==='about'){ document.getElementById('about').scrollIntoView({behavior:'smooth'}); return; }
-        if(cmd==='skills'){ document.getElementById('skills').scrollIntoView({behavior:'smooth'}); return; }
-        if(cmd==='contact'){ document.getElementById('contact').scrollIntoView({behavior:'smooth'}); return; }
-        if(cmd.startsWith('open ')){
-          openProject(cmd.replace(/^open\s+/,'').trim());
-          return;
+    // Stats count-up when visible
+    const counters = document.querySelectorAll('.count');
+    const io2 = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          const el = en.target; const target = +el.dataset.count; let cur=0; const step=Math.max(1, Math.floor(target/120));
+          const t = setInterval(()=>{cur+=step; if(cur>=target){cur=target; clearInterval(t);} el.textContent = cur;}, 16);
+          io2.unobserve(el);
         }
-        printLine('Unknown command. Type "help".', 'var(--bright-red)');
-      }
-    });
+      })
+    },{threshold:0.5});
+    counters.forEach(c=>io2.observe(c));
 
-    // Project cards open on click/Enter
-    document.getElementById('project-grid').addEventListener('click', (e)=>{
-      const card = e.target.closest('.project'); if(!card) return; openProject(card.dataset.project);
-    });
-    document.getElementById('project-grid').addEventListener('keydown', (e)=>{
-      if(e.key==='Enter'){ const card = e.target.closest('.project'); if(!card) return; openProject(card.dataset.project); }
-    });
+    // Year
+    const y = new Date().getFullYear(); document.getElementById('year').textContent = y; document.getElementById('year2').textContent = y;
 
-    // Modal close handlers
-    const modal = document.getElementById('modal');
-    const modalClose = document.getElementById('modal-close');
-    modalClose.addEventListener('click', ()=> modal.classList.remove('open'));
-    modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.classList.remove('open'); });
-    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') modal.classList.remove('open'); });
-
-    // --- Contact form (client-side only) ---
-    const form = document.getElementById('contact-form');
-    form.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const name = form.name.value.trim();
-      const email = form.email.value.trim();
-      const message = form.message.value.trim();
-      const status = document.getElementById('form-status');
-      if(!name || !email || !message){ status.style.color = 'var(--bright-red)'; status.textContent = 'Please complete all fields.'; return; }
-      const ok = /.+@.+\..+/.test(email);
-      if(!ok){ status.style.color = 'var(--bright-red)'; status.textContent = 'Please enter a valid email address.'; return; }
-      status.style.color = 'var(--neon-green)';
-      status.textContent = 'Message queued locally ✔ (demo only).';
-      form.reset();
+    // Project modal open/close
+    const openButtons = document.querySelectorAll('[data-open]');
+    openButtons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.dataset.open; const m = document.getElementById('modal-'+id); if(m) m.classList.add('active');
+      });
     });
+    document.querySelectorAll('[data-close]').forEach(el=> el.addEventListener('click', ()=> el.closest('.modal').classList.remove('active')));
+    document.querySelectorAll('.modal').forEach(m=> m.addEventListener('click', (e)=>{ if(e.target===m) m.classList.remove('active'); }));
 
-    // Ensure progress bars use their ASCII source
-    document.querySelectorAll('.bar .fill').forEach(el=>{ el.textContent = el.dataset.ascii; });
+    // Contact form (demo only)
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault(); alert('Message sent (demo). Thanks, hacker friend!');
+    });
   </script></body>
 </html>
