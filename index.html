@@ -1,261 +1,293 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bottle Counter — Live</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AirDraw – Draw in the Air with Your Hand</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root{
-      --bg: #000000;         /* darkest black background */
-      --panel: rgba(0,0,0,0.45);
-      --accent: #FFD400;     /* yellow accent */
-      --text: #ffffff;
-      --muted: rgba(255,255,255,0.6);
-    }
-    html,body{
-      height:100%;
-      margin:0;
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background:var(--bg);
-      color:var(--text);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-
-    /* Layout */
-    .wrap{
-      min-height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      box-sizing:border-box;
-    }
-
-    /* big centered number */
-    .counter{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width:clamp(160px, 45vw, 420px);
-      height:clamp(160px, 45vw, 420px);
-      background:var(--panel);
-      border-radius:24px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-      position:relative;
-      user-select:none;
-    }
-    .count{
-      font-weight:800;
-      font-size:clamp(48px, 12vw, 140px);
-      color:var(--accent);
-      line-height:1;
-      margin:0;
-      text-align:center;
-      letter-spacing: -2px;
-    }
-    /* small status text */
-    .status{
-      position: absolute;
-      bottom:12px;
-      left:12px;
-      font-size:13px;
-      color:var(--muted);
-      background:transparent;
-    }
-
-    /* Full-screen subtle footer for instructions on small screens */
-    .footer{
-      position:fixed;
-      bottom:14px;
-      right:14px;
-      color:var(--muted);
-      font-size:13px;
-      text-align:right;
-    }
-
-    /* Hide the video element but keep it playing */
-    video#camera {
-      position: fixed;
-      right: 12px;
-      bottom: 12px;
-      width: 160px;
-      height: auto;
-      border-radius:12px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-      transform: scaleX(-1); /* mirror for natural view */
-      opacity: 0.16; /* subtle preview; set to 0 to hide completely */
-      transition:opacity .25s;
-      z-index: 2;
-    }
-
-    /* Responsive: on very small screens, shrink controls/floats*/
-    @media (max-width:420px){
-      .counter{ width:86vw; height:86vw; border-radius:18px; }
-      .status{ font-size:12px; }
-      video#camera { width:120px; opacity:0.12; }
-    }
-
-    /* Accessibility focus outline */
-    .sr-only{
-      position:absolute!important;
-      height:1px;width:1px;
-      overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;
-    }
+    html, body { height: 100%; }
+    body { background: #0b0b0b; color: #e5e7eb; }
+    .video-mirror { transform: scaleX(-1); }
+    .glass { backdrop-filter: blur(10px); background: rgba(17, 24, 39, 0.6); }
+    canvas { touch-action: none; }
   </style>
+  <!-- MediaPipe (Legacy Hands solution) -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
 </head>
-<body>
-  <div class="wrap" role="main">
-    <div class="counter" aria-live="polite" aria-atomic="true">
-      <p id="count" class="count">—</p>
-      <div id="status" class="status">Initializing camera & model…</div>
+<body class="min-h-screen">
+  <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-4">
+    <header class="flex items-center justify-between">
+      <h1 class="text-2xl md:text-3xl font-bold">✍️ AirDraw <span class="text-sm md:text-base font-normal opacity-70">— draw in the air with your hand</span></h1>
+      <div class="text-xs md:text-sm opacity-70">Tip: pinch thumb + index to draw</div>
+    </header><div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+  <!-- Left: Camera & Canvas -->
+  <section class="lg:col-span-9 relative rounded-2xl overflow-hidden border border-gray-800 shadow-xl">
+    <video id="video" class="w-full h-[60vh] md:h-[70vh] object-cover video-mirror bg-black"></video>
+    <!-- Drawing canvas (same size as video) -->
+    <canvas id="drawCanvas" class="absolute inset-0"></canvas>
+    <!-- Overlay for hand landmarks (can be toggled) -->
+    <canvas id="overlayCanvas" class="absolute inset-0 pointer-events-none"></canvas>
+    
+    <div class="absolute top-3 left-3 right-3 flex flex-wrap items-center gap-2 glass rounded-xl p-3 border border-gray-700">
+      <button id="btnStart" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow">Start Camera</button>
+      <button id="btnStop" class="px-3 py-2 rounded-xl bg-rose-600/70 hover:bg-rose-500 text-white font-semibold shadow disabled:opacity-40" disabled>Stop</button>
+      <button id="btnClear" class="px-3 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white font-semibold shadow">Clear</button>
+      <button id="btnSave" class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow">Save PNG</button>
+      
+      <label class="ml-auto flex items-center gap-2 text-sm"><input id="toggleLandmarks" type="checkbox" class="accent-white" checked> Show landmarks</label>
     </div>
-  </div>
 
-  <!-- Subtle video preview (kept low opacity). If you prefer fully hidden camera, set display:none or opacity:0 -->
-  <video id="camera" autoplay playsinline muted></video>
+    <div class="absolute bottom-3 left-3 right-3 glass rounded-xl p-3 border border-gray-700">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 items-center">
+        <label class="flex items-center gap-3 text-sm">Color <input id="color" type="color" class="h-9 w-12 bg-transparent cursor-pointer border border-gray-700 rounded-md" value="#00e0ff"></label>
+        <label class="flex items-center gap-3 text-sm">Thickness <input id="thickness" type="range" min="1" max="24" value="6" class="w-full"></label>
+        <label class="flex items-center gap-2 text-sm"><input id="eraser" type="checkbox" class="accent-white"> Eraser</label>
+        <label class="flex items-center gap-2 text-sm"><input id="alwaysDraw" type="checkbox" class="accent-white"> Always draw (ignore pinch)</label>
+      </div>
+    </div>
+  </section>
 
-  <div class="footer">Only the number of bottles is shown. Camera: on by default.</div>
+  <!-- Right: Status & Help -->
+  <aside class="lg:col-span-3 space-y-3">
+    <div class="p-4 rounded-2xl border border-gray-800 glass">
+      <h2 class="font-semibold mb-2">Status</h2>
+      <div id="status" class="text-sm opacity-80">Camera: idle</div>
+      <div id="fps" class="text-xs opacity-60 mt-1">—</div>
+    </div>
+    <div class="p-4 rounded-2xl border border-gray-800 glass space-y-2">
+      <h3 class="font-semibold">How to use</h3>
+      <ol class="list-decimal list-inside text-sm space-y-1 opacity-90">
+        <li>Click <b>Start Camera</b> and allow access.</li>
+        <li>Point your hand to the camera. Mirror view is on by default.</li>
+        <li><b>Pinch</b> thumb + index to draw; release to stop. Or enable <b>Always draw</b>.</li>
+        <li>Use the <b>Eraser</b> checkbox to erase with your finger.</li>
+        <li><b>Save PNG</b> exports your artwork.</li>
+      </ol>
+      <p class="text-xs opacity-70">Works best with good lighting and your palm facing the camera.</p>
+    </div>
+    <div class="p-4 rounded-2xl border border-gray-800 glass">
+      <h3 class="font-semibold mb-2">Shortcuts</h3>
+      <ul class="text-sm space-y-1 opacity-90">
+        <li><kbd class="px-2 py-0.5 bg-gray-800 rounded">C</kbd> Clear</li>
+        <li><kbd class="px-2 py-0.5 bg-gray-800 rounded">S</kbd> Save</li>
+        <li><kbd class="px-2 py-0.5 bg-gray-800 rounded">L</kbd> Toggle landmarks</li>
+      </ul>
+    </div>
+  </aside>
+</div>
 
-  <!-- TensorFlow.js and COCO-SSD model -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2/dist/coco-ssd.min.js"></script>
+  </div>  <script>
+    const videoEl = document.getElementById('video');
+    const drawCanvas = document.getElementById('drawCanvas');
+    const overlayCanvas = document.getElementById('overlayCanvas');
+    const ctx = drawCanvas.getContext('2d');
+    const octx = overlayCanvas.getContext('2d');
 
-  <script>
-  // Bottle counter script
-  (function () {
-    const video = document.getElementById('camera');
-    const countEl = document.getElementById('count');
+    const btnStart = document.getElementById('btnStart');
+    const btnStop = document.getElementById('btnStop');
+    const btnClear = document.getElementById('btnClear');
+    const btnSave = document.getElementById('btnSave');
+    const colorInput = document.getElementById('color');
+    const thicknessInput = document.getElementById('thickness');
+    const eraserInput = document.getElementById('eraser');
+    const alwaysDrawInput = document.getElementById('alwaysDraw');
+    const toggleLandmarks = document.getElementById('toggleLandmarks');
     const statusEl = document.getElementById('status');
+    const fpsEl = document.getElementById('fps');
 
-    // Detection settings
-    const FRAME_INTERVAL = 150; // ms between detections (adjust for performance)
-    let model = null;
-    let isDetecting = false;
-    let lastCount = null;
+    let camera = null;
+    let hands = null;
+    let running = false;
+    let lastPoint = null; // for smoothing
+    let lastTime = performance.now();
+    let frames = 0;
 
-    // Helpers
-    function setStatus(text) {
-      statusEl.textContent = text;
+    function resizeCanvases() {
+      const rect = videoEl.getBoundingClientRect();
+      [drawCanvas, overlayCanvas].forEach(cv => {
+        cv.width = rect.width * devicePixelRatio;
+        cv.height = rect.height * devicePixelRatio;
+        cv.style.width = rect.width + 'px';
+        cv.style.height = rect.height + 'px';
+      });
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      octx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
     }
 
-    function setCount(n) {
-      // show only the number; use em-dash for unknown/initial
-      if (typeof n === 'number') {
-        countEl.textContent = String(n);
-        lastCount = n;
-      } else {
-        countEl.textContent = '—';
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function drawLine(p0, p1) {
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      const isEraser = eraserInput.checked;
+      ctx.globalCompositeOperation = isEraser ? 'destination-out' : 'source-over';
+      ctx.strokeStyle = isEraser ? 'rgba(0,0,0,1)' : colorInput.value;
+      ctx.lineWidth = parseFloat(thicknessInput.value);
+      ctx.beginPath();
+      ctx.moveTo(p0.x, p0.y);
+      ctx.lineTo(p1.x, p1.y);
+      ctx.stroke();
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function drawDot(p) {
+      ctx.fillStyle = eraserInput.checked ? 'rgba(0,0,0,1)' : colorInput.value;
+      if (eraserInput.checked) {
+        ctx.globalCompositeOperation = 'destination-out';
       }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, parseFloat(thicknessInput.value)/2, 0, Math.PI*2);
+      ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function drawLandmarksOnOverlay(handsResults) {
+      octx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+      if (!toggleLandmarks.checked) return;
+      const width = overlayCanvas.width / devicePixelRatio;
+      const height = overlayCanvas.height / devicePixelRatio;
+      handsResults.multiHandLandmarks.forEach((landmarks, i) => {
+        // Convert normalized to pixel coords (mirrored)
+        const pts = landmarks.map(lm => ({
+          x: (1 - lm.x) * width,
+          y: lm.y * height
+        }));
+        // draw skeleton
+        drawConnectors(octx, pts, HAND_CONNECTIONS, { color: '#94a3b8', lineWidth: 2 });
+        drawLandmarks(octx, pts, { color: '#e5e7eb', lineWidth: 1, radius: 2 });
+      });
+    }
+
+    function pinchAmount(landmarks) {
+      // Normalized distance between index tip (8) and thumb tip (4)
+      const i8 = landmarks[8];
+      const t4 = landmarks[4];
+      const dx = i8.x - t4.x;
+      const dy = i8.y - t4.y;
+      const dz = (i8.z || 0) - (t4.z || 0);
+      const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      return d;
+    }
+
+    function normToCanvasPoint(lm) {
+      const width = overlayCanvas.width / devicePixelRatio;
+      const height = overlayCanvas.height / devicePixelRatio;
+      return { x: (1 - lm.x) * width, y: lm.y * height };
+    }
+
+    async function setupHands() {
+      hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+      hands.setOptions({
+        maxNumHands: 1,
+        modelComplexity: 1,
+        minDetectionConfidence: 0.6,
+        minTrackingConfidence: 0.5
+      });
+      hands.onResults(onResults);
     }
 
     async function startCamera() {
-      try {
-        // prefer rear camera on mobile if available (facingMode: environment)
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: false,
-          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
-        });
-        video.srcObject = stream;
-        await video.play();
-        return true;
-      } catch (err) {
-        console.error('Camera error', err);
-        setStatus('Camera access denied or not available.');
-        setCount('—');
-        return false;
-      }
+      if (!hands) await setupHands();
+      statusEl.textContent = 'Camera: starting…';
+      // Set ideal constraints for better FPS
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+      videoEl.srcObject = stream;
+      await videoEl.play();
+      resizeCanvases();
+      window.addEventListener('resize', resizeCanvases);
+      running = true;
+      btnStart.disabled = true; btnStop.disabled = false;
+      statusEl.textContent = 'Camera: running';
+
+      // MediaPipe Camera helper drives the frames to hands
+      camera = new Camera(videoEl, {
+        onFrame: async () => {
+          if (!running) return;
+          await hands.send({ image: videoEl });
+          // fps
+          frames++;
+          const now = performance.now();
+          if (now - lastTime >= 1000) {
+            fpsEl.textContent = `FPS: ${frames}`;
+            frames = 0; lastTime = now;
+          }
+        },
+        width: 1280,
+        height: 720,
+      });
+      camera.start();
     }
 
-    async function loadModel() {
-      setStatus('Loading detection model (COCO-SSD)…');
-      try {
-        model = await cocoSsd.load();
-        setStatus('Model loaded. Starting detection…');
-        return true;
-      } catch (err) {
-        console.error('Model load error', err);
-        setStatus('Failed to load model.');
-        return false;
+    function stopCamera() {
+      running = false;
+      if (camera) camera.stop();
+      const stream = videoEl.srcObject;
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        videoEl.srcObject = null;
       }
+      btnStart.disabled = false; btnStop.disabled = true;
+      statusEl.textContent = 'Camera: stopped';
     }
 
-    async function detectLoop() {
-      if (!model || !video || video.readyState < 2) {
-        // video not ready; try again soon
-        setTimeout(detectLoop, 200);
-        return;
-      }
-      isDetecting = true;
+    function onResults(results) {
+      // Draw landmarks overlay
+      if (results.multiHandLandmarks && results.multiHandLandmarks.length) {
+        drawLandmarksOnOverlay(results);
+        const landmarks = results.multiHandLandmarks[0];
+        const pIndex = normToCanvasPoint(landmarks[8]);
 
-      // small offscreen canvas to run detection on the current video frame
-      const tmp = document.createElement('canvas');
-      tmp.width = video.videoWidth;
-      tmp.height = video.videoHeight;
-      const ctx = tmp.getContext('2d');
-      ctx.drawImage(video, 0, 0, tmp.width, tmp.height);
+        // Simple smoothing towards the new point
+        if (!lastPoint) lastPoint = { ...pIndex };
+        const smoothed = { x: lerp(lastPoint.x, pIndex.x, 0.6), y: lerp(lastPoint.y, pIndex.y, 0.6) };
 
-      try {
-        const predictions = await model.detect(tmp);
-
-        // Filter predictions for class 'bottle' only and with confidence threshold
-        const BOTTLE_CONFIDENCE = 0.45; // adjust sensitivity (0-1)
-        const bottlePreds = predictions.filter(p => {
-          return p.class === 'bottle' && p.score >= BOTTLE_CONFIDENCE;
-        });
-
-        const bottleCount = bottlePreds.length;
-
-        // Only update DOM when count changes (less flicker)
-        if (bottleCount !== lastCount) {
-          setCount(bottleCount);
+        const doDraw = alwaysDrawInput.checked || pinchAmount(landmarks) < 0.07; // tweak threshold if needed
+        if (doDraw) {
+          if (lastPoint) drawLine(lastPoint, smoothed);
+          else drawDot(smoothed);
         }
-        setStatus('Detecting bottles — confidence ≥ ' + Math.round(BOTTLE_CONFIDENCE*100) + '%');
-      } catch (err) {
-        console.error('Detection error', err);
-        setStatus('Detection error.');
-      } finally {
-        // schedule next detection
-        setTimeout(detectLoop, FRAME_INTERVAL);
+        lastPoint = smoothed;
+      } else {
+        // No hand detected
+        octx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+        lastPoint = null;
       }
     }
 
-    // Initialize: camera then model then loop
-    (async function init() {
-      setCount(null);
-      setStatus('Requesting camera permission…');
+    // UI actions
+    btnStart.addEventListener('click', startCamera);
+    btnStop.addEventListener('click', stopCamera);
+    btnClear.addEventListener('click', () => {
+      ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    });
+    btnSave.addEventListener('click', () => {
+      // Merge drawing over a transparent background to PNG
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width = drawCanvas.width;
+      exportCanvas.height = drawCanvas.height;
+      const ectx = exportCanvas.getContext('2d');
+      ectx.drawImage(drawCanvas, 0, 0);
+      const url = exportCanvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = url; a.download = 'AirDraw.png'; a.click();
+    });
 
-      const camStarted = await startCamera();
-      if (!camStarted) return;
-
-      // give camera a tiny moment to stabilize
-      await new Promise(res => setTimeout(res, 300));
-
-      const modelLoaded = await loadModel();
-      if (!modelLoaded) return;
-
-      // start detection loop
-      detectLoop();
-    })();
-
-    // Clean up when page hidden/unloaded
-    window.addEventListener('beforeunload', () => {
-      if (video && video.srcObject) {
-        video.srcObject.getTracks().forEach(t => t.stop());
+    toggleLandmarks.addEventListener('change', () => {
+      if (!toggleLandmarks.checked) {
+        octx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
       }
     });
 
-    // Pause detection when tab not visible to save CPU
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        setStatus('Paused (tab not visible)');
-        // could also stop the camera stream here, but we leave it for simplicity
-      } else {
-        setStatus('Detecting bottles — resuming');
-      }
+    // Keyboard shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'c') { ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height); }
+      if (e.key.toLowerCase() === 's') { btnSave.click(); }
+      if (e.key.toLowerCase() === 'l') { toggleLandmarks.checked = !toggleLandmarks.checked; toggleLandmarks.dispatchEvent(new Event('change')); }
     });
 
-  })();
-  </script>
-</body>
+    // Auto-size canvases when metadata loads
+    videoEl.addEventListener('loadedmetadata', resizeCanvases);
+  </script></body>
 </html>
