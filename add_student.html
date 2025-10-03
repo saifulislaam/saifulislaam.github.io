@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Add Student</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container my-4">
+    <h3>Add Student</h3>
+    <div class="card p-3">
+      <form id="addForm" onsubmit="return validateStudentForm('addForm')" action="add_student.php" method="post">
+        <div class="row g-3">
+          <div class="col-md-4 input-with-icon">
+            <i class="fa fa-id-badge form-icon"></i>
+            <input class="form-control" type="text" name="roll_no" placeholder="Roll Number" />
+          </div>
+          <div class="col-md-8 input-with-icon">
+            <i class="fa fa-user form-icon"></i>
+            <input class="form-control" type="text" name="name" placeholder="Full Name" />
+          </div>
+          <div class="col-md-4">
+            <select name="class" class="form-select">
+              <option value="">Select Class</option>
+              <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option>
+            </select>
+          </div>
+          <div class="col-md-4 input-with-icon">
+            <i class="fa fa-envelope form-icon"></i>
+            <input class="form-control" type="email" name="email" placeholder="Email (optional)" />
+          </div>
+          <div class="col-md-4 input-with-icon">
+            <i class="fa fa-phone form-icon"></i>
+            <input class="form-control" type="text" name="contact" placeholder="Contact Number" />
+          </div>
+          <div class="col-12">
+            <textarea class="form-control" name="address" placeholder="Address"></textarea>
+          </div>
+          <div class="col-md-4">
+            <label>Admission Date</label>
+            <input class="form-control" type="date" name="admission_date" />
+          </div>
+          <div class="col-12 text-end">
+            <a class="btn btn-secondary" href="index.html">Cancel</a>
+            <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save Student</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

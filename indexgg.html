@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>IT Company Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind config for custom colors
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a',
+                        secondary: '#1e293b',
+                        accent: '#facc15',
+                        text: '#ffffff',
+                        textDark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .transition { transition: all 0.3s; }
+    </style>
+</head>
+<body class="bg-primary text-text min-h-screen font-sans transition">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-secondary/90 backdrop-blur shadow-lg">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
+            <div class="flex items-center space-x-2">
+                <span class="text-accent font-bold text-2xl">ITCompany</span>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#home" class="hover:text-accent transition">Home</a>
+                <a href="#about" class="hover:text-accent transition">About</a>
+                <a href="#services" class="hover:text-accent transition">Services</a>
+                <a href="#products" class="hover:text-accent transition">Products</a>
+                <a href="#portfolio" class="hover:text-accent transition">Portfolio</a>
+                <a href="#technologies" class="hover:text-accent transition">Tech</a>
+                <a href="#industries" class="hover:text-accent transition">Industries</a>
+                <a href="#blog" class="hover:text-accent transition">Blog</a>
+                <a href="#careers" class="hover:text-accent transition">Careers</a>
+                <a href="#testimonials" class="hover:text-accent transition">Testimonials</a>
+                <a href="#pricing" class="hover:text-accent transition">Pricing</a>
+                <a href="#contact" class="hover:text-accent transition">Contact</a>
+                <a href="#faqs" class="hover:text-accent transition">FAQs</a>
+                <a href="#legal" class="hover:text-accent transition">Legal</a>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button id="theme-toggle" class="p-2 rounded hover:bg-accent hover:text-primary transition" aria-label="Toggle theme">
+                    <svg id="theme-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="theme-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-13.66l-.71.71M4.05 19.07l-.71.71M21 12h-1M4 12H3m16.66 5.66l-.71-.71M4.05 4.93l-.71-.71"></path>
+                    </svg>
+                </button>
+                <a href="#login" class="bg-accent text-primary px-4 py-2 rounded font-semibold hover:bg-yellow-400 transition">Client Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-20 pb-16 bg-gradient-to-b from-primary to-secondary">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col items-center text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 text-accent">Empowering Digital Transformation</h1>
+            <p class="text-lg md:text-2xl mb-6 text-gray-300">Modern IT solutions for your business growth. Secure. Scalable. Smart.</p>
+            <div class="flex flex-col sm:flex-row gap-4 mb-8 justify-center">
+                <a href="#contact" class="bg-accent text-primary px-6 py-3 rounded font-semibold hover:bg-yellow-400 transition">Get a Quote</a>
+                <a href="#contact" class="border border-accent text-accent px-6 py-3 rounded font-semibold hover:bg-accent hover:text-primary transition">Contact Us</a>
+            </div>
+            <div class="flex flex-wrap gap-8 justify-center mt-6">
+                <div>
+                    <span class="text-3xl font-bold text-accent">10+</span>
+                    <p class="text-gray-400">Years Experience</p>
+                </div>
+                <div>
+                    <span class="text-3xl font-bold text-accent">200+</span>
+                    <p class="text-gray-400">Clients Served</p>
+                </div>
+                <div>
+                    <span class="text-3xl font-bold text-accent">15+</span>
+                    <p class="text-gray-400">Industries Covered</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us -->
+    <section id="about" class="py-16 bg-secondary">
+        <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+            <div>
+                <h2 class="text-3xl font-bold mb-4 text-accent">About Us</h2>
+                <p class="mb-4 text-gray-300">We are a leading IT company committed to delivering innovative solutions. Our mission is to empower businesses through technology, our vision is a smarter, connected world, and our values are integrity, excellence, and customer focus.</p>
+                <ul class="mb-4 text-gray-400 list-disc pl-5">
+                    <li>Certified professionals</li>
+                    <li>Global partnerships</li>
+                    <li>Proven track record</li>
+                </ul>
+                <p class="text-accent font-semibold">Why choose us? <span class="text-gray-300">Expertise, reliability, and a passion for your success.</span></p>
+            </div>
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center gap-4">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="CEO" class="w-16 h-16 rounded-full border-2 border-accent"/>
+                    <div>
+                        <p class="font-bold text-text">Saiful Islam</p>
+                        <p class="text-gray-400 text-sm">CEO & Founder</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="CTO" class="w-16 h-16 rounded-full border-2 border-accent"/>
+                    <div>
+                        <p class="font-bold text-text">Jane Doe</p>
+                        <p class="text-gray-400 text-sm">CTO</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="COO" class="w-16 h-16 rounded-full border-2 border-accent"/>
+                    <div>
+                        <p class="font-bold text-text">John Smith</p>
+                        <p class="text-gray-400 text-sm">COO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="py-16 bg-primary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Our Services</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-xl mb-2 text-accent">Software Development</h3>
+                    <p class="text-gray-300 mb-2">Web, mobile, and desktop solutions tailored to your needs.</p>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-xl mb-2 text-accent">Cloud & DevOps</h3>
+                    <p class="text-gray-300 mb-2">Cloud migration, automation, and scalable infrastructure.</p>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-xl mb-2 text-accent">IT Consulting</h3>
+                    <p class="text-gray-300 mb-2">Expert advice for digital transformation and growth.</p>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-xl mb-2 text-accent">Cybersecurity</h3>
+                    <p class="text-gray-300 mb-2">Protect your business with advanced security solutions.</p>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-xl mb-2 text-accent">Networking & Infrastructure</h3>
+                    <p class="text-gray-300 mb-2">Robust networks and infrastructure setup for reliability.</p>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-xl mb-2 text-accent">AI, Data Science, Blockchain</h3>
+                    <p class="text-gray-300 mb-2">Leverage next-gen tech for smarter business decisions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section id="products" class="py-16 bg-secondary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Our Products</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-primary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-xl mb-2 text-accent">SaaS Platform</h3>
+                    <p class="text-gray-300 mb-2">All-in-one business management suite.</p>
+                    <img src="https://via.placeholder.com/400x200?text=Product+Screenshot" alt="Product Screenshot" class="rounded mb-2"/>
+                    <a href="#" class="text-accent underline">Request Demo</a>
+                </div>
+                <div class="bg-primary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-xl mb-2 text-accent">Mobile App Suite</h3>
+                    <p class="text-gray-300 mb-2">Productivity and collaboration on the go.</p>
+                    <img src="https://via.placeholder.com/400x200?text=App+Screenshot" alt="App Screenshot" class="rounded mb-2"/>
+                    <a href="#" class="text-accent underline">Free Trial</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio / Case Studies -->
+    <section id="portfolio" class="py-16 bg-primary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Portfolio & Case Studies</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-lg mb-2 text-accent">E-commerce Platform</h3>
+                    <p class="text-gray-300 mb-2">Industry: Retail</p>
+                    <p class="text-gray-400 text-sm">Problem: Outdated system<br>Solution: Modern web app<br>Results: 2x sales growth</p>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-lg mb-2 text-accent">Healthcare Portal</h3>
+                    <p class="text-gray-300 mb-2">Industry: Healthcare</p>
+                    <p class="text-gray-400 text-sm">Problem: Manual records<br>Solution: Digital platform<br>Results: 80% faster processing</p>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-lg mb-2 text-accent">Fintech App</h3>
+                    <p class="text-gray-300 mb-2">Industry: Finance</p>
+                    <p class="text-gray-400 text-sm">Problem: Security risks<br>Solution: Secure mobile app<br>Results: 0 breaches in 2 years</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technologies & Tools -->
+    <section id="technologies" class="py-16 bg-secondary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Technologies & Tools</h2>
+            <div class="grid md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" class="w-12 h-12 mx-auto mb-2" alt="React"/>
+                    <p class="text-gray-300">React</p>
+                </div>
+                <div>
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" class="w-12 h-12 mx-auto mb-2" alt="Node.js"/>
+                    <p class="text-gray-300">Node.js</p>
+                </div>
+                <div>
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aws/aws-original.svg" class="w-12 h-12 mx-auto mb-2" alt="AWS"/>
+                    <p class="text-gray-300">AWS</p>
+                </div>
+                <div>
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="w-12 h-12 mx-auto mb-2" alt="Python"/>
+                    <p class="text-gray-300">Python</p>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-gray-400">API, ERP, CRM integrations & more.</div>
+        </div>
+    </section>
+
+    <!-- Industries Served -->
+    <section id="industries" class="py-16 bg-primary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Industries Served</h2>
+            <div class="flex flex-wrap gap-6 justify-center">
+                <span class="bg-secondary px-4 py-2 rounded text-accent font-semibold">Healthcare</span>
+                <span class="bg-secondary px-4 py-2 rounded text-accent font-semibold">Education</span>
+                <span class="bg-secondary px-4 py-2 rounded text-accent font-semibold">E-commerce</span>
+                <span class="bg-secondary px-4 py-2 rounded text-accent font-semibold">Finance</span>
+                <span class="bg-secondary px-4 py-2 rounded text-accent font-semibold">Real Estate</span>
+                <span class="bg-secondary px-4 py-2 rounded text-accent font-semibold">Government</span>
+            </div>
+            <div class="mt-6 text-center text-gray-400">Industry-specific digital solutions for every sector.</div>
+        </div>
+    </section>
+
+    <!-- Blog / Insights -->
+    <section id="blog" class="py-16 bg-secondary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Blog & Insights</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-primary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-lg mb-2 text-accent">Tech Trends 2024</h3>
+                    <p class="text-gray-300 mb-2">Stay ahead with the latest in AI, cloud, and security.</p>
+                    <a href="#" class="text-accent underline">Read More</a>
+                </div>
+                <div class="bg-primary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-lg mb-2 text-accent">Guide: Cloud Migration</h3>
+                    <p class="text-gray-300 mb-2">Step-by-step process for seamless cloud adoption.</p>
+                    <a href="#" class="text-accent underline">Read More</a>
+                </div>
+                <div class="bg-primary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-lg mb-2 text-accent">Company News</h3>
+                    <p class="text-gray-300 mb-2">Latest updates, awards, and milestones.</p>
+                    <a href="#" class="text-accent underline">Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Careers -->
+    <section id="careers" class="py-16 bg-primary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Careers</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-lg mb-2 text-accent">Frontend Developer</h3>
+                    <p class="text-gray-300 mb-2">React, TailwindCSS, REST APIs</p>
+                    <p class="text-gray-400 text-sm">2+ years experience</p>
+                    <a href="#" class="text-accent underline">Apply Now</a>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <h3 class="font-bold text-lg mb-2 text-accent">Cloud Engineer</h3>
+                    <p class="text-gray-300 mb-2">AWS, Docker, CI/CD</p>
+                    <p class="text-gray-400 text-sm">3+ years experience</p>
+                    <a href="#" class="text-accent underline">Apply Now</a>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-gray-400">Internships & training programs available. <span class="text-accent">Join our team!</span></div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-16 bg-secondary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Testimonials</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-primary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <p class="text-gray-300 mb-4">"Outstanding service and support. Our business grew 3x!"</p>
+                    <div class="flex items-center gap-3">
+                        <img src="https://randomuser.me/api/portraits/men/12.jpg" class="w-10 h-10 rounded-full border-2 border-accent" alt="Client"/>
+                        <span class="text-accent font-semibold">A. Rahman</span>
+                    </div>
+                </div>
+                <div class="bg-primary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <p class="text-gray-300 mb-4">"Reliable, innovative, and always on time."</p>
+                    <div class="flex items-center gap-3">
+                        <img src="https://randomuser.me/api/portraits/women/22.jpg" class="w-10 h-10 rounded-full border-2 border-accent" alt="Client"/>
+                        <span class="text-accent font-semibold">S. Akter</span>
+                    </div>
+                </div>
+                <div class="bg-primary rounded-lg p-6 shadow hover:shadow-xl transition">
+                    <p class="text-gray-300 mb-4">"Highly recommend for digital transformation projects."</p>
+                    <div class="flex items-center gap-3">
+                        <img src="https://randomuser.me/api/portraits/men/34.jpg" class="w-10 h-10 rounded-full border-2 border-accent" alt="Client"/>
+                        <span class="text-accent font-semibold">M. Hasan</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-16 bg-primary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Pricing</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition text-center">
+                    <h3 class="font-bold text-xl mb-2 text-accent">Basic</h3>
+                    <p class="text-3xl font-bold text-accent mb-2">$499</p>
+                    <ul class="mb-4 text-gray-300">
+                        <li>Essential features</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#" class="bg-accent text-primary px-4 py-2 rounded font-semibold hover:bg-yellow-400 transition">Choose</a>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition text-center border-2 border-accent">
+                    <h3 class="font-bold text-xl mb-2 text-accent">Standard</h3>
+                    <p class="text-3xl font-bold text-accent mb-2">$999</p>
+                    <ul class="mb-4 text-gray-300">
+                        <li>All Basic features</li>
+                        <li>Priority support</li>
+                        <li>Custom integrations</li>
+                    </ul>
+                    <a href="#" class="bg-accent text-primary px-4 py-2 rounded font-semibold hover:bg-yellow-400 transition">Choose</a>
+                </div>
+                <div class="bg-secondary rounded-lg p-6 shadow hover:shadow-xl transition text-center">
+                    <h3 class="font-bold text-xl mb-2 text-accent">Enterprise</h3>
+                    <p class="text-3xl font-bold text-accent mb-2">Contact Us</p>
+                    <ul class="mb-4 text-gray-300">
+                        <li>All Standard features</li>
+                        <li>Dedicated manager</li>
+                        <li>24/7 support</li>
+                    </ul>
+                    <a href="#contact" class="bg-accent text-primary px-4 py-2 rounded font-semibold hover:bg-yellow-400 transition">Contact</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us -->
+    <section id="contact" class="py-16 bg-secondary">
+        <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10">
+            <div>
+                <h2 class="text-3xl font-bold mb-4 text-accent">Contact Us</h2>
+                <form class="space-y-4">
+                    <input type="text" placeholder="Name" class="w-full px-4 py-2 rounded bg-primary text-text focus:outline-accent"/>
+                    <input type="email" placeholder="Email" class="w-full px-4 py-2 rounded bg-primary text-text focus:outline-accent"/>
+                    <input type="tel" placeholder="Phone" class="w-full px-4 py-2 rounded bg-primary text-text focus:outline-accent"/>
+                    <textarea placeholder="Message" class="w-full px-4 py-2 rounded bg-primary text-text focus:outline-accent"></textarea>
+                    <button type="submit" class="bg-accent text-primary px-6 py-2 rounded font-semibold hover:bg-yellow-400 transition">Send Message</button>
+                </form>
+                <div class="mt-6 text-gray-400">
+                    <p>123 Main Street, Dhaka, Bangladesh</p>
+                    <p>+880 1234 567890</p>
+                    <p>info@itcompany.com</p>
+                    <div class="flex gap-4 mt-2">
+                        <a href="#" class="hover:text-accent transition">Facebook</a>
+                        <a href="#" class="hover:text-accent transition">LinkedIn</a>
+                        <a href="#" class="hover:text-accent transition">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <iframe class="w-full h-64 rounded" src="https://maps.google.com/maps?q=Dhaka&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                <div class="mt-6">
+                    <a href="#" class="bg-accent text-primary px-4 py-2 rounded font-semibold hover:bg-yellow-400 transition">Live Chat</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQs -->
+    <section id="faqs" class="py-16 bg-primary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">FAQs</h2>
+            <div class="space-y-4">
+                <details class="bg-secondary rounded p-4">
+                    <summary class="font-semibold text-accent cursor-pointer">What services do you offer?</summary>
+                    <p class="text-gray-300 mt-2">We offer software development, cloud, cybersecurity, consulting, and more.</p>
+                </details>
+                <details class="bg-secondary rounded p-4">
+                    <summary class="font-semibold text-accent cursor-pointer">Do you provide support and maintenance?</summary>
+                    <p class="text-gray-300 mt-2">Yes, we offer ongoing support and maintenance for all our solutions.</p>
+                </details>
+                <details class="bg-secondary rounded p-4">
+                    <summary class="font-semibold text-accent cursor-pointer">How can I get a quote?</summary>
+                    <p class="text-gray-300 mt-2">Fill out our contact form or call us directly for a free quote.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Legal -->
+    <section id="legal" class="py-16 bg-secondary">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-accent text-center">Legal</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg mb-2 text-accent">Privacy Policy</h3>
+                    <p class="text-gray-300 text-sm">We respect your privacy and comply with GDPR/CCPA regulations.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2 text-accent">Terms & Conditions</h3>
+                    <p class="text-gray-300 text-sm">Read our terms for using our website and services.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg mb-2 text-accent">Compliance</h3>
+                    <p class="text-gray-300 text-sm">Our solutions are built with security and compliance in mind.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary py-10 border-t border-secondary">
+        <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-8">
+            <div>
+                <span class="text-accent font-bold text-2xl">ITCompany</span>
+                <p class="text-gray-400 mt-2">Empowering Digital Transformation</p>
+                <form class="mt-4 flex">
+                    <input type="email" placeholder="Subscribe to newsletter" class="px-3 py-2 rounded-l bg-secondary text-text focus:outline-accent"/>
+                    <button class="bg-accent text-primary px-4 py-2 rounded-r font-semibold hover:bg-yellow-400 transition">Subscribe</button>
+                </form>
+            </div>
+            <div>
+                <h4 class="text-accent font-bold mb-2">Quick Links</h4>
+                <ul class="text-gray-400 space-y-1">
+                    <li><a href="#about" class="hover:text-accent transition">About</a></li>
+                    <li><a href="#services" class="hover:text-accent transition">Services</a></li>
+                    <li><a href="#products" class="hover:text-accent transition">Products</a></li>
+                    <li><a href="#careers" class="hover:text-accent transition">Careers</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-accent font-bold mb-2">Resources</h4>
+                <ul class="text-gray-400 space-y-1">
+                    <li><a href="#" class="hover:text-accent transition">Brochures</a></li>
+                    <li><a href="#" class="hover:text-accent transition">Case Studies</a></li>
+                    <li><a href="#" class="hover:text-accent transition">Whitepapers</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-accent font-bold mb-2">Contact</h4>
+                <p class="text-gray-400">123 Main Street, Dhaka</p>
+                <p class="text-gray-400">+880 1234 567890</p>
+                <p class="text-gray-400">info@itcompany.com</p>
+                <div class="flex gap-3 mt-2">
+                    <a href="#" class="hover:text-accent transition">Facebook</a>
+                    <a href="#" class="hover:text-accent transition">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gray-500 mt-8 text-sm">
+            &copy; 2024 ITCompany. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Light/Dark Mode Toggle Script -->
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+        });
+    </script>
+</body>
+</html>

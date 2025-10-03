@@ -1,1 +1,17 @@
-...
+/* styles.css - mobile-first */
+:root{
+  --primary:#004aad;
+  --accent:#ff9800;
+  --bg:#f4f4f4;
+  font-family: 'Poppins', sans-serif;
+}
+
+body{background:var(--bg); color:#222;}
+.navbar{background:linear-gradient(90deg,var(--primary),#003580); box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+.hero{background:linear-gradient(135deg,#0b74d1 0%, #004aad 60%); min-height:260px;}
+.card{border-radius:12px; box-shadow:0 8px 18px rgba(0,0,0,0.06);}
+.btn-warning{background:var(--accent); border:0;}
+table thead th{background:linear-gradient(90deg,#ffffff, #f8f9fb); position:sticky; top:0;}
+.form-icon{position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#777;}
+.input-with-icon{position:relative;}
+.input-with-icon input{padding-left:40px;}

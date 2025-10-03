@@ -1,293 +1,76 @@
-<!DOCTYPE html><html lang="en">
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AirDraw – Draw in the Air with Your Hand</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    html, body { height: 100%; }
-    body { background: #0b0b0b; color: #e5e7eb; }
-    .video-mirror { transform: scaleX(-1); }
-    .glass { backdrop-filter: blur(10px); background: rgba(17, 24, 39, 0.6); }
-    canvas { touch-action: none; }
-  </style>
-  <!-- MediaPipe (Legacy Hands solution) -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
-</head>
-<body class="min-h-screen">
-  <div class="max-w-6xl mx-auto p-4 md:p-6 space-y-4">
-    <header class="flex items-center justify-between">
-      <h1 class="text-2xl md:text-3xl font-bold">✍️ AirDraw <span class="text-sm md:text-base font-normal opacity-70">— draw in the air with your hand</span></h1>
-      <div class="text-xs md:text-sm opacity-70">Tip: pinch thumb + index to draw</div>
-    </header><div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-  <!-- Left: Camera & Canvas -->
-  <section class="lg:col-span-9 relative rounded-2xl overflow-hidden border border-gray-800 shadow-xl">
-    <video id="video" class="w-full h-[60vh] md:h-[70vh] object-cover video-mirror bg-black"></video>
-    <!-- Drawing canvas (same size as video) -->
-    <canvas id="drawCanvas" class="absolute inset-0"></canvas>
-    <!-- Overlay for hand landmarks (can be toggled) -->
-    <canvas id="overlayCanvas" class="absolute inset-0 pointer-events-none"></canvas>
-    
-    <div class="absolute top-3 left-3 right-3 flex flex-wrap items-center gap-2 glass rounded-xl p-3 border border-gray-700">
-      <button id="btnStart" class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold shadow">Start Camera</button>
-      <button id="btnStop" class="px-3 py-2 rounded-xl bg-rose-600/70 hover:bg-rose-500 text-white font-semibold shadow disabled:opacity-40" disabled>Stop</button>
-      <button id="btnClear" class="px-3 py-2 rounded-xl bg-gray-700 hover:bg-gray-600 text-white font-semibold shadow">Clear</button>
-      <button id="btnSave" class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold shadow">Save PNG</button>
-      
-      <label class="ml-auto flex items-center gap-2 text-sm"><input id="toggleLandmarks" type="checkbox" class="accent-white" checked> Show landmarks</label>
-    </div>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>School Management System</title>
 
-    <div class="absolute bottom-3 left-3 right-3 glass rounded-xl p-3 border border-gray-700">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 items-center">
-        <label class="flex items-center gap-3 text-sm">Color <input id="color" type="color" class="h-9 w-12 bg-transparent cursor-pointer border border-gray-700 rounded-md" value="#00e0ff"></label>
-        <label class="flex items-center gap-3 text-sm">Thickness <input id="thickness" type="range" min="1" max="24" value="6" class="w-full"></label>
-        <label class="flex items-center gap-2 text-sm"><input id="eraser" type="checkbox" class="accent-white"> Eraser</label>
-        <label class="flex items-center gap-2 text-sm"><input id="alwaysDraw" type="checkbox" class="accent-white"> Always draw (ignore pinch)</label>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="assets/logo.png" alt="logo" style="height:36px;margin-right:8px;">
+        <span>My School</span>
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navmenu"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="add_student.html"><i class="fa fa-user-plus"></i> Add Student</a></li>
+          <li class="nav-item"><a class="nav-link" href="search_student.html"><i class="fa fa-search"></i> Search</a></li>
+          <li class="nav-item"><a class="nav-link" href="view_students.php"><i class="fa fa-table"></i> View Students</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html"><i class="fa fa-sign-in-alt"></i> Staff Login</a></li>
+        </ul>
       </div>
     </div>
-  </section>
+  </nav>
 
-  <!-- Right: Status & Help -->
-  <aside class="lg:col-span-3 space-y-3">
-    <div class="p-4 rounded-2xl border border-gray-800 glass">
-      <h2 class="font-semibold mb-2">Status</h2>
-      <div id="status" class="text-sm opacity-80">Camera: idle</div>
-      <div id="fps" class="text-xs opacity-60 mt-1">—</div>
+  <!-- hero -->
+  <header class="hero text-center text-white d-flex align-items-center">
+    <div class="container py-5">
+      <h1 class="display-5">School Management System</h1>
+      <p class="lead">Add, search, view and manage student records effortlessly.</p>
+      <a class="btn btn-warning btn-lg" href="add_student.html"><i class="fa fa-user-plus"></i> Admit Student</a>
     </div>
-    <div class="p-4 rounded-2xl border border-gray-800 glass space-y-2">
-      <h3 class="font-semibold">How to use</h3>
-      <ol class="list-decimal list-inside text-sm space-y-1 opacity-90">
-        <li>Click <b>Start Camera</b> and allow access.</li>
-        <li>Point your hand to the camera. Mirror view is on by default.</li>
-        <li><b>Pinch</b> thumb + index to draw; release to stop. Or enable <b>Always draw</b>.</li>
-        <li>Use the <b>Eraser</b> checkbox to erase with your finger.</li>
-        <li><b>Save PNG</b> exports your artwork.</li>
-      </ol>
-      <p class="text-xs opacity-70">Works best with good lighting and your palm facing the camera.</p>
+  </header>
+
+  <main class="container my-5">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card p-3">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="add_student.html">Add Student</a></li>
+            <li><a href="search_student.html">Search by Roll No</a></li>
+            <li><a href="view_students.php">View All Students</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card p-3">
+          <h5>About</h5>
+          <p>This is a demo School Management System built with HTML/CSS/JS, PHP and MySQL for XAMPP.</p>
+        </div>
+      </div>
     </div>
-    <div class="p-4 rounded-2xl border border-gray-800 glass">
-      <h3 class="font-semibold mb-2">Shortcuts</h3>
-      <ul class="text-sm space-y-1 opacity-90">
-        <li><kbd class="px-2 py-0.5 bg-gray-800 rounded">C</kbd> Clear</li>
-        <li><kbd class="px-2 py-0.5 bg-gray-800 rounded">S</kbd> Save</li>
-        <li><kbd class="px-2 py-0.5 bg-gray-800 rounded">L</kbd> Toggle landmarks</li>
-      </ul>
-    </div>
-  </aside>
-</div>
+  </main>
 
-  </div>  <script>
-    const videoEl = document.getElementById('video');
-    const drawCanvas = document.getElementById('drawCanvas');
-    const overlayCanvas = document.getElementById('overlayCanvas');
-    const ctx = drawCanvas.getContext('2d');
-    const octx = overlayCanvas.getContext('2d');
+  <footer class="bg-light text-center py-3">
+    &copy; <?=date('Y')?> My School - All rights reserved.
+  </footer>
 
-    const btnStart = document.getElementById('btnStart');
-    const btnStop = document.getElementById('btnStop');
-    const btnClear = document.getElementById('btnClear');
-    const btnSave = document.getElementById('btnSave');
-    const colorInput = document.getElementById('color');
-    const thicknessInput = document.getElementById('thickness');
-    const eraserInput = document.getElementById('eraser');
-    const alwaysDrawInput = document.getElementById('alwaysDraw');
-    const toggleLandmarks = document.getElementById('toggleLandmarks');
-    const statusEl = document.getElementById('status');
-    const fpsEl = document.getElementById('fps');
-
-    let camera = null;
-    let hands = null;
-    let running = false;
-    let lastPoint = null; // for smoothing
-    let lastTime = performance.now();
-    let frames = 0;
-
-    function resizeCanvases() {
-      const rect = videoEl.getBoundingClientRect();
-      [drawCanvas, overlayCanvas].forEach(cv => {
-        cv.width = rect.width * devicePixelRatio;
-        cv.height = rect.height * devicePixelRatio;
-        cv.style.width = rect.width + 'px';
-        cv.style.height = rect.height + 'px';
-      });
-      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-      octx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-    }
-
-    function lerp(a, b, t) { return a + (b - a) * t; }
-
-    function drawLine(p0, p1) {
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      const isEraser = eraserInput.checked;
-      ctx.globalCompositeOperation = isEraser ? 'destination-out' : 'source-over';
-      ctx.strokeStyle = isEraser ? 'rgba(0,0,0,1)' : colorInput.value;
-      ctx.lineWidth = parseFloat(thicknessInput.value);
-      ctx.beginPath();
-      ctx.moveTo(p0.x, p0.y);
-      ctx.lineTo(p1.x, p1.y);
-      ctx.stroke();
-      ctx.globalCompositeOperation = 'source-over';
-    }
-
-    function drawDot(p) {
-      ctx.fillStyle = eraserInput.checked ? 'rgba(0,0,0,1)' : colorInput.value;
-      if (eraserInput.checked) {
-        ctx.globalCompositeOperation = 'destination-out';
-      }
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, parseFloat(thicknessInput.value)/2, 0, Math.PI*2);
-      ctx.fill();
-      ctx.globalCompositeOperation = 'source-over';
-    }
-
-    function drawLandmarksOnOverlay(handsResults) {
-      octx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-      if (!toggleLandmarks.checked) return;
-      const width = overlayCanvas.width / devicePixelRatio;
-      const height = overlayCanvas.height / devicePixelRatio;
-      handsResults.multiHandLandmarks.forEach((landmarks, i) => {
-        // Convert normalized to pixel coords (mirrored)
-        const pts = landmarks.map(lm => ({
-          x: (1 - lm.x) * width,
-          y: lm.y * height
-        }));
-        // draw skeleton
-        drawConnectors(octx, pts, HAND_CONNECTIONS, { color: '#94a3b8', lineWidth: 2 });
-        drawLandmarks(octx, pts, { color: '#e5e7eb', lineWidth: 1, radius: 2 });
-      });
-    }
-
-    function pinchAmount(landmarks) {
-      // Normalized distance between index tip (8) and thumb tip (4)
-      const i8 = landmarks[8];
-      const t4 = landmarks[4];
-      const dx = i8.x - t4.x;
-      const dy = i8.y - t4.y;
-      const dz = (i8.z || 0) - (t4.z || 0);
-      const d = Math.sqrt(dx*dx + dy*dy + dz*dz);
-      return d;
-    }
-
-    function normToCanvasPoint(lm) {
-      const width = overlayCanvas.width / devicePixelRatio;
-      const height = overlayCanvas.height / devicePixelRatio;
-      return { x: (1 - lm.x) * width, y: lm.y * height };
-    }
-
-    async function setupHands() {
-      hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
-      hands.setOptions({
-        maxNumHands: 1,
-        modelComplexity: 1,
-        minDetectionConfidence: 0.6,
-        minTrackingConfidence: 0.5
-      });
-      hands.onResults(onResults);
-    }
-
-    async function startCamera() {
-      if (!hands) await setupHands();
-      statusEl.textContent = 'Camera: starting…';
-      // Set ideal constraints for better FPS
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
-      videoEl.srcObject = stream;
-      await videoEl.play();
-      resizeCanvases();
-      window.addEventListener('resize', resizeCanvases);
-      running = true;
-      btnStart.disabled = true; btnStop.disabled = false;
-      statusEl.textContent = 'Camera: running';
-
-      // MediaPipe Camera helper drives the frames to hands
-      camera = new Camera(videoEl, {
-        onFrame: async () => {
-          if (!running) return;
-          await hands.send({ image: videoEl });
-          // fps
-          frames++;
-          const now = performance.now();
-          if (now - lastTime >= 1000) {
-            fpsEl.textContent = `FPS: ${frames}`;
-            frames = 0; lastTime = now;
-          }
-        },
-        width: 1280,
-        height: 720,
-      });
-      camera.start();
-    }
-
-    function stopCamera() {
-      running = false;
-      if (camera) camera.stop();
-      const stream = videoEl.srcObject;
-      if (stream) {
-        stream.getTracks().forEach(t => t.stop());
-        videoEl.srcObject = null;
-      }
-      btnStart.disabled = false; btnStop.disabled = true;
-      statusEl.textContent = 'Camera: stopped';
-    }
-
-    function onResults(results) {
-      // Draw landmarks overlay
-      if (results.multiHandLandmarks && results.multiHandLandmarks.length) {
-        drawLandmarksOnOverlay(results);
-        const landmarks = results.multiHandLandmarks[0];
-        const pIndex = normToCanvasPoint(landmarks[8]);
-
-        // Simple smoothing towards the new point
-        if (!lastPoint) lastPoint = { ...pIndex };
-        const smoothed = { x: lerp(lastPoint.x, pIndex.x, 0.6), y: lerp(lastPoint.y, pIndex.y, 0.6) };
-
-        const doDraw = alwaysDrawInput.checked || pinchAmount(landmarks) < 0.07; // tweak threshold if needed
-        if (doDraw) {
-          if (lastPoint) drawLine(lastPoint, smoothed);
-          else drawDot(smoothed);
-        }
-        lastPoint = smoothed;
-      } else {
-        // No hand detected
-        octx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-        lastPoint = null;
-      }
-    }
-
-    // UI actions
-    btnStart.addEventListener('click', startCamera);
-    btnStop.addEventListener('click', stopCamera);
-    btnClear.addEventListener('click', () => {
-      ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    });
-    btnSave.addEventListener('click', () => {
-      // Merge drawing over a transparent background to PNG
-      const exportCanvas = document.createElement('canvas');
-      exportCanvas.width = drawCanvas.width;
-      exportCanvas.height = drawCanvas.height;
-      const ectx = exportCanvas.getContext('2d');
-      ectx.drawImage(drawCanvas, 0, 0);
-      const url = exportCanvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = url; a.download = 'AirDraw.png'; a.click();
-    });
-
-    toggleLandmarks.addEventListener('change', () => {
-      if (!toggleLandmarks.checked) {
-        octx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-      }
-    });
-
-    // Keyboard shortcuts
-    window.addEventListener('keydown', (e) => {
-      if (e.key.toLowerCase() === 'c') { ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height); }
-      if (e.key.toLowerCase() === 's') { btnSave.click(); }
-      if (e.key.toLowerCase() === 'l') { toggleLandmarks.checked = !toggleLandmarks.checked; toggleLandmarks.dispatchEvent(new Event('change')); }
-    });
-
-    // Auto-size canvases when metadata loads
-    videoEl.addEventListener('loadedmetadata', resizeCanvases);
-  </script></body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
