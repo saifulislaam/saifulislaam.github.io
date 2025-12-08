@@ -1,0 +1,209 @@
+    /* --- CUSTOM FONTS & VARIABLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap');
+
+        :root {
+            --bg-color: #030303;
+            --neon-green: #00ff41;
+            --neon-cyan: #0ff;
+            --neon-pink: #f0f;
+            --neon-purple: #bc13fe;
+            --glass: rgba(10, 10, 10, 0.8);
+            --border-color: rgba(0, 255, 65, 0.3);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--neon-green);
+            font-family: 'Fira Code', monospace;
+            overflow-x: hidden;
+            cursor: crosshair; /* Hacker feel */
+        }
+
+        /* --- MATRIX BACKGROUND --- */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15; /* Subtle background */
+        }
+
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-cyan);
+            border-radius: 4px;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* --- TYPOGRAPHY & ANIMATIONS --- */
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Glitch Effect */
+        .glitch {
+            position: relative;
+            color: #fff;
+            text-shadow: 2px 2px var(--neon-pink), -2px -2px var(--neon-cyan);
+            animation: glitch-anim 1s infinite alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { text-shadow: 2px 2px var(--neon-pink), -2px -2px var(--neon-cyan); }
+            25% { text-shadow: -2px 2px var(--neon-green), 2px -2px var(--neon-purple); }
+            50% { text-shadow: 2px -2px var(--neon-pink), -2px 2px var(--neon-cyan); }
+            75% { text-shadow: -2px -2px var(--neon-green), 2px 2px var(--neon-purple); }
+            100% { text-shadow: 2px 2px var(--neon-pink), -2px -2px var(--neon-cyan); }
+        }
+
+        /* Neon Glow Text */
+        .neon-text-green { text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 20px var(--neon-green); }
+        .neon-text-cyan { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan); }
+        .neon-text-pink { color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink); }
+
+        /* --- SIDEBAR NAVIGATION --- */
+        .sidebar {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-right: 1px solid var(--border-color);
+            box-shadow: 5px 0 20px rgba(0, 255, 65, 0.1);
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+            transition: 0.4s;
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item:hover {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-cyan);
+            padding-left: 1.5rem; /* Slide effect */
+        }
+
+        .nav-item.active {
+            border-left: 4px solid var(--neon-pink);
+            background: linear-gradient(90deg, rgba(255, 0, 255, 0.1), transparent);
+            color: var(--neon-pink);
+        }
+
+        /* --- COMPONENTS --- */
+        /* Neon Border Box */
+        .neon-box {
+            border: 1px solid var(--border-color);
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .neon-box:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan), inset 0 0 10px rgba(0, 255, 255, 0.1);
+        }
+
+        /* Image Scanline Animation */
+        .img-scanner {
+            position: relative;
+            overflow: hidden;
+        }
+        .img-scanner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+            opacity: 0.6;
+            animation: scanline 3s linear infinite;
+        }
+        @keyframes scanline {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        /* Profile Image Pulsing */
+        .profile-glow {
+            animation: border-pulse 2s infinite;
+        }
+        @keyframes border-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 255, 65, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0); }
+        }
+
+        /* --- SECTION ANIMATIONS (Intersection Observer) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- BUTTONS --- */
+        .cyber-btn {
+            background: transparent;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            transition: 0.3s;
+            overflow: hidden;
+        }
+        .cyber-btn:hover {
+            background: var(--neon-green);
+            color: black;
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+        .cyber-btn-pink {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+        }
+        .cyber-btn-pink:hover {
+            background: var(--neon-pink);
+            color: white;
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+
+        /* --- TERMINAL CURSOR --- */
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
+            color: var(--neon-green);
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+

@@ -1,710 +1,759 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saif ul Islam | Full Stack Developer</title>
-    
-    <!-- Tailwind CSS -->
+    <title>Saif ul Islam | Full-Stack Developer</title>
+    <!-- Tailwind CSS for Layout -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Fira Code for that monospaced terminal look -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome -->
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Tailwind Config for Custom Colors -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        term: {
-                            bg: '#000000',
-                            text: '#00FF00',
-                            accent: '#FFFF00',
-                            secondary: '#00AA00',
-                            dim: '#1a1a1a'
-                        }
-                    },
-                    fontFamily: {
-                        mono: ['"Fira Code"', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
-
+    
     <style>
+        /* --- CUSTOM FONTS & VARIABLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap');
+
+        :root {
+            --bg-color: #030303;
+            --neon-green: #00ff41;
+            --neon-cyan: #0ff;
+            --neon-pink: #f0f;
+            --neon-purple: #bc13fe;
+            --glass: rgba(10, 10, 10, 0.8);
+            --border-color: rgba(0, 255, 65, 0.3);
+        }
+
         body {
-            background-color: #000000;
-            color: #00FF00;
+            background-color: var(--bg-color);
+            color: var(--neon-green);
             font-family: 'Fira Code', monospace;
             overflow-x: hidden;
+            cursor: crosshair; /* Hacker feel */
         }
 
-        /* CRT Scanline Effect Overlay */
-        .scanlines {
+        /* --- MATRIX BACKGROUND --- */
+        #matrix-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(
-                to bottom,
-                rgba(255,255,255,0),
-                rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.2) 50%,
-                rgba(0,0,0,0.2)
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.6;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15; /* Subtle background */
         }
 
-        /* Text Glow */
-        .neon-text {
-            text-shadow: 0 0 5px #00FF00, 0 0 10px #00AA00;
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        .neon-accent {
-            text-shadow: 0 0 5px #FFFF00;
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-cyan);
+            border-radius: 4px;
+            box-shadow: 0 0 10px var(--neon-cyan);
         }
 
-        /* Blinking Cursor */
-        .cursor-blink::after {
-            content: '_';
-            animation: blink 1s step-end infinite;
-        }
-        @keyframes blink {
-            50% { opacity: 0; }
+        /* --- TYPOGRAPHY & ANIMATIONS --- */
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
         }
 
         /* Glitch Effect */
-        .glitch-hover:hover {
-            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
-            color: #FFFF00;
-        }
-        @keyframes glitch {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 2px) }
-            40% { transform: translate(-2px, -2px) }
-            60% { transform: translate(2px, 2px) }
-            80% { transform: translate(2px, -2px) }
-            100% { transform: translate(0) }
+        .glitch {
+            position: relative;
+            color: #fff;
+            text-shadow: 2px 2px var(--neon-pink), -2px -2px var(--neon-cyan);
+            animation: glitch-anim 1s infinite alternate-reverse;
         }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #111;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #00AA00;
-            border: 1px solid #00FF00;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #00FF00;
+        @keyframes glitch-anim {
+            0% { text-shadow: 2px 2px var(--neon-pink), -2px -2px var(--neon-cyan); }
+            25% { text-shadow: -2px 2px var(--neon-green), 2px -2px var(--neon-purple); }
+            50% { text-shadow: 2px -2px var(--neon-pink), -2px 2px var(--neon-cyan); }
+            75% { text-shadow: -2px -2px var(--neon-green), 2px 2px var(--neon-purple); }
+            100% { text-shadow: 2px 2px var(--neon-pink), -2px -2px var(--neon-cyan); }
         }
 
-        /* Fade In Animation */
-        .fade-in-section {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .fade-in-section.is-visible {
-            opacity: 1;
-            transform: none;
+        /* Neon Glow Text */
+        .neon-text-green { text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 20px var(--neon-green); }
+        .neon-text-cyan { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan); }
+        .neon-text-pink { color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink); }
+
+        /* --- SIDEBAR NAVIGATION --- */
+        .sidebar {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-right: 1px solid var(--border-color);
+            box-shadow: 5px 0 20px rgba(0, 255, 65, 0.1);
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
         }
 
-        /* Terminal Box Styling */
-        .term-box {
-            border: 1px solid #00AA00;
-            background: rgba(0, 20, 0, 0.3);
+        .nav-item {
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
+            transition: 0.4s;
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item:hover {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-cyan);
+            padding-left: 1.5rem; /* Slide effect */
+        }
+
+        .nav-item.active {
+            border-left: 4px solid var(--neon-pink);
+            background: linear-gradient(90deg, rgba(255, 0, 255, 0.1), transparent);
+            color: var(--neon-pink);
+        }
+
+        /* --- COMPONENTS --- */
+        /* Neon Border Box */
+        .neon-box {
+            border: 1px solid var(--border-color);
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(5px);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .term-box:hover {
-            border-color: #00FF00;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
-            background: rgba(0, 40, 0, 0.5);
+
+        .neon-box:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan), inset 0 0 10px rgba(0, 255, 255, 0.1);
         }
+
+        /* Image Scanline Animation */
+        .img-scanner {
+            position: relative;
+            overflow: hidden;
+        }
+        .img-scanner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+            opacity: 0.6;
+            animation: scanline 3s linear infinite;
+        }
+        @keyframes scanline {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        /* Profile Image Pulsing */
+        .profile-glow {
+            animation: border-pulse 2s infinite;
+        }
+        @keyframes border-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 255, 65, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0); }
+        }
+
+        /* --- SECTION ANIMATIONS (Intersection Observer) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- BUTTONS --- */
+        .cyber-btn {
+            background: transparent;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            transition: 0.3s;
+            overflow: hidden;
+        }
+        .cyber-btn:hover {
+            background: var(--neon-green);
+            color: black;
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+        .cyber-btn-pink {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+        }
+        .cyber-btn-pink:hover {
+            background: var(--neon-pink);
+            color: white;
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+
+        /* --- TERMINAL CURSOR --- */
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
+            color: var(--neon-green);
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
     </style>
 </head>
-<body class="selection:bg-term-secondary selection:text-black">
+<body class="antialiased">
 
-    <!-- CRT Overlay -->
-    <div class="scanlines"></div>
+    <!-- MATRIX BACKGROUND -->
+    <canvas id="matrix-canvas"></canvas>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-sm border-b border-term-secondary z-40">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="text-xl font-bold text-term-accent glitch-hover cursor-pointer">
-                &lt;Saif_ul_Islam /&gt;
-            </div>
+    <!-- MOBILE MENU TOGGLE -->
+    <button id="menu-btn" class="fixed top-4 right-4 z-50 text-2xl lg:hidden p-2 border border-green-500 bg-black text-green-500 rounded neon-box">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        
+        <!-- SIDE NAVIGATION -->
+        <nav id="sidebar" class="sidebar fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 w-64 z-40 flex flex-col justify-between overflow-y-auto h-screen scrollbar-hide">
             
-            <!-- Desktop Menu -->
-            <div class="hidden xl:flex space-x-6 text-sm">
-                <a href="#hero" class="hover:text-term-accent hover:underline decoration-term-accent underline-offset-4 transition-colors">./Home</a>
-                <a href="#about" class="hover:text-term-accent hover:underline decoration-term-accent underline-offset-4 transition-colors">./About</a>
-                <a href="#skills" class="hover:text-term-accent hover:underline decoration-term-accent underline-offset-4 transition-colors">./Skills</a>
-                <a href="#projects" class="hover:text-term-accent hover:underline decoration-term-accent underline-offset-4 transition-colors">./Projects</a>
-                <a href="#experience" class="hover:text-term-accent hover:underline decoration-term-accent underline-offset-4 transition-colors">./Exp</a>
-                <a href="#contact" class="hover:text-term-accent hover:underline decoration-term-accent underline-offset-4 transition-colors">./Contact</a>
+            <div class="p-6 text-center border-b border-green-900/50">
+                <div class="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-green-500 profile-glow img-scanner">
+                    <!-- Placeholder "Man" Image -->
+                    <img src="https://plus.unsplash.com/premium_photo-1734637616808-14fc29f2a155?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                         alt="Saif ul Islam" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition duration-500">
+                </div>
+                <h2 class="text-xl font-bold neon-text-green glitch" data-text="Saif ul Islam">Saif ul Islam</h2>
+                <p class="text-xs text-cyan-400 mt-1 tracking-widest">FULL_STACK_DEV</p>
             </div>
 
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="xl:hidden text-term-text text-2xl focus:outline-none">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-
-        <!-- Mobile Dropdown -->
-        <div id="mobile-menu" class="hidden xl:hidden bg-term-bg border-b border-term-secondary p-4 flex flex-col space-y-4">
-            <a href="#hero" class="block hover:text-term-accent">./Home</a>
-            <a href="#about" class="block hover:text-term-accent">./About</a>
-            <a href="#skills" class="block hover:text-term-accent">./Skills</a>
-            <a href="#projects" class="block hover:text-term-accent">./Projects</a>
-            <a href="#experience" class="block hover:text-term-accent">./Experience</a>
-            <a href="#contact" class="block hover:text-term-accent">./Contact</a>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 pt-24 pb-12 overflow-hidden">
-
-        <!-- 1. HERO SECTION -->
-        <section id="hero" class="min-h-screen flex flex-col justify-center items-start mb-20 fade-in-section">
-            <p class="text-term-secondary mb-2">> initializing_user_profile...</p>
-            <h1 class="text-4xl md:text-6xl font-bold mb-4 neon-text">
-                Hi, I'm <span class="text-term-accent">Saif ul Islam</span>
-            </h1>
-            <div class="text-xl md:text-2xl mb-8 h-16 md:h-8">
-                <span class="text-term-secondary">> </span>
-                <span id="typewriter" class="cursor-blink"></span>
+            <div class="flex-1 py-4">
+                <ul class="space-y-1">
+                    <li><a href="#hero" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-terminal mr-3 w-5"></i>_HERO</a></li>
+                    <li><a href="#about" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-user-secret mr-3 w-5"></i>_ABOUT</a></li>
+                    <li><a href="#tech" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-code mr-3 w-5"></i>_STACK</a></li>
+                    <li><a href="#services" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-server mr-3 w-5"></i>_SERVICES</a></li>
+                    <li><a href="#projects" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-project-diagram mr-3 w-5"></i>_PROJECTS</a></li>
+                    <li><a href="#casestudies" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-file-alt mr-3 w-5"></i>_CASES</a></li>
+                    <li><a href="#experience" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-briefcase mr-3 w-5"></i>_EXP</a></li>
+                    <li><a href="#education" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-graduation-cap mr-3 w-5"></i>_EDU</a></li>
+                    <li><a href="#testimonials" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-star mr-3 w-5"></i>_REVIEWS</a></li>
+                    <li><a href="#contact" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-envelope mr-3 w-5"></i>_CONTACT</a></li>
+                </ul>
             </div>
-            <p class="text-gray-400 max-w-2xl mb-8 leading-relaxed">
-                Building interactive, responsive, and modern web applications using the latest tech stack. 
-                Full-Stack Wizard based in Pakistan.
-            </p>
-            <div class="flex flex-wrap gap-4">
-                <a href="#projects" class="term-box px-8 py-3 text-term-text font-bold hover:bg-term-secondary hover:text-black transition-colors">
-                    View Projects.exe
-                </a>
-                <a href="#contact" class="border border-term-secondary px-8 py-3 text-term-secondary hover:text-term-accent hover:border-term-accent transition-colors">
-                    Contact Me
-                </a>
-            </div>
-        </section>
 
-        <!-- 2. ABOUT ME -->
-        <section id="about" class="mb-32 fade-in-section">
-            <div class="flex flex-col items-center mb-10">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">01.</span> About Me
-                </h2>
-                <span class="text-xs text-term-secondary">System.out.println(profile);</span>
+            <div class="p-4 border-t border-green-900/50 flex justify-center space-x-4">
+                <a href="https://github.com/saifulislaam" class="text-gray-400 hover:text-white transition transform hover:scale-125"><i class="fab fa-github fa-lg"></i></a>
+                <a href="https://www.linkedin.com/in/saifxeven/" class="text-blue-400 hover:text-white transition transform hover:scale-125"><i class="fab fa-linkedin fa-lg"></i></a>
+                <a href="#" class="text-pink-500 hover:text-white transition transform hover:scale-125"><i class="fab fa-instagram fa-lg"></i></a>
             </div>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="lg:ml-64 w-full relative z-10">
             
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="order-2 md:order-1">
-                    <p class="mb-4 text-gray-300">
-                        I am <strong class="text-term-accent">Saif ul Islam</strong>, a passionate Full-Stack Web Developer. 
-                        I specialize in creating interactive, responsive, and modern web applications.
-                    </p>
-                    <p class="mb-4 text-gray-300">
-                        My journey started with simple HTML pages and evolved into complex full-stack applications using Laravel and React.
-                        When I'm not coding, I'm exploring AI technologies or refining UI/UX designs.
-                    </p>
-                    <div class="mt-6 p-4 border-l-4 border-term-accent bg-term-dim">
-                        <p class="text-sm"><span class="text-term-accent">Degree:</span> BS. Software Engineering</p>
-                        <p class="text-sm"><span class="text-term-accent">University:</span> University of Swat</p>
-                        <p class="text-sm"><span class="text-term-accent">Location:</span> Pakistan</p>
+            <!-- HERO SECTION -->
+            <section id="hero" class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-0"></div>
+                <div class="text-center z-10 max-w-4xl">
+                    <p class="text-cyan-400 mb-4 tracking-[0.3em] uppercase text-sm animate-pulse">System Initialized...</p>
+                    <h1 class="text-4xl md:text-7xl font-bold mb-6 text-white glitch leading-tight" data-text="HELLO WORLD">
+                        Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-500">Saif ul Islam</span>
+                    </h1>
+                    
+                    <div class="h-16 md:h-12 mb-8">
+                        <span id="typing-text" class="text-lg md:text-2xl text-green-400 font-mono typing-cursor"></span>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-6 justify-center mt-8">
+                        <a href="#projects" class="cyber-btn px-8 py-4 font-bold text-lg rounded-sm group">
+                            <span class="mr-2 group-hover:animate-pulse">></span> View Projects
+                        </a>
+                        <a href="#contact" class="cyber-btn cyber-btn-pink px-8 py-4 font-bold text-lg rounded-sm group">
+                            <span class="mr-2 group-hover:animate-pulse">@</span> Contact Me
+                        </a>
                     </div>
                 </div>
-                <div class="order-1 md:order-2 flex justify-center relative">
-                    <!-- Glitch Image Effect Wrapper -->
-                    <div class="relative w-64 h-64 term-box p-2">
-                         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Saif&backgroundColor=b6e3f4" 
-                              alt="Profile" 
-                              class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
-                        <div class="absolute -bottom-4 -right-4 w-full h-full border-2 border-term-secondary -z-10"></div>
+            </section>
+
+            <!-- ABOUT SECTION -->
+            <section id="about" class="min-h-screen p-8 md:p-16 border-t border-green-900/30 flex flex-col justify-center reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 neon-text-cyan flex items-center">
+                    <span class="text-6xl mr-4 opacity-50">01.</span> About Me
+                </h2>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="neon-box p-8 rounded-lg relative bg-black/50">
+                        <div class="absolute -top-2 -left-2 w-4 h-4 border-t-2 border-l-2 border-green-500"></div>
+                        <div class="absolute -bottom-2 -right-2 w-4 h-4 border-b-2 border-r-2 border-green-500"></div>
+                        <p class="text-lg leading-relaxed text-gray-300 mb-6">
+                            I am <strong class="text-white">Saif ul Islam</strong>, a passionate Full-Stack Web Developer from Pakistan. I specialize in creating interactive, responsive, and modern web applications that live on the bleeding edge of technology.
+                        </p>
+                        <p class="text-sm text-green-400 mb-2">> Education: <span class="text-white">BS. Software Engineering, University of Swat</span></p>
+                        <p class="text-sm text-green-400 mb-2">> Hobbies: <span class="text-white">AI Technologies, UI/UX Design, Cyberpunk Aesthetics</span></p>
+                    </div>
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-cyan-500 blur-xl opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                        <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Coding Setup" class="relative rounded border border-gray-700 w-full img-scanner filter grayscale group-hover:grayscale-0 transition duration-500">
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- 3. TECH STACK -->
-        <section id="skills" class="mb-32 fade-in-section">
-            <div class="flex flex-col items-center mb-12">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">02.</span> Tech Stack
+            <!-- TECH STACK -->
+            <section id="tech" class="min-h-screen p-8 md:p-16 border-t border-green-900/30 flex flex-col justify-center reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 neon-text-pink flex items-center">
+                    <span class="text-6xl mr-4 opacity-50">02.</span> Tech Stack
                 </h2>
-                <span class="text-xs text-term-secondary">npm install skills</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Frontend -->
-                <div class="term-box p-6">
-                    <h3 class="text-xl text-term-accent mb-4 border-b border-gray-700 pb-2">Frontend</h3>
-                    <ul class="space-y-2 text-sm font-mono">
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>HTML5 / CSS3</li>
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>JavaScript (ES6+)</li>
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>React.js</li>
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>TailwindCSS</li>
-                    </ul>
-                </div>
-                <!-- Backend -->
-                <div class="term-box p-6">
-                    <h3 class="text-xl text-term-accent mb-4 border-b border-gray-700 pb-2">Backend</h3>
-                    <ul class="space-y-2 text-sm font-mono">
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>Node.js</li>
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>PHP</li>
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>Laravel</li>
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>MySQL</li>
-                    </ul>
-                </div>
-                <!-- Tools -->
-                <div class="term-box p-6">
-                    <h3 class="text-xl text-term-accent mb-4 border-b border-gray-700 pb-2">Tools</h3>
-                    <ul class="space-y-2 text-sm font-mono">
-                        <li><i class="fas fa-code-branch text-term-secondary mr-2"></i>Git & GitHub</li>
-                        <li><i class="fas fa-terminal text-term-secondary mr-2"></i>VS Code</li>
-                        <li><i class="fas fa-pen-nib text-term-secondary mr-2"></i>Figma</li>
-                        <li><i class="fas fa-rocket text-term-secondary mr-2"></i>Postman</li>
-                    </ul>
-                </div>
-                <!-- Other -->
-                <div class="term-box p-6">
-                    <h3 class="text-xl text-term-accent mb-4 border-b border-gray-700 pb-2">Other</h3>
-                    <ul class="space-y-2 text-sm font-mono">
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>TypeScript</li>
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>Responsive UI</li>
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>Dark/Light Mode</li>
-                        <li><i class="fas fa-check text-term-secondary mr-2"></i>API Integration</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. SERVICES -->
-        <section class="mb-32 fade-in-section">
-            <div class="flex flex-col items-center mb-10">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">03.</span> Services
-                </h2>
-                <span class="text-xs text-term-secondary">./services.sh --list</span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Service Cards -->
-                <div class="p-6 border border-term-dim hover:border-term-accent transition-colors bg-black group">
-                    <i class="fas fa-code text-3xl mb-4 text-term-secondary group-hover:text-term-accent"></i>
-                    <h3 class="text-lg font-bold mb-2">Full-Stack Dev</h3>
-                    <p class="text-gray-400 text-sm">Building complete web applications from database to user interface.</p>
-                </div>
-                <div class="p-6 border border-term-dim hover:border-term-accent transition-colors bg-black group">
-                    <i class="fas fa-shopping-cart text-3xl mb-4 text-term-secondary group-hover:text-term-accent"></i>
-                    <h3 class="text-lg font-bold mb-2">eCommerce</h3>
-                    <p class="text-gray-400 text-sm">Secure and scalable shopping websites with payment integration.</p>
-                </div>
-                <div class="p-6 border border-term-dim hover:border-term-accent transition-colors bg-black group">
-                    <i class="fas fa-magic text-3xl mb-4 text-term-secondary group-hover:text-term-accent"></i>
-                    <h3 class="text-lg font-bold mb-2">AI Integration</h3>
-                    <p class="text-gray-400 text-sm">Implementing AI models for image enhancement and data analysis.</p>
-                </div>
-                <div class="p-6 border border-term-dim hover:border-term-accent transition-colors bg-black group">
-                    <i class="fas fa-tachometer-alt text-3xl mb-4 text-term-secondary group-hover:text-term-accent"></i>
-                    <h3 class="text-lg font-bold mb-2">Dashboards</h3>
-                    <p class="text-gray-400 text-sm">Custom admin panels for managing data and user analytics.</p>
-                </div>
-                <div class="p-6 border border-term-dim hover:border-term-accent transition-colors bg-black group">
-                    <i class="fas fa-mobile-alt text-3xl mb-4 text-term-secondary group-hover:text-term-accent"></i>
-                    <h3 class="text-lg font-bold mb-2">Responsive UI/UX</h3>
-                    <p class="text-gray-400 text-sm">Pixel-perfect designs that look great on all devices.</p>
-                </div>
-                <div class="p-6 border border-term-dim hover:border-term-accent transition-colors bg-black group">
-                    <i class="fas fa-cogs text-3xl mb-4 text-term-secondary group-hover:text-term-accent"></i>
-                    <h3 class="text-lg font-bold mb-2">Custom Solutions</h3>
-                    <p class="text-gray-400 text-sm">Tailored software solutions to solve specific business problems.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. FEATURED PROJECTS -->
-        <section id="projects" class="mb-32 fade-in-section">
-            <div class="flex flex-col items-center mb-12">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">04.</span> Featured Projects
-                </h2>
-                <span class="text-xs text-term-secondary">ls -la ./portfolio/projects/</span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Project 1 -->
-                <div class="term-box group overflow-hidden">
-                    <div class="h-48 overflow-hidden border-b border-term-secondary relative">
-                        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/bac4b9194361329.65fad177d61b7.png" 
-                             alt="Portfolio" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Frontend -->
+                    <div class="neon-box p-6 rounded hover:bg-green-900/10">
+                        <h3 class="text-xl text-green-400 mb-4 border-b border-green-800 pb-2"><i class="fab fa-html5 mr-2"></i>Frontend</h3>
+                        <ul class="space-y-2 text-sm text-gray-400 font-mono">
+                            <li class="hover:text-white transition">HTML5 & CSS3</li>
+                            <li class="hover:text-white transition">JavaScript (ES6+)</li>
+                            <li class="hover:text-white transition">React.js</li>
+                            <li class="hover:text-white transition">TailwindCSS</li>
+                        </ul>
                     </div>
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold text-term-accent mb-2">Personal Portfolio</h3>
-                        <p class="text-xs text-term-secondary mb-3">[ HTML, CSS, React, Tailwind ]</p>
-                        <p class="text-gray-400 text-sm mb-4">Modern, responsive portfolio with terminal style interface and animations.</p>
-                        <div class="flex gap-4 text-sm">
-                            <a href="#" class="hover:text-term-accent underline">Source Code</a>
-                            <a href="#" class="hover:text-term-accent underline">Live Demo</a>
+                    <!-- Backend -->
+                    <div class="neon-box p-6 rounded hover:bg-pink-900/10" style="border-color: rgba(255,0,255,0.3);">
+                        <h3 class="text-xl text-pink-400 mb-4 border-b border-pink-800 pb-2"><i class="fas fa-server mr-2"></i>Backend</h3>
+                        <ul class="space-y-2 text-sm text-gray-400 font-mono">
+                            <li class="hover:text-white transition">Node.js</li>
+                            <li class="hover:text-white transition">PHP / Laravel</li>
+                            <li class="hover:text-white transition">MySQL / SQL</li>
+                            <li class="hover:text-white transition">REST APIs</li>
+                        </ul>
+                    </div>
+                    <!-- Tools -->
+                    <div class="neon-box p-6 rounded hover:bg-cyan-900/10" style="border-color: rgba(0,255,255,0.3);">
+                        <h3 class="text-xl text-cyan-400 mb-4 border-b border-cyan-800 pb-2"><i class="fas fa-tools mr-2"></i>Tools</h3>
+                        <ul class="space-y-2 text-sm text-gray-400 font-mono">
+                            <li class="hover:text-white transition">Git & GitHub</li>
+                            <li class="hover:text-white transition">VS Code</li>
+                            <li class="hover:text-white transition">Figma</li>
+                            <li class="hover:text-white transition">Postman</li>
+                        </ul>
+                    </div>
+                     <!-- Other -->
+                     <div class="neon-box p-6 rounded hover:bg-purple-900/10" style="border-color: rgba(188, 19, 254, 0.3);">
+                        <h3 class="text-xl text-purple-400 mb-4 border-b border-purple-800 pb-2"><i class="fas fa-layer-group mr-2"></i>Other</h3>
+                        <ul class="space-y-2 text-sm text-gray-400 font-mono">
+                            <li class="hover:text-white transition">TypeScript</li>
+                            <li class="hover:text-white transition">Responsive Design</li>
+                            <li class="hover:text-white transition">Dark/Light Mode</li>
+                            <li class="hover:text-white transition">System Architecture</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SERVICES -->
+            <section id="services" class="py-20 p-8 md:p-16 border-t border-green-900/30 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-white flex items-center">
+                    <span class="text-6xl mr-4 opacity-50 text-purple-500">03.</span> Services
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Service Items generated from loop logic -->
+                    <div class="neon-box p-8 text-center group">
+                        <i class="fas fa-code text-4xl text-green-500 mb-4 group-hover:animate-bounce"></i>
+                        <h3 class="text-xl font-bold mb-2">Full-Stack Web Dev</h3>
+                        <p class="text-xs text-gray-500">End-to-end development</p>
+                    </div>
+                    <div class="neon-box p-8 text-center group">
+                        <i class="fas fa-tachometer-alt text-4xl text-cyan-500 mb-4 group-hover:animate-bounce"></i>
+                        <h3 class="text-xl font-bold mb-2">CMS & Dashboards</h3>
+                        <p class="text-xs text-gray-500">Admin panel solutions</p>
+                    </div>
+                    <div class="neon-box p-8 text-center group">
+                        <i class="fas fa-shopping-cart text-4xl text-pink-500 mb-4 group-hover:animate-bounce"></i>
+                        <h3 class="text-xl font-bold mb-2">eCommerce</h3>
+                        <p class="text-xs text-gray-500">Shopping web applications</p>
+                    </div>
+                    <div class="neon-box p-8 text-center group">
+                        <i class="fas fa-magic text-4xl text-purple-500 mb-4 group-hover:animate-bounce"></i>
+                        <h3 class="text-xl font-bold mb-2">AI Enhancement</h3>
+                        <p class="text-xs text-gray-500">Image processing & AI integration</p>
+                    </div>
+                    <div class="neon-box p-8 text-center group">
+                        <i class="fas fa-mobile-alt text-4xl text-yellow-400 mb-4 group-hover:animate-bounce"></i>
+                        <h3 class="text-xl font-bold mb-2">Responsive UI/UX</h3>
+                        <p class="text-xs text-gray-500">Mobile-first designs</p>
+                    </div>
+                    <div class="neon-box p-8 text-center group">
+                        <i class="fas fa-plug text-4xl text-red-500 mb-4 group-hover:animate-bounce"></i>
+                        <h3 class="text-xl font-bold mb-2">Custom Solutions</h3>
+                        <p class="text-xs text-gray-500">API Integrations</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROJECTS -->
+            <section id="projects" class="min-h-screen p-8 md:p-16 border-t border-green-900/30 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 neon-text-green flex items-center">
+                    <span class="text-6xl mr-4 opacity-50">04.</span> Featured Projects
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Project 1 -->
+                    <div class="neon-box group rounded-lg overflow-hidden">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/bac4b9194361329.65fad177d61b7.png" alt="Portfolio" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
+                            <div class="absolute top-0 right-0 bg-green-600 text-black text-xs font-bold px-2 py-1">REACT</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-green-400">Personal Portfolio</h3>
+                            <p class="text-gray-400 text-sm mb-4">Modern, responsive portfolio with terminal style interface and dark/light toggle.</p>
+                            <div class="flex flex-wrap gap-2 text-xs text-cyan-300 font-mono mb-4">
+                                <span>#Tailwind</span> <span>#React</span> <span>#Darkmode</span>
+                            </div>
+                            <a href="#" class="inline-block border-b border-green-500 text-green-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
                         </div>
                     </div>
-                </div>
 
-                <!-- Project 2 -->
-                <div class="term-box group overflow-hidden">
-                    <div class="h-48 overflow-hidden border-b border-term-secondary relative">
-                        <img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/701/381/datas/original.PNG" 
-                             alt="ID Card" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors"></div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold text-term-accent mb-2">ID-Card Generator</h3>
-                        <p class="text-xs text-term-secondary mb-3">[ React, HTML, JS ]</p>
-                        <p class="text-gray-400 text-sm mb-4">Web app for generating printable ID cards with image upload.</p>
-                        <div class="flex gap-4 text-sm">
-                            <a href="#" class="hover:text-term-accent underline">Source Code</a>
-                            <a href="#" class="hover:text-term-accent underline">Live Demo</a>
+                    <!-- Project 2 -->
+                    <div class="neon-box group rounded-lg overflow-hidden">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/701/381/datas/original.PNG" alt="ID Generator" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
+                            <div class="absolute top-0 right-0 bg-cyan-600 text-black text-xs font-bold px-2 py-1">JS</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cyan-400">ID-Card Generator</h3>
+                            <p class="text-gray-400 text-sm mb-4">Web app for generating printable ID cards with image upload and validation.</p>
+                            <div class="flex flex-wrap gap-2 text-xs text-cyan-300 font-mono mb-4">
+                                <span>#HTML</span> <span>#CSS</span> <span>#Validation</span>
+                            </div>
+                            <a href="#" class="inline-block border-b border-cyan-500 text-cyan-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
                         </div>
                     </div>
-                </div>
 
-                <!-- Project 3 -->
-                <div class="term-box group overflow-hidden">
-                    <div class="h-48 overflow-hidden border-b border-term-secondary relative">
-                        <img src="https://cdn.dribbble.com/userupload/12778193/file/original-4375c44c39710b7b9e66b24647a34b9b.png" 
-                             alt="SMS" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors"></div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold text-term-accent mb-2">School Management</h3>
-                        <p class="text-xs text-term-secondary mb-3">[ Laravel, MySQL, React ]</p>
-                        <p class="text-gray-400 text-sm mb-4">Efficient management of students, teachers, fees, and attendance.</p>
-                        <div class="flex gap-4 text-sm">
-                            <a href="#" class="hover:text-term-accent underline">Source Code</a>
-                            <a href="#" class="hover:text-term-accent underline">Live Demo</a>
+                    <!-- Project 3 -->
+                    <div class="neon-box group rounded-lg overflow-hidden">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://cdn.dribbble.com/userupload/12778193/file/original-4375c44c39710b7b9e66b24647a34b9b.png" alt="School System" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
+                            <div class="absolute top-0 right-0 bg-pink-600 text-white text-xs font-bold px-2 py-1">LARAVEL</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-pink-400">School Management</h3>
+                            <p class="text-gray-400 text-sm mb-4">Manage students, teachers, attendance, fees, and reports efficiently.</p>
+                            <div class="flex flex-wrap gap-2 text-xs text-pink-300 font-mono mb-4">
+                                <span>#MySQL</span> <span>#PHP</span> <span>#Dashboard</span>
+                            </div>
+                            <a href="#" class="inline-block border-b border-pink-500 text-pink-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
                         </div>
                     </div>
-                </div>
 
-                <!-- Project 4 -->
-                <div class="term-box group overflow-hidden">
-                    <div class="h-48 overflow-hidden border-b border-term-secondary relative">
-                        <img src="https://cdn.dribbble.com/userupload/43426471/file/original-9b43e360d63f35ff682299407cdad175.png" 
-                             alt="HMS" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                         <div class="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors"></div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold text-term-accent mb-2">Hospital Management</h3>
-                        <p class="text-xs text-term-secondary mb-3">[ PHP, Laravel, MySQL ]</p>
-                        <p class="text-gray-400 text-sm mb-4">Patient management, appointments, billing, and staff tracking.</p>
-                        <div class="flex gap-4 text-sm">
-                            <a href="#" class="hover:text-term-accent underline">Source Code</a>
-                            <a href="#" class="hover:text-term-accent underline">Live Demo</a>
+                     <!-- Project 4 -->
+                     <div class="neon-box group rounded-lg overflow-hidden">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://cdn.dribbble.com/userupload/14415697/file/original-4d1e9d9adfd1e042e6d7f0dadfb1912f.jpg?resize=400x0" alt="AI" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
+                            <div class="absolute top-0 right-0 bg-purple-600 text-white text-xs font-bold px-2 py-1">AI</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400">AI Image Enhancer</h3>
+                            <p class="text-gray-400 text-sm mb-4">Web app to enhance and upscale images using AI models and APIs.</p>
+                            <div class="flex flex-wrap gap-2 text-xs text-purple-300 font-mono mb-4">
+                                <span>#NodeJS</span> <span>#API</span> <span>#React</span>
+                            </div>
+                            <a href="#" class="inline-block border-b border-purple-500 text-purple-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
                         </div>
                     </div>
-                </div>
 
-                <!-- Project 5 -->
-                <div class="term-box group overflow-hidden">
-                    <div class="h-48 overflow-hidden border-b border-term-secondary relative">
-                        <img src="https://cdn.dribbble.com/userupload/14415697/file/original-4d1e9d9adfd1e042e6d7f0dadfb1912f.jpg?resize=400x0" 
-                             alt="AI" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors"></div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold text-term-accent mb-2">AI Image Enhancer</h3>
-                        <p class="text-xs text-term-secondary mb-3">[ Node.js, AI APIs ]</p>
-                        <p class="text-gray-400 text-sm mb-4">Upscale and enhance images automatically using AI models.</p>
-                        <div class="flex gap-4 text-sm">
-                            <a href="#" class="hover:text-term-accent underline">Source Code</a>
-                            <a href="#" class="hover:text-term-accent underline">Live Demo</a>
+                    <!-- Project 5 -->
+                     <div class="neon-box group rounded-lg overflow-hidden">
+                        <div class="h-48 overflow-hidden relative">
+                            <img src="https://images.reallygooddesigns.com/2022/04/small-business-website-design.png" alt="Ecom" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
+                            <div class="absolute top-0 right-0 bg-yellow-600 text-black text-xs font-bold px-2 py-1">ECOM</div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-yellow-400">eCommerce Suite</h3>
+                            <p class="text-gray-400 text-sm mb-4">Full-stack online stores with product listing, cart, checkout, and auth.</p>
+                            <div class="flex flex-wrap gap-2 text-xs text-yellow-300 font-mono mb-4">
+                                <span>#Laravel</span> <span>#Cart</span> <span>#Payment</span>
+                            </div>
+                            <a href="#" class="inline-block border-b border-yellow-500 text-yellow-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
                         </div>
                     </div>
-                </div>
 
-                 <!-- Project 6 -->
-                 <div class="term-box group overflow-hidden">
-                    <div class="h-48 overflow-hidden border-b border-term-secondary relative">
-                        <img src="https://images.reallygooddesigns.com/2022/04/small-business-website-design.png" 
-                             alt="Ecom" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
-                        <div class="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors"></div>
-                    </div>
-                    <div class="p-5">
-                        <h3 class="text-xl font-bold text-term-accent mb-2">eCommerce Platform</h3>
-                        <p class="text-xs text-term-secondary mb-3">[ Laravel, React ]</p>
-                        <p class="text-gray-400 text-sm mb-4">Full-stack store with cart, checkout, and auth.</p>
-                        <div class="flex gap-4 text-sm">
-                            <a href="#" class="hover:text-term-accent underline">Source Code</a>
-                            <a href="#" class="hover:text-term-accent underline">Live Demo</a>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- 6. CASE STUDIES -->
-        <section class="mb-32 fade-in-section">
-            <div class="flex flex-col items-center mb-10">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">05.</span> Case Studies
-                </h2>
-                <span class="text-xs text-term-secondary">cat detailed_report.txt</span>
-            </div>
-            
-            <div class="space-y-8">
-                <!-- Case Study 1 -->
-                <div class="border-l-2 border-term-accent pl-6 py-2 relative">
-                    <div class="absolute -left-2 top-0 w-4 h-4 bg-term-accent rounded-full animate-pulse"></div>
-                    <h3 class="text-2xl font-bold mb-2">Hospital Management System Architecture</h3>
-                    <p class="text-gray-400 mb-4 max-w-3xl">
-                        <span class="text-term-secondary">> Challenge:</span> Manage 500+ daily patients and staff schedules manually.<br>
-                        <span class="text-term-secondary">> Solution:</span> Developed a Laravel-based centralized system.<br>
-                        <span class="text-term-secondary">> Result:</span> Reduced waiting time by 40% and digitized 100% of records.
-                    </p>
-                    <div class="w-full md:w-1/2 h-48 bg-gray-900 overflow-hidden border border-term-dim rounded">
-                        <img src="https://cdn.dribbble.com/userupload/43426471/file/original-9b43e360d63f35ff682299407cdad175.png" alt="HMS Detail" class="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity">
-                    </div>
-                </div>
-
-                <!-- Case Study 2 -->
-                <div class="border-l-2 border-term-accent pl-6 py-2 relative">
-                    <div class="absolute -left-2 top-0 w-4 h-4 bg-term-accent rounded-full animate-pulse"></div>
-                    <h3 class="text-2xl font-bold mb-2">AI Image Enhancer Performance</h3>
-                    <p class="text-gray-400 mb-4 max-w-3xl">
-                        <span class="text-term-secondary">> Challenge:</span> Slow processing of high-res images on client side.<br>
-                        <span class="text-term-secondary">> Solution:</span> Implemented Node.js queue system and optimized API calls.<br>
-                        <span class="text-term-secondary">> Result:</span> Batch processing enabled with < 2s latency per image.
-                    </p>
-                    <div class="w-full md:w-1/2 h-48 bg-gray-900 overflow-hidden border border-term-dim rounded">
-                        <img src="https://cdn.dribbble.com/userupload/14415697/file/original-4d1e9d9adfd1e042e6d7f0dadfb1912f.jpg?resize=400x0" alt="AI Detail" class="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 7. EXPERIENCE -->
-        <section id="experience" class="mb-32 fade-in-section">
-            <div class="flex flex-col items-center mb-10">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">06.</span> Work Experience
-                </h2>
-                <span class="text-xs text-term-secondary">history | grep 'job'</span>
-            </div>
-
-            <div class="relative border-l border-term-secondary ml-4 md:ml-0 md:pl-8 space-y-12">
-                <!-- Job 1 -->
-                <div class="relative pl-8 md:pl-0">
-                    <div class="absolute -left-2 top-0 w-4 h-4 bg-term-bg border-2 border-term-accent rounded-full"></div>
-                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
-                        <h3 class="text-xl font-bold text-white">Freelance Full-Stack Developer</h3>
-                        <span class="text-sm font-mono text-term-accent bg-term-dim px-2 py-1 rounded">2023 - Present</span>
-                    </div>
-                    <p class="text-gray-400">Built CMS, eCommerce, dashboards, AI web apps, and management systems for diverse global clients.</p>
-                </div>
-                <!-- Job 2 -->
-                <div class="relative pl-8 md:pl-0">
-                    <div class="absolute -left-2 top-0 w-4 h-4 bg-term-bg border-2 border-term-accent rounded-full"></div>
-                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
-                        <h3 class="text-xl font-bold text-white">University Projects Lead</h3>
-                        <span class="text-sm font-mono text-term-accent bg-term-dim px-2 py-1 rounded">2022 - 2024</span>
-                    </div>
-                    <p class="text-gray-400">Led teams in developing Database management systems and interactive dashboards using Laravel and React.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 8. EDUCATION -->
-        <section class="mb-32 fade-in-section">
-            <div class="flex flex-col items-center mb-10">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">07.</span> Education
-                </h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="term-box p-6 flex items-center gap-4">
-                    <i class="fas fa-graduation-cap text-3xl text-term-accent"></i>
+            <!-- EXPERIENCE & EDUCATION -->
+            <section id="experience" class="py-20 p-8 md:p-16 border-t border-green-900/30 reveal">
+                <div class="grid md:grid-cols-2 gap-12">
+                    
+                    <!-- Exp -->
                     <div>
-                        <h3 class="font-bold">BS. Software Engineering</h3>
-                        <p class="text-sm text-term-secondary">University of Swat | 2023</p>
+                        <h2 class="text-3xl font-bold mb-8 neon-text-cyan"><i class="fas fa-history mr-3"></i>Experience</h2>
+                        <div class="border-l-2 border-cyan-800 ml-4 pl-8 space-y-8">
+                            <div class="relative">
+                                <span class="absolute -left-10 top-0 w-4 h-4 rounded-full bg-cyan-500 shadow-[0_0_10px_#0ff]"></span>
+                                <h4 class="text-xl font-bold text-white">Freelance Full-Stack Developer</h4>
+                                <span class="text-sm text-cyan-400 font-mono">2023 - Present</span>
+                                <p class="text-gray-400 mt-2 text-sm">Built CMS, eCommerce, dashboards, AI web apps, and management systems for diverse clients.</p>
+                            </div>
+                            <div class="relative">
+                                <span class="absolute -left-10 top-0 w-4 h-4 rounded-full bg-cyan-900"></span>
+                                <h4 class="text-xl font-bold text-white">University Projects</h4>
+                                <span class="text-sm text-cyan-400 font-mono">2023 - Present</span>
+                                <p class="text-gray-400 mt-2 text-sm">Developed robust DBMS, interactive dashboards, and web tools using Laravel & React.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="term-box p-6 flex items-center gap-4">
-                    <i class="fas fa-certificate text-3xl text-term-accent"></i>
-                    <div>
-                        <h3 class="font-bold">Certified Web Developer</h3>
-                        <p class="text-sm text-term-secondary">Online Certifications | 2023</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- 9. PROCESS -->
-        <section class="mb-32 fade-in-section">
-             <div class="flex flex-col items-center mb-10">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">08.</span> Dev Process
+                    <!-- Edu -->
+                    <div id="education">
+                        <h2 class="text-3xl font-bold mb-8 neon-text-pink"><i class="fas fa-graduation-cap mr-3"></i>Education</h2>
+                        <div class="space-y-4">
+                            <div class="neon-box p-6 border-l-4 border-l-pink-500">
+                                <h4 class="text-lg font-bold text-white">BS. Software Engineering</h4>
+                                <p class="text-pink-400 text-sm">University of Swat | 2023</p>
+                            </div>
+                            <div class="neon-box p-6 border-l-4 border-l-pink-500">
+                                <h4 class="text-lg font-bold text-white">Certified Web Developer</h4>
+                                <p class="text-pink-400 text-sm">Freelance / Online | 2023</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <!-- PROCESS -->
+             <section id="process" class="py-12 p-8 md:p-16 border-t border-green-900/30 reveal">
+                 <h2 class="text-3xl font-bold mb-8 text-center neon-text-green">Development Protocol</h2>
+                 <div class="flex flex-wrap justify-center gap-4">
+                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">01. Requirement Analysis</span>
+                     <span class="text-gray-600 self-center">>>></span>
+                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">02. UI/UX Wireframing</span>
+                     <span class="text-gray-600 self-center">>>></span>
+                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">03. Development</span>
+                     <span class="text-gray-600 self-center">>>></span>
+                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">04. Testing</span>
+                     <span class="text-gray-600 self-center">>>></span>
+                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">05. Deployment</span>
+                 </div>
+             </section>
+
+             <!-- TESTIMONIALS & OPEN SOURCE -->
+             <section id="testimonials" class="py-20 p-8 md:p-16 bg-gradient-to-b from-transparent to-black/80 reveal">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- GitHub -->
+                    <div class="neon-box p-8 text-center border-dashed border-2 border-gray-700">
+                        <i class="fab fa-github text-6xl text-white mb-4"></i>
+                        <h3 class="text-2xl font-bold mb-2">Open Source</h3>
+                        <p class="text-gray-400 mb-4">Contributing to the community one commit at a time.</p>
+                        <div class="text-green-400 font-mono text-sm">
+                            user: saifulislaam<br>
+                            repo_status: all_public
+                        </div>
+                    </div>
+
+                    <!-- Reviews -->
+                    <div class="relative overflow-hidden neon-box p-8">
+                        <i class="fas fa-quote-left text-4xl text-green-800 absolute top-4 left-4"></i>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-bold mb-6 text-white">Client Logs</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <p class="text-gray-300 italic mb-2">"Saif delivered a fully functional school management system with great attention to detail. Highly professional."</p>
+                                    <p class="text-green-500 text-sm font-bold">- Client A.</p>
+                                </div>
+                                <div class="border-t border-gray-800 pt-4">
+                                    <p class="text-gray-300 italic mb-2">"His dashboards are clean, intuitive, and efficient. Impressive full-stack skills."</p>
+                                    <p class="text-green-500 text-sm font-bold">- University Supervisor</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </section>
+
+            <!-- CONTACT -->
+            <section id="contact" class="py-20 p-8 md:p-16 border-t border-green-900/30 reveal">
+                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center neon-text-purple">
+                    Execute Connection
                 </h2>
-            </div>
-            <div class="flex flex-wrap justify-center gap-4 text-sm font-mono">
-                <div class="px-4 py-2 border border-term-secondary rounded-full bg-term-dim hover:bg-term-secondary hover:text-black transition-colors">1. Requirements</div>
-                <div class="text-term-accent flex items-center">-></div>
-                <div class="px-4 py-2 border border-term-secondary rounded-full bg-term-dim hover:bg-term-secondary hover:text-black transition-colors">2. UI/UX Design</div>
-                <div class="text-term-accent flex items-center">-></div>
-                <div class="px-4 py-2 border border-term-secondary rounded-full bg-term-dim hover:bg-term-secondary hover:text-black transition-colors">3. Development</div>
-                <div class="text-term-accent flex items-center">-></div>
-                <div class="px-4 py-2 border border-term-secondary rounded-full bg-term-dim hover:bg-term-secondary hover:text-black transition-colors">4. Testing</div>
-                <div class="text-term-accent flex items-center">-></div>
-                <div class="px-4 py-2 border border-term-secondary rounded-full bg-term-dim hover:bg-term-secondary hover:text-black transition-colors">5. Deployment</div>
-            </div>
-        </section>
-
-        <!-- 10. OPEN SOURCE -->
-        <section class="mb-32 fade-in-section">
-             <div class="flex flex-col items-center mb-10">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">09.</span> Open Source
-                </h2>
-            </div>
-            <div class="term-box p-6 max-w-3xl mx-auto font-mono text-sm">
-                <div class="flex justify-between border-b border-gray-700 pb-2 mb-4">
-                    <span>saifulislam/contributions</span>
-                    <span><i class="fab fa-github"></i> Public</span>
-                </div>
-                <div class="grid grid-cols-7 gap-1 h-24 mb-4 opacity-80">
-                    <!-- Fake Contribution Graph -->
-                    <script>
-                        for(let i=0; i<84; i++) {
-                            let opacity = Math.random() > 0.7 ? "bg-term-accent" : (Math.random() > 0.4 ? "bg-term-secondary" : "bg-gray-800");
-                            document.write(`<div class="${opacity} rounded-sm w-full h-full"></div>`);
-                        }
-                    </script>
-                </div>
-                <div class="text-center text-gray-400">
-                    345 contributions in the last year
-                </div>
-            </div>
-        </section>
-
-        <!-- 11. TESTIMONIALS -->
-        <section class="mb-32 fade-in-section">
-            <div class="flex flex-col items-center mb-10">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">10.</span> Testimonials
-                </h2>
-            </div>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="p-6 bg-term-dim border-l-4 border-term-accent italic relative">
-                    <i class="fas fa-quote-left absolute top-4 left-4 text-term-secondary opacity-30 text-4xl"></i>
-                    <p class="mb-4 z-10 relative">"Saif delivered a fully functional school management system with great attention to detail. Highly professional."</p>
-                    <p class="text-term-accent font-bold text-right">- Client</p>
-                </div>
-                <div class="p-6 bg-term-dim border-l-4 border-term-accent italic relative">
-                     <i class="fas fa-quote-left absolute top-4 left-4 text-term-secondary opacity-30 text-4xl"></i>
-                    <p class="mb-4 z-10 relative">"His dashboards are clean, intuitive, and efficient. Impressive full-stack skills."</p>
-                    <p class="text-term-accent font-bold text-right">- University Supervisor</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 12. CONTACT -->
-        <section id="contact" class="mb-20 fade-in-section">
-            <div class="flex flex-col items-center mb-10">
-                <h2 class="text-3xl font-bold border-b-2 border-term-secondary pb-2 mb-2">
-                    <span class="text-term-accent">11.</span> Contact Me
-                </h2>
-                <span class="text-xs text-term-secondary">sudo send_mail</span>
-            </div>
-
-            <div class="max-w-2xl mx-auto term-box p-8">
-                <form id="contactForm" onsubmit="event.preventDefault(); alert('Message Transmitted Successfully!');">
-                    <div class="mb-6">
-                        <label class="block text-term-secondary mb-2">> Enter Name:</label>
-                        <input type="text" class="w-full bg-black border-b border-term-secondary text-term-text focus:outline-none focus:border-term-accent py-2" placeholder="_">
+                <div class="max-w-2xl mx-auto neon-box p-8 rounded-xl bg-black/80">
+                    <form class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-purple-400 text-xs font-bold mb-2 uppercase tracking-wide">Identity Name</label>
+                                <input type="text" class="w-full bg-gray-900 border border-purple-900 rounded p-3 text-white focus:outline-none focus:border-purple-500 transition shadow-[0_0_10px_rgba(188,19,254,0.1)]">
+                            </div>
+                            <div>
+                                <label class="block text-purple-400 text-xs font-bold mb-2 uppercase tracking-wide">Electronic Mail</label>
+                                <input type="email" class="w-full bg-gray-900 border border-purple-900 rounded p-3 text-white focus:outline-none focus:border-purple-500 transition shadow-[0_0_10px_rgba(188,19,254,0.1)]">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-purple-400 text-xs font-bold mb-2 uppercase tracking-wide">Transmission Content</label>
+                            <textarea rows="5" class="w-full bg-gray-900 border border-purple-900 rounded p-3 text-white focus:outline-none focus:border-purple-500 transition shadow-[0_0_10px_rgba(188,19,254,0.1)]"></textarea>
+                        </div>
+                        <button type="submit" class="w-full cyber-btn cyber-btn-pink py-4 font-bold tracking-widest text-lg rounded hover:bg-purple-600 hover:text-white">
+                            SEND_MESSAGE
+                        </button>
+                    </form>
+                    
+                    <div class="mt-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between text-sm text-gray-500 font-mono text-center md:text-left">
+                        <p>saifulislam.git@gmail.com</p>
+                        <p>+92 344 2864308</p>
                     </div>
-                    <div class="mb-6">
-                        <label class="block text-term-secondary mb-2">> Enter Email:</label>
-                        <input type="email" class="w-full bg-black border-b border-term-secondary text-term-text focus:outline-none focus:border-term-accent py-2" placeholder="_">
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-term-secondary mb-2">> Message Content:</label>
-                        <textarea rows="4" class="w-full bg-black border-b border-term-secondary text-term-text focus:outline-none focus:border-term-accent py-2" placeholder="_"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-term-secondary text-black font-bold py-3 hover:bg-term-accent transition-colors">
-                        [ SEND MESSAGE ]
-                    </button>
-                </form>
-
-                <div class="mt-8 flex justify-center space-x-8 text-2xl">
-                    <a href="https://github.com/saifulislaam" class="text-term-secondary hover:text-term-accent"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/saifxeven/" class="text-term-secondary hover:text-term-accent"><i class="fab fa-linkedin"></i></a>
-                    <a href="mailto:saifulislamsui7@gmail.com" class="text-term-secondary hover:text-term-accent"><i class="fas fa-envelope"></i></a>
                 </div>
-            </div>
-        </section>
+            </section>
 
-    </main>
+            <!-- FOOTER -->
+            <footer class="py-8 text-center border-t border-gray-900 text-gray-600 text-xs font-mono">
+                <p>&copy; 2025 Saif ul Islam. System Verified.</p>
+                <div class="mt-2 space-x-4">
+                    <a href="https://github.com/saifulislaam" class="hover:text-green-500">GitHub</a>
+                    <a href="https://www.linkedin.com/in/saifxeven/" class="hover:text-blue-500">LinkedIn</a>
+                    <a href="#" class="hover:text-white">Privacy</a>
+                </div>
+            </footer>
+        </main>
+    </div>
 
-    <!-- Footer -->
-    <footer class="border-t border-term-secondary bg-black py-8 text-center text-sm text-gray-500 font-mono">
-        <p>© 2025 Saif ul Islam. All rights reserved.</p>
-        <p class="mt-2 text-xs">System Status: <span class="text-term-text">ONLINE</span> | Latency: 24ms</p>
-    </footer>
-
-    <!-- Scripts -->
     <script>
-        // 1. Mobile Menu Toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+        // --- MATRIX RAIN EFFECT ---
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
 
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        // 2. Typewriter Effect
-        const textToType = "Full-Stack Web Developer | HTML, CSS, JS, React, Node, PHP, Laravel";
-        const typeWriterElement = document.getElementById('typewriter');
-        let i = 0;
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
 
-        function typeWriter() {
-            if (i < textToType.length) {
-                typeWriterElement.innerHTML += textToType.charAt(i);
-                i++;
-                setTimeout(typeWriter, 50); // Speed of typing
-            }
+        for(let i = 0; i < columns; i++) {
+            drops[i] = 1;
         }
 
-        // Start typing when page loads
-        window.onload = typeWriter;
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 3. Fade In Animation on Scroll
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
+            ctx.fillStyle = '#0F0'; // Neon Green
+            ctx.font = fontSize + 'px monospace';
 
-        const observer = new IntersectionObserver((entries, observer) => {
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 33);
+
+
+        // --- TYPEWRITER EFFECT ---
+        const textToType = "Full-Stack Web Developer | HTML, CSS, React, Laravel | Building modern web apps.";
+        const typeContainer = document.getElementById('typing-text');
+        let typeIndex = 0;
+
+        function typeWriter() {
+            if (typeIndex < textToType.length) {
+                typeContainer.textContent += textToType.charAt(typeIndex);
+                typeIndex++;
+                setTimeout(typeWriter, 50); // Typing speed
+            }
+        }
+        // Start typing after a brief delay
+        setTimeout(typeWriter, 1000);
+
+
+        // --- SCROLL ANIMATIONS (Intersection Observer) ---
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealCallback = (entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target); // Only animate once
+                    entry.target.classList.add('active');
                 }
             });
-        }, observerOptions);
+        };
 
-        document.querySelectorAll('.fade-in-section').forEach(section => {
-            observer.observe(section);
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver(revealCallback, revealOptions);
+        revealElements.forEach(el => observer.observe(el));
+
+
+        // --- MOBILE MENU TOGGLE ---
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        let isMenuOpen = false;
+
+        menuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if(isMenuOpen) {
+                sidebar.classList.remove('-translate-x-full');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+
+        // Close menu when clicking a link on mobile
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if(window.innerWidth < 1024) {
+                    sidebar.classList.add('-translate-x-full');
+                    isMenuOpen = false;
+                }
+            });
+        });
+
+        // --- ACTIVE LINK HIGHLIGHTER ---
+        const sections = document.querySelectorAll('section');
+        const navLi = document.querySelectorAll('.sidebar ul li a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if(scrollY >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLi.forEach(a => {
+                a.classList.remove('active');
+                if(a.getAttribute('href').includes(current)) {
+                    a.classList.add('active');
+                }
+            });
         });
 
     </script>
