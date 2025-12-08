@@ -1,0 +1,87 @@
+ /* Base Setup */
+        body {
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Selection Color */
+        ::selection {
+            background-color: #FFFF00;
+            color: #000;
+        }
+
+        /* The Core "Sketchy" Border Class */
+        .sketch-border {
+            border: 2px solid white;
+            border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .sketch-border:hover {
+            border-radius: 15px 255px 15px 225px / 225px 15px 255px 15px;
+        }
+
+        /* Button Utilities */
+        .btn-primary {
+            background-color: #FF1493;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            font-size: 1.125rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 15px #FFFF00;
+            transform: translateY(-4px);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            font-size: 1.125rem;
+            transition: color 0.2s, background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-secondary:hover {
+            background-color: rgba(255, 20, 147, 0.2);
+            color: #FFFF00;
+        }
+
+        /* Scribble Hover Effect */
+        .scribble-hover:hover {
+            animation: wiggle 0.5s ease-in-out infinite;
+        }
+
+        /* Modal Transitions */
+        #modal-overlay { transition: opacity 0.3s ease; }
+        #modal-content { transition: transform 0.3s ease, opacity 0.3s ease; }
+        
+        .modal-hidden {
+            pointer-events: none;
+            opacity: 0;
+        }
+        .modal-hidden #modal-content {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+        
+        .modal-visible {
+            pointer-events: auto;
+            opacity: 1;
+        }
+        .modal-visible #modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
