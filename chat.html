@@ -1,15 +1,18 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SAIF AI Chatbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
     <style>
+        /* --- CSS VARIABLES BASED ON JSON THEME --- */
         :root {
-            /* Color Palette */
             --primary: #0A0E17;
             --secondary: #1A1F2C;
             --accent: #00D4AA;
@@ -19,1855 +22,654 @@
             --background: #0D1117;
             --surface: #161B22;
             --error: #FF6B6B;
-            --warning: #FFD166;
-            --success: #06D6A0;
-            --info: #118AB2;
-            
-            /* Typography */
-            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --base-size: 16px;
-            
-            /* Spacing */
-            --spacing-xs: 0.25rem;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-            --spacing-xxl: 3rem;
-            
-            /* Border Radius */
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 18px;
-            --radius-xl: 24px;
-            
-            /* Shadows */
-            --shadow-level1: 0 2px 8px rgba(0, 0, 0, 0.2);
-            --shadow-level2: 0 8px 30px rgba(0, 212, 170, 0.15);
-            --shadow-level3: 0 16px 50px rgba(0, 212, 170, 0.2);
-            
-            /* Transitions */
-            --transition-fast: 0.15s ease;
-            --transition-normal: 0.3s ease;
-            --transition-slow: 0.5s ease;
-            
-            /* Sidebar */
+            --glass-bg: rgba(26, 31, 44, 0.85);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --font-family: 'Inter', sans-serif;
             --sidebar-width: 280px;
-            --sidebar-tablet-width: 240px;
-            
-            /* Z-index layers */
-            --z-sidebar: 100;
-            --z-modal: 200;
-            --z-tooltip: 300;
+            --header-height: 70px;
         }
-        
+
+        /* --- GLOBAL RESET & TYPOGRAPHY --- */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-        
+
         body {
             font-family: var(--font-family);
-            font-size: var(--base-size);
-            background: var(--background);
+            background-color: var(--background);
             color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
         }
-        
-        /* Layout */
+
+        /* --- LAYOUT GRID --- */
         .app-container {
             display: flex;
-            height: 100vh;
-            width: 100vw;
+            width: 100%;
+            height: 100%;
             position: relative;
-            overflow: hidden;
         }
-        
-        /* Sidebar Styles */
+
+        /* --- SIDEBAR (Glassmorphism) --- */
         .sidebar {
             width: var(--sidebar-width);
-            background: rgba(26, 31, 44, 0.85);
+            background: var(--glass-bg);
             backdrop-filter: blur(12px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(12px);
+            border-right: var(--glass-border);
             display: flex;
             flex-direction: column;
-            transition: transform var(--transition-normal);
-            z-index: var(--z-sidebar);
-            position: relative;
+            padding: 20px;
+            z-index: 100;
+            transition: transform 0.3s ease;
         }
-        
-        .sidebar-header {
-            padding: var(--spacing-lg);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .ai-profile {
+
+        .brand {
             display: flex;
             align-items: center;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-md);
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        
-        .ai-avatar {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, #00D4AA 0%, #009688 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--primary);
-            font-weight: 600;
-        }
-        
-        .ai-info h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: var(--spacing-xs);
-        }
-        
-        .ai-status {
-            display: flex;
-            align-items: center;
-            font-size: 0.85rem;
-            color: var(--success);
-            gap: var(--spacing-xs);
-        }
-        
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            background: var(--success);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .sidebar-content {
-            flex: 1;
-            padding: var(--spacing-lg);
-            overflow-y: auto;
-        }
-        
-        .sidebar-section {
-            margin-bottom: var(--spacing-xl);
-        }
-        
-        .sidebar-section h4 {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-md);
-            font-weight: 500;
-        }
-        
-        .sidebar-actions {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm);
-        }
-        
-        .sidebar-btn {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding: var(--spacing-md);
-            border-radius: var(--radius-md);
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            text-align: left;
-        }
-        
-        .sidebar-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .sidebar-btn.active {
-            background: rgba(0, 212, 170, 0.1);
-            color: var(--accent);
-        }
-        
-        .sidebar-btn i {
-            font-size: 1.1rem;
-            width: 24px;
-        }
-        
-        .conversation-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs);
-        }
-        
-        .conversation-item {
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .conversation-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .conversation-item.active {
-            background: rgba(0, 212, 170, 0.1);
-            color: var(--accent);
-        }
-        
-        .conversation-title {
-            font-size: 0.9rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex: 1;
-        }
-        
-        .conversation-date {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-        
-        .sidebar-footer {
-            padding: var(--spacing-lg);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-        
-        .user-avatar {
+
+        .brand-avatar {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #118AB2 0%, #073B4C 100%);
-            border-radius: 50%;
+            background: linear-gradient(135deg, #00D4AA, #009688);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            color: #0A0E17;
+        }
+
+        .brand-info h2 {
+            font-size: 1.1rem;
             font-weight: 600;
         }
-        
-        /* Main Chat Area */
-        .main-content {
+
+        .brand-info span {
+            font-size: 0.8rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .brand-info span::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: block;
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .menu-section {
+            margin-bottom: 25px;
+        }
+
+        .menu-label {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .menu-btn:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            color: var(--accent);
+        }
+
+        .menu-btn.active {
+            background: linear-gradient(90deg, rgba(0,212,170,0.1), transparent);
+            border-left: 3px solid var(--accent);
+        }
+
+        .user-profile {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: #555;
+            border-radius: 50%;
+        }
+
+        /* --- MAIN CHAT AREA --- */
+        .main-chat {
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: var(--primary);
+            background: radial-gradient(circle at top right, #1A1F2C 0%, #0A0E17 100%);
             position: relative;
-            overflow: hidden;
+            width: 100%;
         }
-        
+
+        /* Header */
         .chat-header {
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: var(--header-height);
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            background: var(--surface);
-            z-index: 10;
+            padding: 0 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: rgba(10, 14, 23, 0.8);
         }
-        
-        .chat-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .chat-actions {
-            display: flex;
-            gap: var(--spacing-sm);
-        }
-        
-        .icon-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+
+        .header-title {
             display: flex;
             align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
+            gap: 15px;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
             border: none;
             color: var(--text-primary);
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: all var(--transition-fast);
         }
-        
-        .icon-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05);
-        }
-        
+
+        /* Messages Container */
         .messages-container {
             flex: 1;
             overflow-y: auto;
-            padding: var(--spacing-lg);
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: var(--spacing-lg);
+            gap: 20px;
+            scroll-behavior: smooth;
         }
-        
+
+        /* Message Bubbles */
         .message {
-            display: flex;
-            max-width: 80%;
-            animation: slideUpFade 0.3s ease;
+            max-width: 70%;
+            padding: 16px 20px;
+            font-size: 1rem;
+            line-height: 1.5;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
         }
-        
-        @keyframes slideUpFade {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
-        .message.ai {
-            align-self: flex-start;
-        }
-        
+
         .message.user {
             align-self: flex-end;
-        }
-        
-        .message-content {
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-radius: var(--radius-lg);
-            position: relative;
-        }
-        
-        .message.ai .message-content {
-            background: linear-gradient(135deg, rgba(26, 31, 44, 0.9) 0%, rgba(36, 42, 56, 0.9) 100%);
-            border: 1px solid #2D3748;
-            border-radius: 18px 18px 18px 4px;
-            box-shadow: var(--shadow-level2);
-        }
-        
-        .message.user .message-content {
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: #0A0E17;
             border-radius: 18px 18px 4px 18px;
             box-shadow: 0 4px 20px rgba(0, 212, 170, 0.2);
         }
-        
-        .message-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-            margin-top: var(--spacing-sm);
+
+        .message.ai {
+            align-self: flex-start;
+            background: linear-gradient(135deg, #1A1F2C 0%, #242A38 100%);
+            border: 1px solid #2D3748;
+            border-radius: 18px 18px 18px 4px;
+            color: var(--text-primary);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
-        
-        .message.ai .message-avatar {
-            background: linear-gradient(135deg, #00D4AA 0%, #009688 100%);
-            color: var(--primary);
-            margin-right: var(--spacing-sm);
+
+        /* Markdown Styling within bubbles */
+        .message.ai p { margin-bottom: 10px; }
+        .message.ai p:last-child { margin-bottom: 0; }
+        .message.ai code { 
+            background: rgba(0,0,0,0.3); 
+            padding: 2px 4px; 
+            border-radius: 4px; 
+            font-family: 'Courier New', monospace;
         }
-        
-        .message.user .message-avatar {
-            background: linear-gradient(135deg, #118AB2 0%, #073B4C 100%);
-            margin-left: var(--spacing-sm);
-        }
-        
-        .message-text {
-            line-height: 1.5;
-        }
-        
-        .message-text p {
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .message-text p:last-child {
-            margin-bottom: 0;
-        }
-        
-        .message-time {
-            font-size: 0.75rem;
-            margin-top: var(--spacing-xs);
-            opacity: 0.7;
-            display: flex;
-            justify-content: flex-end;
-        }
-        
-        .message-actions {
-            display: flex;
-            gap: var(--spacing-xs);
-            margin-top: var(--spacing-xs);
-            justify-content: flex-end;
-        }
-        
-        .message-action-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: var(--radius-sm);
-            color: inherit;
-            font-size: 0.75rem;
-            padding: 2px 6px;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-        
-        .message-action-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .message.ai pre {
+            background: #0d1117;
+            padding: 10px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+            border: 1px solid #30363d;
         }
         
         /* Input Area */
-        .input-container {
-            padding: var(--spacing-md) var(--spacing-lg);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        .input-area {
+            padding: 20px 24px;
             background: var(--surface);
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
-        
+
         .input-wrapper {
+            background: #0A0E17;
+            border: 1px solid #2D3748;
+            border-radius: 16px;
+            padding: 8px 16px;
             display: flex;
-            gap: var(--spacing-md);
-            align-items: flex-end;
+            align-items: center;
+            gap: 12px;
+            transition: border-color 0.2s;
         }
-        
-        .input-actions {
-            display: flex;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-md);
+
+        .input-wrapper:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.1);
         }
-        
-        .action-btn {
+
+        textarea {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            resize: none;
+            height: 24px;
+            max-height: 120px;
+            font-family: inherit;
+            outline: none;
+            padding: 8px 0;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            color: var(--accent);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .send-btn {
+            background: var(--accent);
+            color: #0A0E17;
+            border: none;
             width: 40px;
             height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
-            color: var(--text-primary);
+            border-radius: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-fast);
+            transition: transform 0.2s;
         }
-        
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.05);
-        }
-        
-        .message-input {
-            flex: 1;
-            background: var(--secondary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-md) var(--spacing-lg);
-            color: var(--text-primary);
-            font-family: var(--font-family);
-            font-size: 0.95rem;
-            resize: none;
-            max-height: 150px;
-            min-height: 50px;
-            transition: all var(--transition-fast);
-        }
-        
-        .message-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.2);
-        }
-        
-        .send-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all var(--transition-fast);
-            flex-shrink: 0;
-        }
-        
+
         .send-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+            background: var(--accent-hover);
         }
-        
+
         /* Typing Indicator */
         .typing-indicator {
             display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            padding: var(--spacing-md) var(--spacing-lg);
-            background: rgba(26, 31, 44, 0.7);
-            border-radius: var(--radius-lg);
+            gap: 5px;
+            padding: 10px 15px;
+            background: #1A1F2C;
+            border-radius: 18px;
             width: fit-content;
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 20px;
+            animation: fadeIn 0.3s;
         }
         
-        .typing-dot {
+        .dot {
             width: 8px;
             height: 8px;
-            background: var(--accent);
+            background: var(--text-secondary);
             border-radius: 50%;
-            animation: typingBounce 1.4s infinite ease-in-out;
+            animation: bounce 1.4s infinite ease-in-out both;
         }
         
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
         
-        @keyframes typingBounce {
-            0%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-        }
-        
-        /* File Upload Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(10, 14, 23, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: var(--z-modal);
-            opacity: 0;
-            visibility: hidden;
-            transition: all var(--transition-normal);
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow: hidden;
-            transform: scale(0.9);
-            transition: transform var(--transition-normal);
-            box-shadow: var(--shadow-level3);
-        }
-        
-        .modal-overlay.active .modal {
-            transform: scale(1);
-        }
-        
-        .modal-header {
-            padding: var(--spacing-lg);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all var(--transition-fast);
-        }
-        
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-        }
-        
-        .modal-content {
-            padding: var(--spacing-lg);
-        }
-        
-        .upload-area {
-            border: 2px dashed rgba(0, 212, 170, 0.3);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-xl);
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            margin-bottom: var(--spacing-lg);
-        }
-        
-        .upload-area:hover {
-            border-color: var(--accent);
-            background: rgba(0, 212, 170, 0.05);
-        }
-        
-        .upload-icon {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .file-types {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-top: var(--spacing-sm);
-        }
-        
-        .uploaded-files {
-            margin-top: var(--spacing-lg);
-        }
-        
-        .uploaded-file {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--spacing-md);
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--spacing-sm);
-        }
-        
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-        
-        .file-icon {
-            font-size: 1.5rem;
-            color: var(--accent);
-        }
-        
-        .file-name {
-            font-weight: 500;
-        }
-        
-        .file-size {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-        
-        .file-remove {
-            background: none;
-            border: none;
-            color: var(--error);
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-        
-        /* Camera Modal */
-        .camera-preview {
-            width: 100%;
-            height: 300px;
-            background: var(--primary);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--spacing-lg);
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .camera-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #1A1F2C 0%, #242A38 100%);
-            color: var(--text-secondary);
-        }
-        
-        .camera-placeholder i {
-            font-size: 4rem;
-            margin-bottom: var(--spacing-md);
-        }
-        
-        .camera-controls {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-lg);
-            margin-top: var(--spacing-lg);
-        }
-        
-        .camera-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-        }
-        
-        .camera-btn.capture {
-            background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
-            color: var(--primary);
-        }
-        
-        .camera-btn.capture:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
-        }
-        
-        .camera-btn.secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-        }
-        
-        /* Mobile Responsiveness */
-        .mobile-header {
-            display: none;
-            padding: var(--spacing-md);
-            background: var(--surface);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .mobile-menu-btn {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: calc(var(--z-sidebar) - 1);
-            opacity: 0;
-            visibility: hidden;
-            transition: all var(--transition-normal);
-            backdrop-filter: blur(3px);
-        }
-        
-        .sidebar-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        /* Responsive Breakpoints */
-        @media (max-width: 1023px) {
-            .sidebar {
-                position: fixed;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                transform: translateX(-100%);
-                z-index: var(--z-sidebar);
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-            }
-            
-            .mobile-header {
-                display: flex;
-            }
-            
-            .message {
-                max-width: 90%;
-            }
-        }
-        
-        @media (max-width: 767px) {
-            .sidebar {
-                width: 100%;
-                max-width: 320px;
-            }
-            
-            .message {
-                max-width: 95%;
-            }
-            
-            .input-wrapper {
-                flex-direction: column;
-                gap: var(--spacing-sm);
-            }
-            
-            .input-actions {
-                align-self: flex-start;
-            }
-            
-            .send-btn {
-                align-self: flex-end;
-                width: 45px;
-                height: 45px;
-            }
-        }
-        
-        /* Welcome Message */
-        .welcome-message {
-            text-align: center;
-            max-width: 600px;
-            margin: auto;
-            padding: var(--spacing-xl);
-        }
-        
-        .welcome-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--spacing-lg);
-            background: linear-gradient(135deg, #00D4AA 0%, #118AB2 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .welcome-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: var(--spacing-xl);
-            line-height: 1.6;
-        }
-        
-        .capabilities-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-xl);
-        }
-        
-        .capability-item {
-            background: rgba(26, 31, 44, 0.5);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-md);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-        }
-        
-        .capability-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(0, 212, 170, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent);
-            font-size: 1.2rem;
-        }
-        
-        /* Utility Classes */
-        .hidden {
-            display: none !important;
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .scrollbar-custom {
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) transparent;
-        }
-        
-        .scrollbar-custom::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .scrollbar-custom::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        
-        .scrollbar-custom::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 3px;
-        }
-        
-        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-hover);
-        }
-        
-        /* Loading Animation */
-        .loading-dots {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .loading-dots span {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--accent);
-            animation: loadingDot 1.4s infinite ease-in-out both;
-        }
-        
-        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-        
-        @keyframes loadingDot {
+        @keyframes bounce {
             0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1.0); }
+            40% { transform: scale(1); }
         }
-        
-        /* Code Block Styling */
-        .message-text pre {
-            background: rgba(10, 14, 23, 0.8);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-md);
-            overflow-x: auto;
-            margin: var(--spacing-md) 0;
-            border-left: 3px solid var(--accent);
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0A0E17; }
+        ::-webkit-scrollbar-thumb { background: #2D3748; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4A5568; }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 240px;
+            }
         }
-        
-        .message-text code {
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            color: var(--accent);
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: absolute;
+                height: 100%;
+                left: -100%;
+                box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            }
+            .sidebar.active {
+                left: 0;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .message {
+                max-width: 85%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar Overlay for Mobile -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-        
-        <!-- Sidebar -->
-        <aside class="sidebar scrollbar-custom" id="sidebar">
-            <div class="sidebar-header">
-                <div class="ai-profile">
-                    <div class="ai-avatar">S</div>
-                    <div class="ai-info">
-                        <h3>SAIF AI</h3>
-                        <div class="ai-status">
-                            <span class="status-indicator"></span>
-                            <span>Online</span>
-                        </div>
-                    </div>
-                </div>
+
+<div class="app-container">
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-avatar">S</div>
+            <div class="brand-info">
+                <h2>SAIF AI</h2>
+                <span>Online</span>
             </div>
-            
-            <div class="sidebar-content">
-                <div class="sidebar-section">
-                    <h4>AI Profile</h4>
-                    <div class="sidebar-actions">
-                        <button class="sidebar-btn active" id="modelInfoBtn">
-                            <i class="fas fa-robot"></i>
-                            <span>DeepSeek Chat</span>
-                        </button>
-                        <button class="sidebar-btn" id="settingsBtn">
-                            <i class="fas fa-cog"></i>
-                            <span>Settings</span>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="sidebar-section">
-                    <h4>Conversations</h4>
-                    <button class="sidebar-btn" id="newChatBtn">
-                        <i class="fas fa-plus"></i>
-                        <span>New Chat</span>
-                    </button>
-                    
-                    <div class="conversation-list" id="conversationList">
-                        <div class="conversation-item active">
-                            <span class="conversation-title">Welcome to SAIF AI</span>
-                            <span class="conversation-date">Today</span>
-                        </div>
-                        <div class="conversation-item">
-                            <span class="conversation-title">Code Review - React Components</span>
-                            <span class="conversation-date">Yesterday</span>
-                        </div>
-                        <div class="conversation-item">
-                            <span class="conversation-title">Document Analysis Report</span>
-                            <span class="conversation-date">Nov 12</span>
-                        </div>
-                        <div class="conversation-item">
-                            <span class="conversation-title">Image Processing Discussion</span>
-                            <span class="conversation-date">Nov 10</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="sidebar-section">
-                    <h4>Tools</h4>
-                    <div class="sidebar-actions">
-                        <button class="sidebar-btn" id="fileUploadBtn">
-                            <i class="fas fa-file-upload"></i>
-                            <span>File Upload</span>
-                        </button>
-                        <button class="sidebar-btn" id="cameraBtn">
-                            <i class="fas fa-camera"></i>
-                            <span>Camera</span>
-                        </button>
-                        <button class="sidebar-btn" id="helpBtn">
-                            <i class="fas fa-question-circle"></i>
-                            <span>Help & Support</span>
-                        </button>
-                    </div>
-                </div>
+        </div>
+
+        <div class="menu-section">
+            <p class="menu-label">Chat</p>
+            <button class="menu-btn active" onclick="alert('New Chat Initiated')">
+                <i class="fas fa-plus"></i> New Chat
+            </button>
+            <button class="menu-btn">
+                <i class="fas fa-history"></i> History
+            </button>
+            <button class="menu-btn">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </div>
+
+        <div class="menu-section">
+            <p class="menu-label">Tools</p>
+            <button class="menu-btn">
+                <i class="fas fa-file-upload"></i> Uploads
+            </button>
+            <button class="menu-btn">
+                <i class="fas fa-camera"></i> Camera
+            </button>
+            <button class="menu-btn">
+                <i class="fas fa-cog"></i> Settings
+            </button>
+        </div>
+
+        <div class="user-profile">
+            <div class="user-avatar" style="background: url('https://ui-avatars.com/api/?name=User&background=00D4AA&color=fff') center/cover;"></div>
+            <div>
+                <div style="font-weight: 600;">User</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">Pro Plan</div>
             </div>
-            
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="user-avatar">JD</div>
-                    <div>
-                        <div style="font-weight: 500;">John Developer</div>
-                        <div style="font-size: 0.85rem; color: var(--text-secondary);">Free Plan</div>
-                    </div>
-                    <button class="icon-btn" id="logoutBtn" style="margin-left: auto;">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                </div>
-            </div>
-        </aside>
-        
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Mobile Header -->
-            <div class="mobile-header">
-                <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-sign-out-alt" style="margin-left: auto; cursor: pointer; color: var(--text-secondary);"></i>
+        </div>
+    </aside>
+
+    <main class="main-chat">
+        <header class="chat-header">
+            <div class="header-title">
+                <button class="mobile-menu-toggle" id="menuToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="chat-title">SAIF AI</div>
-                <div class="chat-actions">
-                    <button class="icon-btn" id="mobileNewChatBtn">
-                        <i class="fas fa-plus"></i>
-                    </button>
+                <div>
+                    <h3>Chat Session</h3>
+                    <small style="color: var(--accent);">DeepSeek V3</small>
                 </div>
             </div>
-            
-            <!-- Chat Header -->
-            <div class="chat-header">
-                <div class="chat-title">Welcome to SAIF AI</div>
-                <div class="chat-actions">
-                    <button class="icon-btn" id="clearChatBtn" title="Clear chat">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                    <button class="icon-btn" id="themeToggleBtn" title="Toggle theme">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                    <button class="icon-btn" id="fullscreenBtn" title="Fullscreen">
-                        <i class="fas fa-expand"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Messages Container -->
-            <div class="messages-container scrollbar-custom" id="messagesContainer">
-                <!-- Welcome Message -->
-                <div class="welcome-message fade-in">
-                    <h1 class="welcome-title">Hello! I'm SAIF AI</h1>
-                    <p class="welcome-subtitle">Your intelligent assistant with advanced capabilities for text analysis, code generation, document processing, and multimedia understanding. Feel free to upload files or use your camera for interactive assistance.</p>
-                    
-                    <div class="capabilities-list">
-                        <div class="capability-item">
-                            <div class="capability-icon">
-                                <i class="fas fa-file-upload"></i>
-                            </div>
-                            <div>
-                                <div style="font-weight: 500;">File Upload</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Images, documents, code, audio, video</div>
-                            </div>
-                        </div>
-                        <div class="capability-item">
-                            <div class="capability-icon">
-                                <i class="fas fa-camera"></i>
-                            </div>
-                            <div>
-                                <div style="font-weight: 500;">Camera Integration</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Photos, document scanning, QR codes</div>
-                            </div>
-                        </div>
-                        <div class="capability-item">
-                            <div class="capability-icon">
-                                <i class="fas fa-code"></i>
-                            </div>
-                            <div>
-                                <div style="font-weight: 500;">Code Analysis</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Multiple languages with syntax highlighting</div>
-                            </div>
-                        </div>
-                        <div class="capability-item">
-                            <div class="capability-icon">
-                                <i class="fas fa-language"></i>
-                            </div>
-                            <div>
-                                <div style="font-weight: 500;">Multi-language</div>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary);">Support for various languages</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Chat messages will be appended here -->
-            </div>
-            
-            <!-- Typing Indicator -->
-            <div class="typing-indicator hidden" id="typingIndicator">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <span style="margin-left: var(--spacing-sm);">SAIF AI is typing</span>
-            </div>
-            
-            <!-- Input Area -->
-            <div class="input-container">
-                <div class="input-actions">
-                    <button class="action-btn" id="attachFileBtn" title="Attach file">
-                        <i class="fas fa-paperclip"></i>
-                    </button>
-                    <button class="action-btn" id="openCameraBtn" title="Open camera">
-                        <i class="fas fa-camera"></i>
-                    </button>
-                    <button class="action-btn" id="voiceInputBtn" title="Voice input">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                </div>
-                
-                <div class="input-wrapper">
-                    <textarea 
-                        class="message-input scrollbar-custom" 
-                        id="messageInput" 
-                        placeholder="Type your message here... (Shift+Enter for new line, Enter to send)"
-                        rows="1"
-                    ></textarea>
-                    <button class="send-btn" id="sendMessageBtn">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </main>
-    </div>
-    
-    <!-- File Upload Modal -->
-    <div class="modal-overlay" id="fileUploadModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Upload Files</h3>
-                <button class="modal-close" id="closeFileModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-content">
-                <div class="upload-area" id="uploadDropArea">
-                    <div class="upload-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                    </div>
-                    <h4>Drag & Drop Files Here</h4>
-                    <p>or click to browse</p>
-                    <p class="file-types">Supports: Images, PDF, Documents, Code files, Audio, Video (Max 50MB)</p>
-                    <input type="file" id="fileInput" multiple style="display: none;">
-                </div>
-                
-                <div class="uploaded-files" id="uploadedFilesList">
-                    <!-- Uploaded files will appear here -->
-                </div>
-                
-                <div style="display: flex; justify-content: flex-end; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
-                    <button class="sidebar-btn" id="cancelUploadBtn">Cancel</button>
-                    <button class="sidebar-btn" style="background: var(--accent); color: var(--primary);" id="confirmUploadBtn">Upload & Send</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Camera Modal -->
-    <div class="modal-overlay" id="cameraModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Camera</h3>
-                <button class="modal-close" id="closeCameraModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-content">
-                <div class="camera-preview">
-                    <div class="camera-placeholder">
-                        <i class="fas fa-camera"></i>
-                        <p>Camera Preview</p>
-                        <p style="font-size: 0.9rem;">Click capture to take a photo</p>
-                    </div>
-                </div>
-                
-                <div class="camera-controls">
-                    <button class="camera-btn secondary" id="switchCameraBtn" title="Switch camera">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
-                    <button class="camera-btn capture" id="capturePhotoBtn">
-                        <i class="fas fa-camera"></i>
-                    </button>
-                    <button class="camera-btn secondary" id="toggleFlashBtn" title="Toggle flash">
-                        <i class="fas fa-bolt"></i>
-                    </button>
-                </div>
-                
-                <div style="display: flex; justify-content: flex-end; gap: var(--spacing-md); margin-top: var(--spacing-xl);">
-                    <button class="sidebar-btn" id="cancelCameraBtn">Cancel</button>
-                    <button class="sidebar-btn" style="background: var(--accent); color: var(--primary);" id="usePhotoBtn">Use Photo</button>
-                </div>
-            </div>
-        </div>
-    </div>
+            <button class="icon-btn" onclick="clearChat()" title="Clear Chat">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </header>
 
-    <script>
-        // DOM Elements
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const messageInput = document.getElementById('messageInput');
-        const sendMessageBtn = document.getElementById('sendMessageBtn');
-        const messagesContainer = document.getElementById('messagesContainer');
-        const typingIndicator = document.getElementById('typingIndicator');
-        const fileUploadModal = document.getElementById('fileUploadModal');
-        const cameraModal = document.getElementById('cameraModal');
-        const fileUploadBtn = document.getElementById('fileUploadBtn');
-        const attachFileBtn = document.getElementById('attachFileBtn');
-        const cameraBtn = document.getElementById('cameraBtn');
-        const openCameraBtn = document.getElementById('openCameraBtn');
-        const closeFileModal = document.getElementById('closeFileModal');
-        const closeCameraModal = document.getElementById('closeCameraModal');
-        const cancelUploadBtn = document.getElementById('cancelUploadBtn');
-        const cancelCameraBtn = document.getElementById('cancelCameraBtn');
-        const uploadDropArea = document.getElementById('uploadDropArea');
-        const fileInput = document.getElementById('fileInput');
-        const clearChatBtn = document.getElementById('clearChatBtn');
-        const newChatBtn = document.getElementById('newChatBtn');
-        const mobileNewChatBtn = document.getElementById('mobileNewChatBtn');
-        const conversationItems = document.querySelectorAll('.conversation-item');
+        <div class="messages-container" id="messagesContainer">
+            </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <input type="file" id="fileInput" style="display: none;" multiple onchange="handleFileUpload(this)">
+                <button class="icon-btn" onclick="document.getElementById('fileInput').click()" title="Attach File">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <textarea id="userInput" placeholder="Type a message..." rows="1"></textarea>
+                <button class="icon-btn" title="Voice Input">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <button class="send-btn" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div id="filePreview" style="margin-top: 10px; font-size: 0.8rem; color: var(--accent);"></div>
+        </div>
+    </main>
+</div>
+
+<script>
+    // --- CONFIGURATION ---
+    const CONFIG = {
+        apiKey: "sk-0f588f25466e4941980bb611bbc070e7",
+        apiEndpoint: "https://api.deepseek.com/chat/completions", // Corrected standard DeepSeek endpoint
+        model: "deepseek-chat"
+    };
+
+    // --- STATE ---
+    let conversationHistory = [
+        { 
+            role: "system", 
+            content: "You are SAIF AI, an intelligent assistant created by the SAIF Project. You are helpful, professional, and friendly. You support file uploads, coding, and analysis." 
+        }
+    ];
+
+    // --- DOM ELEMENTS ---
+    const messagesContainer = document.getElementById('messagesContainer');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const sidebar = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menuToggle');
+    const filePreview = document.getElementById('filePreview');
+
+    // --- INITIALIZATION ---
+    window.onload = () => {
+        addMessage("ai", "Hello! I'm SAIF AI, your intelligent assistant. I can help you with text analysis, code, document processing, and more. Feel free to upload files or start chatting!");
+    };
+
+    // --- EVENT LISTENERS ---
+    
+    // Toggle Sidebar (Mobile)
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && 
+            !sidebar.contains(e.target) && 
+            !menuToggle.contains(e.target) && 
+            sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+        }
+    });
+
+    // Auto-resize textarea
+    userInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+        if(this.value === '') this.style.height = '24px';
+    });
+
+    // Send on Click
+    sendBtn.addEventListener('click', sendMessage);
+
+    // Send on Enter (Shift+Enter for new line)
+    userInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // --- CORE FUNCTIONS ---
+
+    async function sendMessage() {
+        const text = userInput.value.trim();
+        const fileContent = filePreview.getAttribute('data-content'); // Get stored file content if any
         
-        // State
-        let messages = [];
-        let uploadedFiles = [];
-        let isTyping = false;
-        let currentConversationId = 'welcome';
+        if (!text && !fileContent) return;
+
+        // Clear input
+        userInput.value = '';
+        userInput.style.height = '24px';
+        filePreview.innerHTML = '';
+        filePreview.removeAttribute('data-content');
+
+        // Construct User Message
+        let fullMessage = text;
+        if(fileContent) {
+            fullMessage += `\n\n[User uploaded a file context]:\n${fileContent}`;
+        }
+
+        // Add to UI
+        addMessage("user", text + (fileContent ? ' 📎' : ''));
         
-        // Initialize the application
-        function init() {
-            // Load any saved messages from localStorage
-            loadMessages();
-            
-            // Set up event listeners
-            setupEventListeners();
-            
-            // Auto-resize textarea
-            autoResizeTextarea();
-            
-            // Add a welcome message if no messages exist
-            if (messages.length === 0) {
-                addMessage('ai', 'Hello! I\'m SAIF AI, your intelligent assistant. I can help you with text analysis, code, document processing, and more. Feel free to upload files or use your camera!');
+        // Add to History
+        conversationHistory.push({ role: "user", content: fullMessage });
+
+        // Show Typing Indicator
+        const loadingId = showTypingIndicator();
+
+        try {
+            const response = await fetch(CONFIG.apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${CONFIG.apiKey}`
+                },
+                body: JSON.stringify({
+                    model: CONFIG.model,
+                    messages: conversationHistory,
+                    temperature: 0.7,
+                    max_tokens: 2000
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.error?.message || 'API Error');
             }
+
+            const data = await response.json();
+            const aiText = data.choices[0].message.content;
+
+            // Remove loading
+            removeTypingIndicator(loadingId);
+
+            // Add AI Message to UI
+            addMessage("ai", aiText);
+
+            // Update History
+            conversationHistory.push({ role: "assistant", content: aiText });
+
+        } catch (error) {
+            removeTypingIndicator(loadingId);
+            addMessage("ai", `⚠️ **Error:** ${error.message}. Please check your connection or API key.`);
         }
+    }
+
+    function addMessage(sender, text) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${sender}`;
         
-        // Set up all event listeners
-        function setupEventListeners() {
-            // Sidebar toggle for mobile
-            mobileMenuBtn.addEventListener('click', toggleSidebar);
-            sidebarOverlay.addEventListener('click', toggleSidebar);
-            
-            // Send message
-            sendMessageBtn.addEventListener('click', sendMessage);
-            messageInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            
-            // File upload
-            fileUploadBtn.addEventListener('click', openFileUploadModal);
-            attachFileBtn.addEventListener('click', openFileUploadModal);
-            closeFileModal.addEventListener('click', closeFileUploadModal);
-            cancelUploadBtn.addEventListener('click', closeFileUploadModal);
-            
-            // Camera
-            cameraBtn.addEventListener('click', openCameraModal);
-            openCameraBtn.addEventListener('click', openCameraModal);
-            closeCameraModal.addEventListener('click', closeCameraModal);
-            cancelCameraBtn.addEventListener('click', closeCameraModal);
-            
-            // File upload drop area
-            uploadDropArea.addEventListener('click', () => fileInput.click());
-            uploadDropArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadDropArea.style.borderColor = 'var(--accent)';
-                uploadDropArea.style.background = 'rgba(0, 212, 170, 0.05)';
-            });
-            uploadDropArea.addEventListener('dragleave', () => {
-                uploadDropArea.style.borderColor = 'rgba(0, 212, 170, 0.3)';
-                uploadDropArea.style.background = 'transparent';
-            });
-            uploadDropArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadDropArea.style.borderColor = 'rgba(0, 212, 170, 0.3)';
-                uploadDropArea.style.background = 'transparent';
-                
-                if (e.dataTransfer.files.length) {
-                    handleFileUpload(e.dataTransfer.files);
-                }
-            });
-            
-            // File input change
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length) {
-                    handleFileUpload(e.target.files);
-                }
-            });
-            
-            // Clear chat
-            clearChatBtn.addEventListener('click', clearChat);
-            
-            // New chat
-            newChatBtn.addEventListener('click', startNewChat);
-            mobileNewChatBtn.addEventListener('click', startNewChat);
-            
-            // Conversation items
-            conversationItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    document.querySelector('.conversation-item.active')?.classList.remove('active');
-                    this.classList.add('active');
-                    // In a real app, you would load the conversation here
-                });
-            });
-            
-            // Confirm upload button
-            document.getElementById('confirmUploadBtn').addEventListener('click', sendFilesAsMessage);
-            
-            // Capture photo button
-            document.getElementById('capturePhotoBtn').addEventListener('click', capturePhoto);
-            
-            // Use photo button
-            document.getElementById('usePhotoBtn').addEventListener('click', usePhoto);
-        }
-        
-        // Toggle sidebar visibility (mobile)
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            sidebarOverlay.classList.toggle('active');
-        }
-        
-        // Auto-resize textarea as user types
-        function autoResizeTextarea() {
-            messageInput.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = (this.scrollHeight) + 'px';
-            });
-        }
-        
-        // Send message function
-        function sendMessage() {
-            const text = messageInput.value.trim();
-            if (!text) return;
-            
-            // Add user message
-            addMessage('user', text);
-            messageInput.value = '';
-            messageInput.style.height = 'auto';
-            
-            // Show typing indicator
-            showTypingIndicator();
-            
-            // Simulate AI response after a delay
-            setTimeout(() => {
-                hideTypingIndicator();
-                simulateAIResponse(text);
-            }, 1000 + Math.random() * 1000);
-        }
-        
-        // Add a message to the chat
-        function addMessage(sender, text, files = []) {
-            const messageId = Date.now();
-            const message = {
-                id: messageId,
-                sender,
-                text,
-                files: [...files],
-                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        // Parse Markdown
+        msgDiv.innerHTML = marked.parse(text);
+
+        messagesContainer.appendChild(msgDiv);
+        scrollToBottom();
+    }
+
+    function showTypingIndicator() {
+        const id = 'loading-' + Date.now();
+        const div = document.createElement('div');
+        div.className = 'typing-indicator';
+        div.id = id;
+        div.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
+        messagesContainer.appendChild(div);
+        scrollToBottom();
+        return id;
+    }
+
+    function removeTypingIndicator(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    }
+
+    function scrollToBottom() {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function clearChat() {
+        messagesContainer.innerHTML = '';
+        conversationHistory = [conversationHistory[0]]; // Keep system prompt
+        addMessage("ai", "Chat cleared. Ready for new topic!");
+    }
+
+    // --- FILE HANDLING (Text Files) ---
+    function handleFileUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        // Visual feedback
+        filePreview.innerHTML = `Attachment: ${file.name} (Ready to send)`;
+
+        // Simple text file reading to include in context
+        if (file.type.match('text.*') || file.name.endsWith('.js') || file.name.endsWith('.py') || file.name.endsWith('.json')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Store content in a data attribute to send with next message
+                filePreview.setAttribute('data-content', e.target.result);
             };
-            
-            messages.push(message);
-            saveMessages();
-            renderMessage(message);
-            
-            // Scroll to the bottom
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            reader.readAsText(file);
+        } else {
+            // Non-text files (images/pdfs) - Mock behavior for this demo since DeepSeek text API doesn't take binary
+            // In a production app with Multimodal support, you'd convert this to base64
+            filePreview.setAttribute('data-content', `[File: ${file.name} (Binary content placeholder)]`);
         }
-        
-        // Render a message element
-        function renderMessage(message) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${message.sender}`;
-            messageDiv.dataset.id = message.id;
-            
-            const avatarDiv = document.createElement('div');
-            avatarDiv.className = 'message-avatar';
-            avatarDiv.textContent = message.sender === 'ai' ? 'S' : 'U';
-            
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
-            
-            const textDiv = document.createElement('div');
-            textDiv.className = 'message-text';
-            
-            // Process text for markdown-like formatting
-            let processedText = message.text;
-            
-            // Convert URLs to clickable links
-            processedText = processedText.replace(
-                /(https?:\/\/[^\s]+)/g, 
-                '<a href="$1" target="_blank" style="color: inherit; text-decoration: underline;">$1</a>'
-            );
-            
-            // Convert code blocks (simple implementation)
-            processedText = processedText.replace(
-                /```([\s\S]*?)```/g,
-                '<pre><code>$1</code></pre>'
-            );
-            
-            // Convert inline code
-            processedText = processedText.replace(
-                /`([^`]+)`/g,
-                '<code>$1</code>'
-            );
-            
-            textDiv.innerHTML = processedText;
-            
-            const timeDiv = document.createElement('div');
-            timeDiv.className = 'message-time';
-            timeDiv.textContent = message.timestamp;
-            
-            // Add message actions
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'message-actions';
-            
-            const copyBtn = document.createElement('button');
-            copyBtn.className = 'message-action-btn';
-            copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
-            copyBtn.title = 'Copy message';
-            copyBtn.addEventListener('click', () => copyMessageToClipboard(message.text));
-            
-            actionsDiv.appendChild(copyBtn);
-            
-            contentDiv.appendChild(textDiv);
-            contentDiv.appendChild(timeDiv);
-            contentDiv.appendChild(actionsDiv);
-            
-            // Add file previews if any
-            if (message.files && message.files.length > 0) {
-                const filesDiv = document.createElement('div');
-                filesDiv.style.marginTop = '10px';
-                
-                message.files.forEach(file => {
-                    const fileDiv = document.createElement('div');
-                    fileDiv.className = 'uploaded-file';
-                    fileDiv.style.marginTop = '5px';
-                    
-                    const fileInfo = document.createElement('div');
-                    fileInfo.className = 'file-info';
-                    
-                    const fileIcon = document.createElement('div');
-                    fileIcon.className = 'file-icon';
-                    
-                    // Set icon based on file type
-                    if (file.type.startsWith('image/')) {
-                        fileIcon.innerHTML = '<i class="fas fa-image"></i>';
-                    } else if (file.type === 'application/pdf') {
-                        fileIcon.innerHTML = '<i class="fas fa-file-pdf"></i>';
-                    } else if (file.type.includes('document') || file.type.includes('text')) {
-                        fileIcon.innerHTML = '<i class="fas fa-file-alt"></i>';
-                    } else {
-                        fileIcon.innerHTML = '<i class="fas fa-file"></i>';
-                    }
-                    
-                    const fileName = document.createElement('div');
-                    fileName.className = 'file-name';
-                    fileName.textContent = file.name;
-                    
-                    fileInfo.appendChild(fileIcon);
-                    fileInfo.appendChild(fileName);
-                    
-                    fileDiv.appendChild(fileInfo);
-                    filesDiv.appendChild(fileDiv);
-                });
-                
-                contentDiv.appendChild(filesDiv);
-            }
-            
-            if (message.sender === 'ai') {
-                messageDiv.appendChild(avatarDiv);
-                messageDiv.appendChild(contentDiv);
-            } else {
-                messageDiv.appendChild(contentDiv);
-                messageDiv.appendChild(avatarDiv);
-            }
-            
-            messagesContainer.appendChild(messageDiv);
-        }
-        
-        // Show typing indicator
-        function showTypingIndicator() {
-            isTyping = true;
-            typingIndicator.classList.remove('hidden');
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-        
-        // Hide typing indicator
-        function hideTypingIndicator() {
-            isTyping = false;
-            typingIndicator.classList.add('hidden');
-        }
-        
-        // Simulate an AI response
-        function simulateAIResponse(userMessage) {
-            let response = '';
-            
-            // Simple response logic based on user message
-            const lowerMsg = userMessage.toLowerCase();
-            
-            if (lowerMsg.includes('hello') || lowerMsg.includes('hi') || lowerMsg.includes('hey')) {
-                response = "Hello! How can I assist you today? I can help with code, document analysis, image processing, and more.";
-            } else if (lowerMsg.includes('code') || lowerMsg.includes('program')) {
-                response = "I can help you with code! Here's an example of a React component:\n\n```jsx\nimport React, { useState } from 'react';\n\nconst Counter = () => {\n  const [count, setCount] = useState(0);\n  \n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={() => setCount(count + 1)}>\n        Increment\n      </button>\n    </div>\n  );\n};\n\nexport default Counter;\n```";
-            } else if (lowerMsg.includes('upload') || lowerMsg.includes('file')) {
-                response = "You can upload files using the paperclip icon or the 'File Upload' option in the sidebar. I support images, documents, code files, audio, and video files up to 50MB.";
-            } else if (lowerMsg.includes('camera') || lowerMsg.includes('photo')) {
-                response = "You can use the camera icon to take photos or scan documents. I can analyze images, extract text using OCR, and help you with visual content.";
-            } else if (lowerMsg.includes('weather')) {
-                response = "I don't have real-time weather data access in this demo, but I can help you with many other tasks like text analysis, code review, document processing, and more!";
-            } else {
-                response = `I understand you're saying: "${userMessage}". As an AI assistant, I can process text, analyze code, help with document review, and work with uploaded files. How else can I assist you?`;
-            }
-            
-            addMessage('ai', response);
-        }
-        
-        // Open file upload modal
-        function openFileUploadModal() {
-            fileUploadModal.classList.add('active');
-            toggleSidebar(); // Close sidebar on mobile
-        }
-        
-        // Close file upload modal
-        function closeFileUploadModal() {
-            fileUploadModal.classList.remove('active');
-            // Clear uploaded files
-            uploadedFiles = [];
-            updateUploadedFilesList();
-        }
-        
-        // Open camera modal
-        function openCameraModal() {
-            cameraModal.classList.add('active');
-            toggleSidebar(); // Close sidebar on mobile
-        }
-        
-        // Close camera modal
-        function closeCameraModal() {
-            cameraModal.classList.remove('active');
-        }
-        
-        // Handle file upload
-        function handleFileUpload(files) {
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                
-                // Check file size (50MB limit)
-                if (file.size > 50 * 1024 * 1024) {
-                    alert(`File ${file.name} is too large. Maximum size is 50MB.`);
-                    continue;
-                }
-                
-                // Add to uploaded files list
-                uploadedFiles.push({
-                    id: Date.now() + i,
-                    name: file.name,
-                    size: formatFileSize(file.size),
-                    type: file.type
-                });
-            }
-            
-            updateUploadedFilesList();
-        }
-        
-        // Update the uploaded files list in the modal
-        function updateUploadedFilesList() {
-            const uploadedFilesList = document.getElementById('uploadedFilesList');
-            uploadedFilesList.innerHTML = '';
-            
-            if (uploadedFiles.length === 0) {
-                uploadedFilesList.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No files selected</p>';
-                return;
-            }
-            
-            uploadedFiles.forEach(file => {
-                const fileDiv = document.createElement('div');
-                fileDiv.className = 'uploaded-file';
-                fileDiv.dataset.id = file.id;
-                
-                const fileInfo = document.createElement('div');
-                fileInfo.className = 'file-info';
-                
-                const fileIcon = document.createElement('div');
-                fileIcon.className = 'file-icon';
-                
-                // Set icon based on file type
-                if (file.type.startsWith('image/')) {
-                    fileIcon.innerHTML = '<i class="fas fa-image"></i>';
-                } else if (file.type === 'application/pdf') {
-                    fileIcon.innerHTML = '<i class="fas fa-file-pdf"></i>';
-                } else if (file.type.includes('document') || file.type.includes('text')) {
-                    fileIcon.innerHTML = '<i class="fas fa-file-alt"></i>';
-                } else {
-                    fileIcon.innerHTML = '<i class="fas fa-file"></i>';
-                }
-                
-                const fileName = document.createElement('div');
-                fileName.className = 'file-name';
-                fileName.textContent = file.name;
-                
-                const fileSize = document.createElement('div');
-                fileSize.className = 'file-size';
-                fileSize.textContent = file.size;
-                
-                fileInfo.appendChild(fileIcon);
-                fileInfo.appendChild(fileName);
-                
-                const fileRemoveBtn = document.createElement('button');
-                fileRemoveBtn.className = 'file-remove';
-                fileRemoveBtn.innerHTML = '<i class="fas fa-times"></i>';
-                fileRemoveBtn.addEventListener('click', () => removeUploadedFile(file.id));
-                
-                fileDiv.appendChild(fileInfo);
-                fileDiv.appendChild(fileSize);
-                fileDiv.appendChild(fileRemoveBtn);
-                
-                uploadedFilesList.appendChild(fileDiv);
-            });
-        }
-        
-        // Remove a file from the uploaded files list
-        function removeUploadedFile(fileId) {
-            uploadedFiles = uploadedFiles.filter(file => file.id !== fileId);
-            updateUploadedFilesList();
-        }
-        
-        // Send uploaded files as a message
-        function sendFilesAsMessage() {
-            if (uploadedFiles.length === 0) {
-                alert('Please select at least one file to upload.');
-                return;
-            }
-            
-            const fileNames = uploadedFiles.map(f => f.name).join(', ');
-            addMessage('user', `I've uploaded ${uploadedFiles.length} file(s): ${fileNames}`, uploadedFiles);
-            
-            // Simulate AI response
-            showTypingIndicator();
-            setTimeout(() => {
-                hideTypingIndicator();
-                
-                let response = `I've received ${uploadedFiles.length} file(s): ${fileNames}. `;
-                
-                // Check file types and respond accordingly
-                const hasImages = uploadedFiles.some(f => f.type.startsWith('image/'));
-                const hasDocuments = uploadedFiles.some(f => 
-                    f.type.includes('document') || 
-                    f.type.includes('text') || 
-                    f.type === 'application/pdf'
-                );
-                const hasCode = uploadedFiles.some(f => 
-                    f.type.includes('javascript') || 
-                    f.name.endsWith('.js') || 
-                    f.name.endsWith('.py') || 
-                    f.name.endsWith('.java') ||
-                    f.name.endsWith('.html') ||
-                    f.name.endsWith('.css')
-                );
-                
-                if (hasImages) {
-                    response += "I can analyze images for content, extract text using OCR, or provide descriptions. ";
-                }
-                if (hasDocuments) {
-                    response += "I can summarize documents, extract key information, or answer questions about their content. ";
-                }
-                if (hasCode) {
-                    response += "I can review code, explain functionality, or suggest improvements. ";
-                }
-                
-                response += "How would you like me to process these files?";
-                
-                addMessage('ai', response);
-            }, 1500);
-            
-            closeFileUploadModal();
-        }
-        
-        // Capture photo (simulated)
-        function capturePhoto() {
-            const captureBtn = document.getElementById('capturePhotoBtn');
-            const originalHTML = captureBtn.innerHTML;
-            
-            // Show capturing animation
-            captureBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
-            captureBtn.disabled = true;
-            
-            // Simulate camera capture
-            setTimeout(() => {
-                captureBtn.innerHTML = originalHTML;
-                captureBtn.disabled = false;
-                
-                // Show success message
-                alert('Photo captured successfully! Click "Use Photo" to send it to the chat.');
-            }, 1000);
-        }
-        
-        // Use captured photo
-        function usePhoto() {
-            // Simulate using a photo
-            const photoFile = {
-                id: Date.now(),
-                name: `photo_${new Date().toISOString().slice(0, 10)}.jpg`,
-                size: '2.4 MB',
-                type: 'image/jpeg'
-            };
-            
-            addMessage('user', "I've taken a photo with the camera", [photoFile]);
-            
-            // Simulate AI response
-            showTypingIndicator();
-            setTimeout(() => {
-                hideTypingIndicator();
-                addMessage('ai', "I can see your photo! I can analyze it for objects, text, or provide a description. What would you like me to do with this image?");
-            }, 1500);
-            
-            closeCameraModal();
-        }
-        
-        // Clear chat
-        function clearChat() {
-            if (confirm('Are you sure you want to clear the chat? This cannot be undone.')) {
-                messages = [];
-                saveMessages();
-                
-                // Clear messages container but keep welcome message
-                const welcomeMessage = document.querySelector('.welcome-message');
-                messagesContainer.innerHTML = '';
-                if (welcomeMessage) {
-                    messagesContainer.appendChild(welcomeMessage);
-                }
-            }
-        }
-        
-        // Start a new chat
-        function startNewChat() {
-            // In a real app, this would create a new conversation
-            // For this demo, we'll just clear the current chat and add a welcome message
-            clearChat();
-            addMessage('ai', 'Hello! I\'m SAIF AI. What would you like to discuss or work on today?');
-            
-            // Update conversation title
-            document.querySelector('.chat-title').textContent = 'New Chat';
-            
-            // Close sidebar on mobile
-            toggleSidebar();
-        }
-        
-        // Copy message to clipboard
-        function copyMessageToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                // Show success feedback
-                const originalText = event.target.innerHTML;
-                event.target.innerHTML = '<i class="fas fa-check"></i>';
-                event.target.style.color = 'var(--success)';
-                
-                setTimeout(() => {
-                    event.target.innerHTML = originalText;
-                    event.target.style.color = '';
-                }, 1000);
-            });
-        }
-        
-        // Format file size
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-        
-        // Save messages to localStorage
-        function saveMessages() {
-            localStorage.setItem(`saif_chat_${currentConversationId}`, JSON.stringify(messages));
-        }
-        
-        // Load messages from localStorage
-        function loadMessages() {
-            const saved = localStorage.getItem(`saif_chat_${currentConversationId}`);
-            if (saved) {
-                try {
-                    messages = JSON.parse(saved);
-                    
-                    // Clear messages container
-                    const welcomeMessage = document.querySelector('.welcome-message');
-                    messagesContainer.innerHTML = '';
-                    if (welcomeMessage) {
-                        messagesContainer.appendChild(welcomeMessage);
-                    }
-                    
-                    // Render all saved messages
-                    messages.forEach(msg => renderMessage(msg));
-                    
-                    // Scroll to bottom
-                    setTimeout(() => {
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                    }, 100);
-                } catch (e) {
-                    console.error('Error loading messages:', e);
-                    messages = [];
-                }
-            }
-        }
-        
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
+    }
+</script>
+
 </body>
 </html>
