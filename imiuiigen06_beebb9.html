@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Saif AI - Image Generator</title>
+    <title>Saif AI - Image Generator (Safe Mode)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Your existing styles remain the same */
         * { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        /* Dark Theme */
         body { background-color: #000000; overscroll-behavior: none; height: 100vh; overflow: hidden; }
         .ios-blue { color: #0A84FF; }
         .ios-blue-bg { background-color: #0A84FF; }
@@ -79,11 +78,194 @@
         
         /* Download button fix */
         .download-btn { cursor: pointer; }
+        
+        /* NEW: Custom Popup Styles */
+        .custom-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .custom-popup-overlay.active {
+            display: flex;
+        }
+        
+        .custom-popup {
+            background: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+            border-radius: 32px;
+            padding: 32px;
+            max-width: 320px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid #FF3B30;
+            box-shadow: 0 20px 40px rgba(255, 59, 48, 0.2);
+            animation: slideUp 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .custom-popup::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            height: 100px;
+            background: linear-gradient(90deg, transparent, rgba(255, 59, 48, 0.2), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            20%, 100% { transform: translateX(100%) rotate(45deg); }
+        }
+        
+        .popup-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 59, 48, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border: 2px solid #FF3B30;
+            animation: pulse 2s infinite;
+        }
+        
+        .popup-icon i {
+            width: 40px;
+            height: 40px;
+            color: #FF3B30;
+            stroke-width: 2;
+        }
+        
+        .popup-message {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 10px rgba(255, 59, 48, 0.3);
+            letter-spacing: 1px;
+        }
+        
+        .popup-submessage {
+            color: #98989D;
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        
+        .popup-button {
+            background: #FF3B30;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
+            width: 100%;
+        }
+        
+        .popup-button:hover {
+            transform: scale(1.02);
+            background: #ff5252;
+            box-shadow: 0 6px 20px rgba(255, 59, 48, 0.6);
+        }
+        
+        .popup-button:active {
+            transform: scale(0.98);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Safety warning (now permanent) */
+        .safety-warning {
+            background-color: rgba(255, 59, 48, 0.1);
+            border: 1px solid #FF3B30;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 16px;
+            display: none;
+        }
+        .safety-warning.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .safe-badge {
+            background-color: #30B0C0;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+        }
+        
+        /* Permanent safety indicator */
+        .safety-indicator {
+            background-color: rgba(48, 176, 192, 0.15);
+            border: 1px solid #30B0C0;
+            border-radius: 20px;
+            padding: 4px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .safety-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #30B0C0;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
     </style>
 </head>
 <body class="bg-ios">
     <!-- Hidden API Key -->
     <div id="api-key" style="display: none;">pk_i8GI8nuBSyGTlSrs</div>
+    
+    <!-- Custom Popup Message -->
+    <div id="customPopup" class="custom-popup-overlay">
+        <div class="custom-popup">
+            <div class="popup-icon">
+                <i data-lucide="ban"></i>
+            </div>
+            <div class="popup-message">Koni roja ki khu sam sha kna</div>
+            <div class="popup-submessage">This content is not allowed. Please use appropriate language and requests.</div>
+            <button class="popup-button" onclick="closeCustomPopup()">OK</button>
+        </div>
+    </div>
     
     <!-- Gallery Modal -->
     <div id="galleryModal" class="gallery-modal">
@@ -107,6 +289,12 @@
             <span class="text-xl font-bold text-white tracking-tight">Saif AI</span>
         </div>
         <div class="flex items-center gap-3">
+            <!-- Permanent Safety Indicator (removed toggle) -->
+            <div class="safety-indicator">
+                <span class="safety-dot"></span>
+                <span class="text-xs text-white font-medium">Safe Mode</span>
+                <span class="safe-badge">PERMANENT</span>
+            </div>
             <button class="p-2 hover:bg-[#2C2C2E] rounded-full transition-all-200">
                 <i data-lucide="search" class="w-6 h-6 text-gray-400"></i>
             </button>
@@ -120,11 +308,22 @@
 
     <!-- Scrollable Main Content -->
     <main class="px-4 pt-5 space-y-5 main-content hide-scrollbar">
+        <!-- Safety Warning Message (small inline warning) -->
+        <div id="safetyWarning" class="safety-warning">
+            <div class="flex items-start gap-3">
+                <i data-lucide="shield-off" class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5"></i>
+                <div>
+                    <h3 class="text-white font-semibold text-sm">Content Blocked</h3>
+                    <p id="safetyMessage" class="text-secondary text-xs mt-1">Your prompt contains inappropriate content.</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Prompt Section -->
         <section>
             <h2 class="text-xl font-bold text-white mb-3">Enter your prompt...</h2>
             <div class="input-bg rounded-2xl p-4">
-                <textarea id="promptInput" class="w-full bg-transparent text-white text-base resize-none border-none outline-none" rows="3"></textarea>
+                <textarea id="promptInput" class="w-full bg-transparent text-white text-base resize-none border-none outline-none" rows="3" placeholder="Describe your image..."></textarea>
             </div>
             <div class="flex justify-between items-center mt-2.5 px-1">
                 <span class="text-sm text-secondary">Prompt: <span id="charCount">0</span> characters</span>
@@ -132,7 +331,7 @@
             </div>
         </section>
 
-        <!-- Model Selection Section - ALL MODELS FROM POLLINATIONS -->
+        <!-- Model Selection Section -->
         <section>
             <h2 class="text-xl font-bold text-white mb-3">Select Model</h2>
             <div class="flex flex-wrap gap-2" id="modelContainer">
@@ -248,9 +447,8 @@
         const API_KEY = document.getElementById('api-key').textContent.trim();
         const BASE_URL = 'https://gen.pollinations.ai';
 
-        // ALL POLLINATIONS MODELS - Complete list
+        // ALL POLLINATIONS MODELS
         const models = [
-            // Image Models
             { id: 'flux', name: 'Flux', icon: '🔥', badge: 'Best' },
             { id: 'flux-2-dev', name: 'Flux 2', icon: '🔥', badge: 'Dev' },
             { id: 'zimage', name: 'ZImage', icon: '⚡', badge: 'Fast' },
@@ -267,14 +465,57 @@
             { id: 'kontext', name: 'Kontext', icon: '📚', badge: 'Edit' },
             { id: 'klein', name: 'Klein', icon: '🎨', badge: 'Art' },
             { id: 'klein-large', name: 'Klein Pro', icon: '🎨', badge: 'Pro' },
-            
-            // Video Models
             { id: 'veo', name: 'Veo', icon: '🎬', badge: 'Video' },
             { id: 'seedance', name: 'Seedance', icon: '🎬', badge: 'Video' },
             { id: 'seedance-pro', name: 'Seedance Pro', icon: '🎬', badge: 'Pro' },
             { id: 'wan', name: 'WAN', icon: '🌊', badge: 'Video' },
             { id: 'ltx-2', name: 'LTX 2', icon: '⚡', badge: 'Video' },
             { id: 'grok-video', name: 'Grok Video', icon: '🚀', badge: 'Video' }
+        ];
+
+        // Comprehensive blocklist for inappropriate content (permanent)
+        const BLOCKED_WORDS = [
+            // Explicit sexual terms
+            'nude', 'naked', 'sex', 'sexual', 'erotic', 'porn', 'pornographic', 'xxx', '18+',
+            'nsfw', 'explicit', 'adult', 'intimate', 'sensual', 'provocative', 'seductive',
+            'lingerie', 'bikini', 'underwear', 'swimsuit', 'cleavage', 'provocative',
+            'nudity', 'topless', 'bottomless', 'stripper', 'stripping', 'striptease',
+            'milf', 'horny', 'sexy', 'hot', 'steamy', 'kinky', 'fetish', 'bdsm',
+            'orgy', 'gangbang', 'incest', 'molest', 'pedo', 'lolita', 'teen', 'minor',
+            'rape', 'sexual assault', 'abuse', 'harassment',
+            
+            // Body parts
+            'breast', 'boobs', 'tits', 'nipple', 'areola', 'chest',
+            'butt', 'ass', 'booty', 'buttocks', 'rear', 'derriere',
+            'vagina', 'penis', 'dick', 'cock', 'pussy', 'genitals', 'pubic',
+            'thong', 'g-string', 'see-through', 'transparent', 'wet',
+            
+            // Violent/illegal
+            'gore', 'blood', 'violence', 'violent', 'brutal', 'torture', 'murder',
+            'kill', 'killing', 'dead', 'death', 'corpse', 'body horror',
+            'weapon', 'gun', 'knife', 'sword', 'explosive', 'bomb',
+            'terrorism', 'terrorist', 'jihad', 'isis', 'hitler', 'nazi',
+            
+            // Drugs/alcohol
+            'drug', 'cocaine', 'heroin', 'meth', 'crack', 'weed', 'marijuana',
+            'cannabis', 'lsd', 'mdma', 'ecstasy', 'pill', 'syringe', 'needle',
+            'alcohol', 'beer', 'wine', 'liquor', 'whiskey', 'vodka', 'drunk',
+            
+            // Hate speech
+            'hate', 'racist', 'racism', 'discrimination', 'supremacy', 'kkk',
+            'white power', 'black power', 'slur', 'offensive', 'insult',
+            
+            // Illegal activities
+            'illegal', 'crime', 'criminal', 'theft', 'robbery', 'burglary',
+            'hacking', 'malware', 'virus', 'scam', 'fraud', 'counterfeit',
+            
+            // Self-harm
+            'suicide', 'self-harm', 'cutting', 'depression', 'trigger',
+            
+            // Additional problematic terms
+            'bare', 'exposed', 'revealing', 'risqué', 'raunchy', 'lewd',
+            'lascivious', 'obscene', 'indecent', 'suggestive', 'inappropriate',
+            'mature', 'graphic', 'disturbing', 'shocking', 'horror'
         ];
 
         // State
@@ -298,9 +539,68 @@
         const recentContainer = document.getElementById('recentContainer');
         const modelContainer = document.getElementById('modelContainer');
         const downloadBtn = document.getElementById('downloadBtn');
+        const safetyWarning = document.getElementById('safetyWarning');
+        const safetyMessage = document.getElementById('safetyMessage');
+        const customPopup = document.getElementById('customPopup');
 
         // Initialize Lucide icons
         lucide.createIcons();
+
+        // Custom popup functions
+        window.showCustomPopup = function() {
+            customPopup.classList.add('active');
+            // Recreate icons for popup
+            lucide.createIcons();
+        };
+
+        window.closeCustomPopup = function() {
+            customPopup.classList.remove('active');
+        };
+
+        // Check prompt for inappropriate content (permanent)
+        function isPromptSafe(prompt) {
+            const lowerPrompt = prompt.toLowerCase();
+            
+            // Check each blocked word
+            for (const word of BLOCKED_WORDS) {
+                if (lowerPrompt.includes(word)) {
+                    safetyMessage.textContent = `Blocked word detected: "${word}"`;
+                    safetyWarning.classList.add('show');
+                    
+                    // Show custom popup with the message
+                    showCustomPopup();
+                    
+                    return false;
+                }
+            }
+            
+            // Check for patterns that might indicate inappropriate content
+            const suspiciousPatterns = [
+                /\b(18|nsfw|xxx)\b/i,
+                /\b(after|before)\s+(dark|hours?)\b/i,
+                /\b(behind|backstage)\s+(the\s+)?scenes?\b/i
+            ];
+            
+            for (const pattern of suspiciousPatterns) {
+                if (pattern.test(prompt)) {
+                    safetyMessage.textContent = 'Your prompt contains suspicious patterns';
+                    safetyWarning.classList.add('show');
+                    
+                    // Show custom popup with the message
+                    showCustomPopup();
+                    
+                    return false;
+                }
+            }
+            
+            safetyWarning.classList.remove('show');
+            return true;
+        }
+
+        // Add safety prefix to prompts
+        function addSafetyPrefix(prompt) {
+            return "family-friendly, appropriate, " + prompt;
+        }
 
         // Load models
         function initModels() {
@@ -317,7 +617,6 @@
             document.querySelectorAll('.model-chip').forEach(chip => {
                 chip.classList.remove('selected');
             });
-            // highlight the clicked one
             event.target.classList.add('selected');
         };
 
@@ -378,28 +677,13 @@
             alert('Image already saved to gallery!');
         };
 
-        // Share image (optional)
-        window.shareImage = function() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Saif AI Generated Image',
-                    text: 'Check out this image I created with Saif AI!',
-                    url: currentImageUrl
-                });
-            } else {
-                navigator.clipboard.writeText(currentImageUrl);
-                alert('Image URL copied to clipboard!');
-            }
-        };
-
-        // Download image - FIXED
+        // Download image
         window.downloadImage = function() {
             if (!currentImageUrl) {
                 alert('No image to download');
                 return;
             }
             
-            // Create a temporary link and trigger download
             const link = document.createElement('a');
             link.href = currentImageUrl;
             link.download = `saif-ai-${Date.now()}.jpg`;
@@ -433,7 +717,7 @@
             document.getElementById('galleryModal').classList.remove('active');
         };
 
-        // Character counter - unlimited
+        // Character counter
         promptInput.addEventListener('input', function() {
             const count = this.value.length;
             charCount.textContent = count;
@@ -504,20 +788,6 @@
         styleDropdown.addEventListener('click', (e) => e.stopPropagation());
         ratioDropdown.addEventListener('click', (e) => e.stopPropagation());
 
-        // ---------- FILTER FUNCTION: block explicit prompts ----------
-        function isExplicitPrompt(text) {
-            if (!text) return false;
-            const lower = text.toLowerCase();
-            // blocklist: covers nude, explicit, sexy, hot, bikini, etc.
-            const blocklist = [
-                'nude', 'naked', 'explicit', 'sex', 'erotic', 'porn', 'xxx',
-                'bikini', 'sexy', 'hot', 'lingerie', 'swimsuit', 'sultry',
-                'sensual', 'provocative', 'cleavage', 'intimate', 'topless',
-                'bare', 'underwear', 'nsfw', '18+', 'adult', 'mature'
-            ];
-            return blocklist.some(word => lower.includes(word));
-        }
-
         // Generate image with API
         generateBtn.addEventListener('click', async function() {
             const prompt = promptInput.value.trim();
@@ -526,10 +796,13 @@
                 return;
             }
 
-            // FILTER CHECK: block explicit prompts
-            if (isExplicitPrompt(prompt)) {
-                alert('Der koni Insan ee Roja drla neshta');
-                return;  // stop generation
+            // Check prompt safety (permanent - no toggle)
+            if (!isPromptSafe(prompt)) {
+                // Show warning and stop generation
+                generateBtnText.textContent = 'GENERATE';
+                this.classList.remove('generating');
+                loadingOverlay.classList.add('hidden');
+                return;
             }
 
             // Change button text to "GENERATING..."
@@ -543,8 +816,8 @@
                 const styleMatch = styleText.textContent.match(/Style: (.+) [🎨📷✨🖼️🎮🌃✏️]/);
                 const style = styleMatch ? styleMatch[1] : 'Digital Art';
                 
-                // Enhance prompt with style
-                const enhancedPrompt = `${prompt}, ${style} style, high quality, detailed, 4k`;
+                // Always add safety prefix
+                const enhancedPrompt = addSafetyPrefix(`${prompt}, ${style} style, high quality, detailed, 4k`);
                 
                 const url = `${BASE_URL}/image/${encodeURIComponent(enhancedPrompt)}?model=${selectedModel}&width=${selectedWidth}&height=${selectedHeight}&key=${API_KEY}`;
                 
@@ -607,7 +880,7 @@
         loadHistory();
         lucide.createIcons();
         
-        // Set initial character count to 0 (no placeholder)
+        // Set initial character count
         charCount.textContent = '0';
     </script>
 </body>
