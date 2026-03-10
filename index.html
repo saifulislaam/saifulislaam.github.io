@@ -1,681 +1,891 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saif ul Islam | Full-Stack Developer</title>
-    <!-- Tailwind CSS for Layout -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Saif | FULL_STACK_DEV</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Phosphor Icons (Ultra Advanced Thin Icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;600&display=swap" rel="stylesheet">
     
-    <style>
-        /* --- CUSTOM FONTS & VARIABLES --- */
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600&family=Orbitron:wght@400;700;900&display=swap');
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        water: '#38bdf8',      
+                        deepwater: '#0ea5e9',  
+                        void: '#091224',       
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
 
-        :root {
-            --bg-color: #030303;
-            --neon-green: #00ff41;
-            --neon-cyan: #0ff;
-            --neon-pink: #f0f;
-            --neon-purple: #bc13fe;
-            --glass: rgba(10, 10, 10, 0.8);
-            --border-color: rgba(0, 255, 65, 0.3);
+    <style>
+        /* --- CORE STYLES & HARDWARE ACCELERATION --- */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--neon-green);
-            font-family: 'Fira Code', monospace;
+            background-color: #091224;
+            color: #ffffff;
             overflow-x: hidden;
-            cursor: crosshair; /* Hacker feel */
+            overscroll-behavior-y: none;
         }
 
-        /* --- MATRIX BACKGROUND --- */
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.15; /* Subtle background */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.5); }
+
+        /* --- PURE CSS LIQUID WATER ORBS --- */
+        .liquid-bg {
+            position: fixed; inset: 0; z-index: -1;
+            overflow: hidden; pointer-events: none;
+            background: #091224;
+        }
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(140px); 
+            opacity: 0.4;
+            animation: float 20s infinite ease-in-out alternate;
+            will-change: transform;
+        }
+        .orb-1 { top: -10%; left: -10%; width: 55vw; height: 55vw; background: rgba(56, 189, 248, 0.25); animation-duration: 25s; }
+        .orb-2 { bottom: -20%; right: -10%; width: 65vw; height: 65vw; background: rgba(14, 165, 233, 0.2); animation-delay: -8s; }
+        .orb-3 { top: 40%; left: 40%; width: 45vw; height: 45vw; background: rgba(125, 211, 252, 0.15); animation-delay: -15s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(3%, 5%) scale(1.05); }
+            100% { transform: translate(-3%, -3%) scale(0.95); }
         }
 
-        /* --- SCROLLBAR --- */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #000;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--neon-cyan);
-            border-radius: 4px;
-            box-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        /* --- TYPOGRAPHY & ANIMATIONS --- */
-        h1, h2, h3 {
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-        }
-
-        /* Glitch Effect */
-        .glitch {
+        /* --- ULTRA LIGHT WATER GLASS COMPONENTS --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.02); 
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.04); 
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 20, 50, 0.15); 
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
             position: relative;
-            color: #fff;
-            text-shadow: 2px 2px var(--neon-pink), -2px -2px var(--neon-cyan);
-            animation: glitch-anim 1s infinite alternate-reverse;
+            overflow: hidden;
+        }
+        .glass-panel::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 100%);
+            pointer-events: none;
+        }
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(56, 189, 248, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px 0 rgba(56, 189, 248, 0.08); 
         }
 
-        @keyframes glitch-anim {
-            0% { text-shadow: 2px 2px var(--neon-pink), -2px -2px var(--neon-cyan); }
-            25% { text-shadow: -2px 2px var(--neon-green), 2px -2px var(--neon-purple); }
-            50% { text-shadow: 2px -2px var(--neon-pink), -2px 2px var(--neon-cyan); }
-            75% { text-shadow: -2px -2px var(--neon-green), 2px 2px var(--neon-purple); }
-            100% { text-shadow: 2px 2px var(--neon-pink), -2px -2px var(--neon-cyan); }
-        }
-
-        /* Neon Glow Text */
-        .neon-text-green { text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green), 0 0 20px var(--neon-green); }
-        .neon-text-cyan { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan); }
-        .neon-text-pink { color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink); }
-
-        /* --- SIDEBAR NAVIGATION --- */
+        /* --- JSON SPECIFIC SIDEBAR --- */
         .sidebar {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-right: 1px solid var(--border-color);
-            box-shadow: 5px 0 20px rgba(0, 255, 65, 0.1);
-            background: rgba(0,0,0,0.95);
-            backdrop-filter: blur(10px);
+            width: 280px;
+            position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
+            background: rgba(4, 9, 20, 0.7); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(0, 255, 65, 0.1); 
+            box-shadow: 10px 0 30px rgba(0, 255, 255, 0.05), 0 0 30px rgba(255, 0, 255, 0.05); 
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
+            scrollbar-width: none;
+        }
+        .sidebar::-webkit-scrollbar { display: none; }
+        
+        @media (max-width: 1023px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
         }
 
+        /* Profile JSON Animations */
+        .avatar-container {
+            width: 110px; height: 110px; margin: 0 auto;
+            border-radius: 50%; position: relative;
+            padding: 3px; display: flex; align-items: center; justify-content: center;
+        }
+        .avatar-container::before {
+            content: ''; position: absolute; inset: 0; border-radius: 50%;
+            border: 1px dashed #00ff41; 
+            box-shadow: 0 0 15px rgba(0,255,65,0.3); 
+            animation: rotate 12s linear infinite, pulse 2s infinite;
+        }
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; z-index: 10; animation: reverseRotate 12s linear infinite;}
+        
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        @keyframes reverseRotate { 100% { transform: rotate(-360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        /* JSON Nav Items */
         .nav-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 24px; color: rgba(255,255,255,0.5);
+            text-decoration: none; font-size: 12px; font-weight: 400; font-family: 'Fira Code', monospace;
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
             position: relative;
-            overflow: hidden;
-            transition: 0.3s;
+            z-index: 2;
         }
-
-        .nav-item::before {
-            content: '';
+        .nav-item i { width: 24px; text-align: center; margin-right: 12px; font-size: 18px; transition: all 0.3s; }
+        .nav-badge { font-size: 9px; padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.3); font-weight: 600; }
+        
+        /* 2026 Advanced Magnetic Nav Indicator */
+        .nav-indicator {
             position: absolute;
-            left: -100%;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.2), transparent);
-            transition: 0.4s;
+            left: 0; width: 4px; height: 42px; /* Matches item height */
+            background: #00ff41; 
+            border-top-right-radius: 4px; border-bottom-right-radius: 4px;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy magnetic ease */
+            box-shadow: 0 0 15px #00ff41;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0; /* Hidden until activated */
         }
 
-        .nav-item:hover::before {
-            left: 100%;
+        /* Social Bounce */
+        .social-icon { animation: bounce 2s infinite; transition: all 0.3s; font-size: 24px;}
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+        /* Glitch Animation */
+        .glitch { animation: glitchAnim 3s infinite; }
+        @keyframes glitchAnim {
+            0%, 100% { text-shadow: 1px 0 #00ff41, -1px 0 #ff00ff; }
+            50% { text-shadow: -1px 0 #00ff41, 1px 0 #00ffff; }
         }
 
-        .nav-item:hover {
-            color: var(--neon-cyan);
-            text-shadow: 0 0 8px var(--neon-cyan);
-            padding-left: 1.5rem; /* Slide effect */
+        /* --- MAIN CONTENT & REVEAL ANIMATIONS --- */
+        .main-content { 
+            flex: 1; position: relative; z-index: 10; transition: margin 0.3s; 
+            padding-top: 100px; 
+        }
+        @media (min-width: 1024px) { 
+            .main-content { margin-left: 280px; padding-top: 0; } 
         }
 
-        .nav-item.active {
-            border-left: 4px solid var(--neon-pink);
-            background: linear-gradient(90deg, rgba(255, 0, 255, 0.1), transparent);
-            color: var(--neon-pink);
-        }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
 
-        /* --- COMPONENTS --- */
-        /* Neon Border Box */
-        .neon-box {
-            border: 1px solid var(--border-color);
-            background: rgba(5, 5, 5, 0.7);
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+        /* Titles */
+        .sec-title {
+            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 4px;
+            color: #38bdf8; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
         }
-
-        .neon-box:hover {
-            transform: translateY(-5px) scale(1.02);
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 15px var(--neon-cyan), inset 0 0 10px rgba(0, 255, 255, 0.1);
-        }
-
-        /* Image Scanline Animation */
-        .img-scanner {
-            position: relative;
-            overflow: hidden;
-        }
-        .img-scanner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--neon-green);
-            box-shadow: 0 0 10px var(--neon-green);
-            opacity: 0.6;
-            animation: scanline 3s linear infinite;
-        }
-        @keyframes scanline {
-            0% { top: -10%; }
-            100% { top: 110%; }
-        }
-
-        /* Profile Image Pulsing */
-        .profile-glow {
-            animation: border-pulse 2s infinite;
-        }
-        @keyframes border-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(0, 255, 65, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 255, 65, 0); }
-        }
-
-        /* --- SECTION ANIMATIONS (Intersection Observer) --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* --- BUTTONS --- */
-        .cyber-btn {
-            background: transparent;
-            border: 1px solid var(--neon-green);
-            color: var(--neon-green);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            transition: 0.3s;
-            overflow: hidden;
-        }
-        .cyber-btn:hover {
-            background: var(--neon-green);
-            color: black;
-            box-shadow: 0 0 20px var(--neon-green);
-        }
-        .cyber-btn-pink {
-            border-color: var(--neon-pink);
-            color: var(--neon-pink);
-        }
-        .cyber-btn-pink:hover {
-            background: var(--neon-pink);
-            color: white;
-            box-shadow: 0 0 20px var(--neon-pink);
-        }
-
-        /* --- TERMINAL CURSOR --- */
-        .typing-cursor::after {
-            content: '█';
-            animation: blink 1s step-end infinite;
-            margin-left: 5px;
-            color: var(--neon-green);
-        }
+        .sec-title::before { content: ''; width: 30px; height: 1px; background: rgba(56, 189, 248, 0.4); }
+        
+        /* Typewriter */
+        .typing-cursor::after { content: '█'; animation: blink 1s step-end infinite; color: #38bdf8; margin-left: 4px; font-weight: 300;}
         @keyframes blink { 50% { opacity: 0; } }
 
+        /* Water Buttons */
+        .water-btn {
+            background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2);
+            backdrop-filter: blur(10px); color: #38bdf8; font-weight: 400; padding: 12px 28px; border-radius: 100px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;
+            text-transform: uppercase; letter-spacing: 1px; font-size: 12px; cursor: pointer;
+        }
+        .water-btn:hover {
+            background: rgba(56, 189, 248, 0.2); color: white;
+            box-shadow: 0 8px 20px -5px rgba(56, 189, 248, 0.2); transform: translateY(-2px);
+        }
+
+        /* --- 2026 FLOATING DYNAMIC ISLAND TOPBAR --- */
+        .mobile-topbar {
+            position: fixed; top: 16px; left: 16px; right: 16px; height: 60px;
+            background: rgba(5, 11, 24, 0.65); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08); z-index: 40;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+            border-radius: 100px; /* Floating Pill Design */
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .mobile-topbar.scrolled {
+            background: rgba(5, 11, 24, 0.9);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8); 
+            border-color: rgba(56, 189, 248, 0.2);
+            transform: translateY(-4px); /* Tucks up slightly when scrolling */
+        }
+        @media (min-width: 1024px) { .mobile-topbar { display: none; } }
+        
+        #menuBtn {
+            width: 36px; height: 36px; border-radius: 50%; background: transparent;
+            color: #fff; border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer;
+            transition: all 0.3s;
+        }
+        #menuBtn:hover { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;}
+
+        .ph-light { font-weight: 300; }
+        
+        .tech-icon-glow {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.1));
+        }
+        .tech-icon-glow:hover {
+            transform: translateY(-4px) scale(1.1);
+            filter: drop-shadow(0 0 15px currentColor);
+        }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <!-- MATRIX BACKGROUND -->
-    <canvas id="matrix-canvas"></canvas>
-
-    <!-- MOBILE MENU TOGGLE -->
-    <button id="menu-btn" class="fixed top-4 right-4 z-50 text-2xl lg:hidden p-2 border border-green-500 bg-black text-green-500 rounded neon-box">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div class="flex flex-col lg:flex-row min-h-screen">
-        
-        <!-- SIDE NAVIGATION -->
-        <nav id="sidebar" class="sidebar fixed inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 w-64 z-40 flex flex-col justify-between overflow-y-auto h-screen scrollbar-hide">
-            
-            <div class="p-6 text-center border-b border-green-900/50">
-                <div class="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-green-500 profile-glow img-scanner">
-                    <!-- Placeholder "Man" Image -->
-                    <img src="https://plus.unsplash.com/premium_photo-1734637616808-14fc29f2a155?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                         alt="Saif ul Islam" class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition duration-500">
-                </div>
-                <h2 class="text-xl font-bold neon-text-green glitch" data-text="Saif ul Islam">Saif ul Islam</h2>
-                <p class="text-xs text-cyan-400 mt-1 tracking-widest">FULL_STACK_DEV</p>
-            </div>
-
-            <div class="flex-1 py-4">
-                <ul class="space-y-1">
-                    <li><a href="#hero" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-terminal mr-3 w-5"></i>_HERO</a></li>
-                    <li><a href="#about" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-user-secret mr-3 w-5"></i>_ABOUT</a></li>
-                    <li><a href="#tech" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-code mr-3 w-5"></i>_STACK</a></li>
-                    <li><a href="#services" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-server mr-3 w-5"></i>_SERVICES</a></li>
-                    <li><a href="#projects" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-project-diagram mr-3 w-5"></i>_PROJECTS</a></li>
-                    <li><a href="#casestudies" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-file-alt mr-3 w-5"></i>_CASES</a></li>
-                    <li><a href="#experience" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-briefcase mr-3 w-5"></i>_EXP</a></li>
-                    <li><a href="#education" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-graduation-cap mr-3 w-5"></i>_EDU</a></li>
-                    <li><a href="#testimonials" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-star mr-3 w-5"></i>_REVIEWS</a></li>
-                    <li><a href="#contact" class="nav-item block py-3 px-6 text-sm font-semibold tracking-wider"><i class="fas fa-envelope mr-3 w-5"></i>_CONTACT</a></li>
-                </ul>
-            </div>
-
-            <div class="p-4 border-t border-green-900/50 flex justify-center space-x-4">
-                <a href="https://github.com/saifulislaam" class="text-gray-400 hover:text-white transition transform hover:scale-125"><i class="fab fa-github fa-lg"></i></a>
-                <a href="https://www.linkedin.com/in/saifxeven/" class="text-blue-400 hover:text-white transition transform hover:scale-125"><i class="fab fa-linkedin fa-lg"></i></a>
-                <a href="#" class="text-pink-500 hover:text-white transition transform hover:scale-125"><i class="fab fa-instagram fa-lg"></i></a>
-            </div>
-        </nav>
-
-        <!-- MAIN CONTENT -->
-        <main class="lg:ml-64 w-full relative z-10">
-            
-            <!-- HERO SECTION -->
-            <section id="hero" class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-0"></div>
-                <div class="text-center z-10 max-w-4xl">
-                    <p class="text-cyan-400 mb-4 tracking-[0.3em] uppercase text-sm animate-pulse">System Initialized...</p>
-                    <h1 class="text-4xl md:text-7xl font-bold mb-6 text-white glitch leading-tight" data-text="HELLO WORLD">
-                        Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-500">Saif ul Islam</span>
-                    </h1>
-                    
-                    <div class="h-16 md:h-12 mb-8">
-                        <span id="typing-text" class="text-lg md:text-2xl text-green-400 font-mono typing-cursor"></span>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row gap-6 justify-center mt-8">
-                        <a href="#projects" class="cyber-btn px-8 py-4 font-bold text-lg rounded-sm group">
-                            <span class="mr-2 group-hover:animate-pulse">></span> View Projects
-                        </a>
-                        <a href="#contact" class="cyber-btn cyber-btn-pink px-8 py-4 font-bold text-lg rounded-sm group">
-                            <span class="mr-2 group-hover:animate-pulse">@</span> Contact Me
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ABOUT SECTION -->
-            <section id="about" class="min-h-screen p-8 md:p-16 border-t border-green-900/30 flex flex-col justify-center reveal">
-                <h2 class="text-4xl md:text-5xl font-bold mb-12 neon-text-cyan flex items-center">
-                    <span class="text-6xl mr-4 opacity-50">01.</span> About Me
-                </h2>
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="neon-box p-8 rounded-lg relative bg-black/50">
-                        <div class="absolute -top-2 -left-2 w-4 h-4 border-t-2 border-l-2 border-green-500"></div>
-                        <div class="absolute -bottom-2 -right-2 w-4 h-4 border-b-2 border-r-2 border-green-500"></div>
-                        <p class="text-lg leading-relaxed text-gray-300 mb-6">
-                            I am <strong class="text-white">Saif ul Islam</strong>, a passionate Full-Stack Web Developer from Pakistan. I specialize in creating interactive, responsive, and modern web applications that live on the bleeding edge of technology.
-                        </p>
-                        <p class="text-sm text-green-400 mb-2">> Education: <span class="text-white">BS. Software Engineering, University of Swat</span></p>
-                        <p class="text-sm text-green-400 mb-2">> Hobbies: <span class="text-white">AI Technologies, UI/UX Design, Cyberpunk Aesthetics</span></p>
-                    </div>
-                    <div class="relative group">
-                        <div class="absolute inset-0 bg-cyan-500 blur-xl opacity-20 group-hover:opacity-40 transition duration-500"></div>
-                        <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Coding Setup" class="relative rounded border border-gray-700 w-full img-scanner filter grayscale group-hover:grayscale-0 transition duration-500">
-                    </div>
-                </div>
-            </section>
-
-            <!-- TECH STACK -->
-            <section id="tech" class="min-h-screen p-8 md:p-16 border-t border-green-900/30 flex flex-col justify-center reveal">
-                <h2 class="text-4xl md:text-5xl font-bold mb-12 neon-text-pink flex items-center">
-                    <span class="text-6xl mr-4 opacity-50">02.</span> Tech Stack
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Frontend -->
-                    <div class="neon-box p-6 rounded hover:bg-green-900/10">
-                        <h3 class="text-xl text-green-400 mb-4 border-b border-green-800 pb-2"><i class="fab fa-html5 mr-2"></i>Frontend</h3>
-                        <ul class="space-y-2 text-sm text-gray-400 font-mono">
-                            <li class="hover:text-white transition">HTML5 & CSS3</li>
-                            <li class="hover:text-white transition">JavaScript (ES6+)</li>
-                            <li class="hover:text-white transition">React.js</li>
-                            <li class="hover:text-white transition">TailwindCSS</li>
-                        </ul>
-                    </div>
-                    <!-- Backend -->
-                    <div class="neon-box p-6 rounded hover:bg-pink-900/10" style="border-color: rgba(255,0,255,0.3);">
-                        <h3 class="text-xl text-pink-400 mb-4 border-b border-pink-800 pb-2"><i class="fas fa-server mr-2"></i>Backend</h3>
-                        <ul class="space-y-2 text-sm text-gray-400 font-mono">
-                            <li class="hover:text-white transition">Node.js</li>
-                            <li class="hover:text-white transition">PHP / Laravel</li>
-                            <li class="hover:text-white transition">MySQL / SQL</li>
-                            <li class="hover:text-white transition">REST APIs</li>
-                        </ul>
-                    </div>
-                    <!-- Tools -->
-                    <div class="neon-box p-6 rounded hover:bg-cyan-900/10" style="border-color: rgba(0,255,255,0.3);">
-                        <h3 class="text-xl text-cyan-400 mb-4 border-b border-cyan-800 pb-2"><i class="fas fa-tools mr-2"></i>Tools</h3>
-                        <ul class="space-y-2 text-sm text-gray-400 font-mono">
-                            <li class="hover:text-white transition">Git & GitHub</li>
-                            <li class="hover:text-white transition">VS Code</li>
-                            <li class="hover:text-white transition">Figma</li>
-                            <li class="hover:text-white transition">Postman</li>
-                        </ul>
-                    </div>
-                     <!-- Other -->
-                     <div class="neon-box p-6 rounded hover:bg-purple-900/10" style="border-color: rgba(188, 19, 254, 0.3);">
-                        <h3 class="text-xl text-purple-400 mb-4 border-b border-purple-800 pb-2"><i class="fas fa-layer-group mr-2"></i>Other</h3>
-                        <ul class="space-y-2 text-sm text-gray-400 font-mono">
-                            <li class="hover:text-white transition">TypeScript</li>
-                            <li class="hover:text-white transition">Responsive Design</li>
-                            <li class="hover:text-white transition">Dark/Light Mode</li>
-                            <li class="hover:text-white transition">System Architecture</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SERVICES -->
-            <section id="services" class="py-20 p-8 md:p-16 border-t border-green-900/30 reveal">
-                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-white flex items-center">
-                    <span class="text-6xl mr-4 opacity-50 text-purple-500">03.</span> Services
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Service Items generated from loop logic -->
-                    <div class="neon-box p-8 text-center group">
-                        <i class="fas fa-code text-4xl text-green-500 mb-4 group-hover:animate-bounce"></i>
-                        <h3 class="text-xl font-bold mb-2">Full-Stack Web Dev</h3>
-                        <p class="text-xs text-gray-500">End-to-end development</p>
-                    </div>
-                    <div class="neon-box p-8 text-center group">
-                        <i class="fas fa-tachometer-alt text-4xl text-cyan-500 mb-4 group-hover:animate-bounce"></i>
-                        <h3 class="text-xl font-bold mb-2">CMS & Dashboards</h3>
-                        <p class="text-xs text-gray-500">Admin panel solutions</p>
-                    </div>
-                    <div class="neon-box p-8 text-center group">
-                        <i class="fas fa-shopping-cart text-4xl text-pink-500 mb-4 group-hover:animate-bounce"></i>
-                        <h3 class="text-xl font-bold mb-2">eCommerce</h3>
-                        <p class="text-xs text-gray-500">Shopping web applications</p>
-                    </div>
-                    <div class="neon-box p-8 text-center group">
-                        <i class="fas fa-magic text-4xl text-purple-500 mb-4 group-hover:animate-bounce"></i>
-                        <h3 class="text-xl font-bold mb-2">AI Enhancement</h3>
-                        <p class="text-xs text-gray-500">Image processing & AI integration</p>
-                    </div>
-                    <div class="neon-box p-8 text-center group">
-                        <i class="fas fa-mobile-alt text-4xl text-yellow-400 mb-4 group-hover:animate-bounce"></i>
-                        <h3 class="text-xl font-bold mb-2">Responsive UI/UX</h3>
-                        <p class="text-xs text-gray-500">Mobile-first designs</p>
-                    </div>
-                    <div class="neon-box p-8 text-center group">
-                        <i class="fas fa-plug text-4xl text-red-500 mb-4 group-hover:animate-bounce"></i>
-                        <h3 class="text-xl font-bold mb-2">Custom Solutions</h3>
-                        <p class="text-xs text-gray-500">API Integrations</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- PROJECTS -->
-            <section id="projects" class="min-h-screen p-8 md:p-16 border-t border-green-900/30 reveal">
-                <h2 class="text-4xl md:text-5xl font-bold mb-12 neon-text-green flex items-center">
-                    <span class="text-6xl mr-4 opacity-50">04.</span> Featured Projects
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    
-                    <!-- Project 1 -->
-                    <div class="neon-box group rounded-lg overflow-hidden">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/bac4b9194361329.65fad177d61b7.png" alt="Portfolio" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
-                            <div class="absolute top-0 right-0 bg-green-600 text-black text-xs font-bold px-2 py-1">REACT</div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-green-400">Personal Portfolio</h3>
-                            <p class="text-gray-400 text-sm mb-4">Modern, responsive portfolio with terminal style interface and dark/light toggle.</p>
-                            <div class="flex flex-wrap gap-2 text-xs text-cyan-300 font-mono mb-4">
-                                <span>#Tailwind</span> <span>#React</span> <span>#Darkmode</span>
-                            </div>
-                            <a href="#" class="inline-block border-b border-green-500 text-green-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
-                        </div>
-                    </div>
-
-                    <!-- Project 2 -->
-                    <div class="neon-box group rounded-lg overflow-hidden">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/701/381/datas/original.PNG" alt="ID Generator" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
-                            <div class="absolute top-0 right-0 bg-cyan-600 text-black text-xs font-bold px-2 py-1">JS</div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-cyan-400">ID-Card Generator</h3>
-                            <p class="text-gray-400 text-sm mb-4">Web app for generating printable ID cards with image upload and validation.</p>
-                            <div class="flex flex-wrap gap-2 text-xs text-cyan-300 font-mono mb-4">
-                                <span>#HTML</span> <span>#CSS</span> <span>#Validation</span>
-                            </div>
-                            <a href="#" class="inline-block border-b border-cyan-500 text-cyan-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
-                        </div>
-                    </div>
-
-                    <!-- Project 3 -->
-                    <div class="neon-box group rounded-lg overflow-hidden">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://cdn.dribbble.com/userupload/12778193/file/original-4375c44c39710b7b9e66b24647a34b9b.png" alt="School System" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
-                            <div class="absolute top-0 right-0 bg-pink-600 text-white text-xs font-bold px-2 py-1">LARAVEL</div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-pink-400">School Management</h3>
-                            <p class="text-gray-400 text-sm mb-4">Manage students, teachers, attendance, fees, and reports efficiently.</p>
-                            <div class="flex flex-wrap gap-2 text-xs text-pink-300 font-mono mb-4">
-                                <span>#MySQL</span> <span>#PHP</span> <span>#Dashboard</span>
-                            </div>
-                            <a href="#" class="inline-block border-b border-pink-500 text-pink-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
-                        </div>
-                    </div>
-
-                     <!-- Project 4 -->
-                     <div class="neon-box group rounded-lg overflow-hidden">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://cdn.dribbble.com/userupload/14415697/file/original-4d1e9d9adfd1e042e6d7f0dadfb1912f.jpg?resize=400x0" alt="AI" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
-                            <div class="absolute top-0 right-0 bg-purple-600 text-white text-xs font-bold px-2 py-1">AI</div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-purple-400">AI Image Enhancer</h3>
-                            <p class="text-gray-400 text-sm mb-4">Web app to enhance and upscale images using AI models and APIs.</p>
-                            <div class="flex flex-wrap gap-2 text-xs text-purple-300 font-mono mb-4">
-                                <span>#NodeJS</span> <span>#API</span> <span>#React</span>
-                            </div>
-                            <a href="#" class="inline-block border-b border-purple-500 text-purple-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
-                        </div>
-                    </div>
-
-                    <!-- Project 5 -->
-                     <div class="neon-box group rounded-lg overflow-hidden">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://images.reallygooddesigns.com/2022/04/small-business-website-design.png" alt="Ecom" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 filter brightness-75 group-hover:brightness-100">
-                            <div class="absolute top-0 right-0 bg-yellow-600 text-black text-xs font-bold px-2 py-1">ECOM</div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-white mb-2 group-hover:text-yellow-400">eCommerce Suite</h3>
-                            <p class="text-gray-400 text-sm mb-4">Full-stack online stores with product listing, cart, checkout, and auth.</p>
-                            <div class="flex flex-wrap gap-2 text-xs text-yellow-300 font-mono mb-4">
-                                <span>#Laravel</span> <span>#Cart</span> <span>#Payment</span>
-                            </div>
-                            <a href="#" class="inline-block border-b border-yellow-500 text-yellow-500 pb-1 hover:text-white hover:border-white transition">View Code ></a>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <!-- EXPERIENCE & EDUCATION -->
-            <section id="experience" class="py-20 p-8 md:p-16 border-t border-green-900/30 reveal">
-                <div class="grid md:grid-cols-2 gap-12">
-                    
-                    <!-- Exp -->
-                    <div>
-                        <h2 class="text-3xl font-bold mb-8 neon-text-cyan"><i class="fas fa-history mr-3"></i>Experience</h2>
-                        <div class="border-l-2 border-cyan-800 ml-4 pl-8 space-y-8">
-                            <div class="relative">
-                                <span class="absolute -left-10 top-0 w-4 h-4 rounded-full bg-cyan-500 shadow-[0_0_10px_#0ff]"></span>
-                                <h4 class="text-xl font-bold text-white">Freelance Full-Stack Developer</h4>
-                                <span class="text-sm text-cyan-400 font-mono">2023 - Present</span>
-                                <p class="text-gray-400 mt-2 text-sm">Built CMS, eCommerce, dashboards, AI web apps, and management systems for diverse clients.</p>
-                            </div>
-                            <div class="relative">
-                                <span class="absolute -left-10 top-0 w-4 h-4 rounded-full bg-cyan-900"></span>
-                                <h4 class="text-xl font-bold text-white">University Projects</h4>
-                                <span class="text-sm text-cyan-400 font-mono">2023 - Present</span>
-                                <p class="text-gray-400 mt-2 text-sm">Developed robust DBMS, interactive dashboards, and web tools using Laravel & React.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Edu -->
-                    <div id="education">
-                        <h2 class="text-3xl font-bold mb-8 neon-text-pink"><i class="fas fa-graduation-cap mr-3"></i>Education</h2>
-                        <div class="space-y-4">
-                            <div class="neon-box p-6 border-l-4 border-l-pink-500">
-                                <h4 class="text-lg font-bold text-white">BS. Software Engineering</h4>
-                                <p class="text-pink-400 text-sm">University of Swat | 2023</p>
-                            </div>
-                            <div class="neon-box p-6 border-l-4 border-l-pink-500">
-                                <h4 class="text-lg font-bold text-white">Certified Web Developer</h4>
-                                <p class="text-pink-400 text-sm">Freelance / Online | 2023</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-             <!-- PROCESS -->
-             <section id="process" class="py-12 p-8 md:p-16 border-t border-green-900/30 reveal">
-                 <h2 class="text-3xl font-bold mb-8 text-center neon-text-green">Development Protocol</h2>
-                 <div class="flex flex-wrap justify-center gap-4">
-                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">01. Requirement Analysis</span>
-                     <span class="text-gray-600 self-center">>>></span>
-                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">02. UI/UX Wireframing</span>
-                     <span class="text-gray-600 self-center">>>></span>
-                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">03. Development</span>
-                     <span class="text-gray-600 self-center">>>></span>
-                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">04. Testing</span>
-                     <span class="text-gray-600 self-center">>>></span>
-                     <span class="px-4 py-2 border border-green-500 rounded-full text-xs hover:bg-green-500 hover:text-black transition cursor-default">05. Deployment</span>
-                 </div>
-             </section>
-
-             <!-- TESTIMONIALS & OPEN SOURCE -->
-             <section id="testimonials" class="py-20 p-8 md:p-16 bg-gradient-to-b from-transparent to-black/80 reveal">
-                <div class="grid md:grid-cols-2 gap-12">
-                    <!-- GitHub -->
-                    <div class="neon-box p-8 text-center border-dashed border-2 border-gray-700">
-                        <i class="fab fa-github text-6xl text-white mb-4"></i>
-                        <h3 class="text-2xl font-bold mb-2">Open Source</h3>
-                        <p class="text-gray-400 mb-4">Contributing to the community one commit at a time.</p>
-                        <div class="text-green-400 font-mono text-sm">
-                            user: saifulislaam<br>
-                            repo_status: all_public
-                        </div>
-                    </div>
-
-                    <!-- Reviews -->
-                    <div class="relative overflow-hidden neon-box p-8">
-                        <i class="fas fa-quote-left text-4xl text-green-800 absolute top-4 left-4"></i>
-                        <div class="relative z-10">
-                            <h3 class="text-2xl font-bold mb-6 text-white">Client Logs</h3>
-                            <div class="space-y-6">
-                                <div>
-                                    <p class="text-gray-300 italic mb-2">"Saif delivered a fully functional school management system with great attention to detail. Highly professional."</p>
-                                    <p class="text-green-500 text-sm font-bold">- Client A.</p>
-                                </div>
-                                <div class="border-t border-gray-800 pt-4">
-                                    <p class="text-gray-300 italic mb-2">"His dashboards are clean, intuitive, and efficient. Impressive full-stack skills."</p>
-                                    <p class="text-green-500 text-sm font-bold">- University Supervisor</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-             </section>
-
-            <!-- CONTACT -->
-            <section id="contact" class="py-20 p-8 md:p-16 border-t border-green-900/30 reveal">
-                <h2 class="text-4xl md:text-5xl font-bold mb-12 text-center neon-text-purple">
-                    Execute Connection
-                </h2>
-                <div class="max-w-2xl mx-auto neon-box p-8 rounded-xl bg-black/80">
-                    <form class="space-y-6">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-purple-400 text-xs font-bold mb-2 uppercase tracking-wide">Identity Name</label>
-                                <input type="text" class="w-full bg-gray-900 border border-purple-900 rounded p-3 text-white focus:outline-none focus:border-purple-500 transition shadow-[0_0_10px_rgba(188,19,254,0.1)]">
-                            </div>
-                            <div>
-                                <label class="block text-purple-400 text-xs font-bold mb-2 uppercase tracking-wide">Electronic Mail</label>
-                                <input type="email" class="w-full bg-gray-900 border border-purple-900 rounded p-3 text-white focus:outline-none focus:border-purple-500 transition shadow-[0_0_10px_rgba(188,19,254,0.1)]">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-purple-400 text-xs font-bold mb-2 uppercase tracking-wide">Transmission Content</label>
-                            <textarea rows="5" class="w-full bg-gray-900 border border-purple-900 rounded p-3 text-white focus:outline-none focus:border-purple-500 transition shadow-[0_0_10px_rgba(188,19,254,0.1)]"></textarea>
-                        </div>
-                        <button type="submit" class="w-full cyber-btn cyber-btn-pink py-4 font-bold tracking-widest text-lg rounded hover:bg-purple-600 hover:text-white">
-                            SEND_MESSAGE
-                        </button>
-                    </form>
-                    
-                    <div class="mt-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between text-sm text-gray-500 font-mono text-center md:text-left">
-                        <p>saifulislam.git@gmail.com</p>
-                        <p>+92 344 2864308</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FOOTER -->
-            <footer class="py-8 text-center border-t border-gray-900 text-gray-600 text-xs font-mono">
-                <p>&copy; 2025 Saif ul Islam. System Verified.</p>
-                <div class="mt-2 space-x-4">
-                    <a href="https://github.com/saifulislaam" class="hover:text-green-500">GitHub</a>
-                    <a href="https://www.linkedin.com/in/saifxeven/" class="hover:text-blue-500">LinkedIn</a>
-                    <a href="#" class="hover:text-white">Privacy</a>
-                    <a href="chat.html" class="hover:text-white">chatbot</a>
-                </div>
-            </footer>
-        </main>
+    <div class="liquid-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
 
-    <script>
-        // --- MATRIX RAIN EFFECT ---
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
+    <!-- 2026 Advanced Mobile Topbar -->
+    <div id="mobileTopbar" class="mobile-topbar">
+        <div class="text-white font-medium text-lg tracking-wide flex items-center gap-2">
+            <!-- Advanced dual-tone icon vibe -->
+            <div class="relative flex items-center justify-center">
+                <i class="ph-light ph-asterisk text-water animate-spin-slow" style="animation-duration: 8s;"></i>
+                <i class="ph-light ph-drop text-water absolute opacity-50"></i>
+            </div>
+            Saif
+        </div>
+        <button id="menuBtn">
+            <i class="ph-light ph-list"></i>
+        </button>
+    </div>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+    <!-- ================= JSON SIDEBAR ================= -->
+    <aside id="sidebar" class="sidebar py-8">
+        
+        <div class="text-center mb-8 px-6 animate-[fadeInScale_0.6s_ease-out_0.4s_both]">
+            <div class="avatar-container mb-4">
+                <img src="https://plus.unsplash.com/premium_photo-1734637616808-14fc29f2a155?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Saif ul Islam" class="avatar-img">
+            </div>
+            <h2 class="text-lg font-medium text-white mb-1 tracking-wide">Saif ul Islam</h2>
+            <h3 class="text-[10px] text-[#00ff41] font-mono mb-3 uppercase tracking-widest">FULL_STACK_DEV</h3>
+            <div class="inline-flex items-center gap-2 text-[9px] font-medium px-3 py-1 rounded-full bg-black/30 border border-[#00ff41]/30 text-[#00ff41] animate-[pulse_1.5s_infinite]">
+                ● ONLINE
+            </div>
+        </div>
 
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        const drops = [];
+        <!-- Navigation Array with Advanced Magnetic Indicator -->
+        <div class="relative flex-1 mb-8" id="navMenuContainer">
+            <!-- The Magnetic Liquid Indicator -->
+            <div id="navIndicator" class="nav-indicator"></div>
 
-        for(let i = 0; i < columns; i++) {
-            drops[i] = 1;
-        }
+            <nav class="flex flex-col gap-1 w-full relative z-10" id="navMenu">
+                <a href="#hero" class="nav-item group" data-color="#00ff41">
+                    <div><i class="ph-light ph-terminal-window" style="color: #00ff41;"></i> _HERO</div>
+                    <span class="nav-badge" style="color: #00ff41; border: 1px solid #00ff4130;">01</span>
+                </a>
+                <a href="#about" class="nav-item group" data-color="#ff00ff">
+                    <div><i class="ph-light ph-user-focus" style="color: #ff00ff;"></i> _ABOUT</div>
+                    <span class="nav-badge" style="color: #ff00ff; border: 1px solid #ff00ff30;">02</span>
+                </a>
+                <a href="#tech" class="nav-item group" data-color="#00ffff">
+                    <div><i class="ph-light ph-code" style="color: #00ffff;"></i> _STACK</div>
+                    <span class="nav-badge" style="color: #00ffff; border: 1px solid #00ffff30;">03</span>
+                </a>
+                <a href="#services" class="nav-item group" data-color="#bc13fe">
+                    <div><i class="ph-light ph-hard-drives" style="color: #bc13fe;"></i> _SERVICES</div>
+                    <span class="nav-badge" style="color: #bc13fe; border: 1px solid #bc13fe30;">04</span>
+                </a>
+                <a href="#projects" class="nav-item group" data-color="#00ff41">
+                    <div><i class="ph-light ph-projector-screen" style="color: #00ff41;"></i> _PROJECTS</div>
+                    <span class="nav-badge" style="color: #00ff41; border: 1px solid #00ff4130;">05</span>
+                </a>
+                <a href="#experience" class="nav-item group" data-color="#00ffff">
+                    <div><i class="ph-light ph-briefcase" style="color: #00ffff;"></i> _EXP</div>
+                    <span class="nav-badge" style="color: #00ffff; border: 1px solid #00ffff30;">07</span>
+                </a>
+                <a href="#education" class="nav-item group" data-color="#bc13fe">
+                    <div><i class="ph-light ph-graduation-cap" style="color: #bc13fe;"></i> _EDU</div>
+                    <span class="nav-badge" style="color: #bc13fe; border: 1px solid #bc13fe30;">08</span>
+                </a>
+                <a href="#testimonials" class="nav-item group" data-color="#00ff41">
+                    <div><i class="ph-light ph-star" style="color: #00ff41;"></i> _REVIEWS</div>
+                    <span class="nav-badge" style="color: #00ff41; border: 1px solid #00ff4130;">09</span>
+                </a>
+                <a href="#contact" class="nav-item group" data-color="#ff00ff">
+                    <div><i class="ph-light ph-envelope-simple" style="color: #ff00ff;"></i> _CONTACT</div>
+                    <span class="nav-badge" style="color: #ff00ff; border: 1px solid #ff00ff30;">10</span>
+                </a>
+            </nav>
+        </div>
 
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        <div class="flex justify-center gap-6 px-6 pb-6 border-b border-white/5">
+            <a href="https://github.com/saifulislaam" target="_blank" class="social-icon" style="color:#fff;" onmouseover="this.style.color='#00ff41'" onmouseout="this.style.color='#fff'"><i class="ph-light ph-github-logo"></i></a>
+            <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="social-icon" style="color:#fff; animation-delay: 0.2s;" onmouseover="this.style.color='#00ffff'" onmouseout="this.style.color='#fff'"><i class="ph-light ph-linkedin-logo"></i></a>
+            <a href="#" class="social-icon" style="color:#fff; animation-delay: 0.4s;" onmouseover="this.style.color='#ff00ff'" onmouseout="this.style.color='#fff'"><i class="ph-light ph-instagram-logo"></i></a>
+        </div>
 
-            ctx.fillStyle = '#0F0'; // Neon Green
-            ctx.font = fontSize + 'px monospace';
+        <div class="pt-6 px-6 text-center">
+            <p class="font-mono text-[9px] font-medium glitch" style="color: #00ff41; opacity: 0.7;">SYSTEM v2.0</p>
+        </div>
+    </aside>
 
-            for(let i = 0; i < drops.length; i++) {
-                const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main-content px-4 md:px-12 lg:px-16 pb-24 lg:pt-0">
 
-                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
+        <!-- HERO SECTION -->
+        <section id="hero" class="min-h-screen flex flex-col justify-center py-10">
+            <div class="max-w-4xl reveal active">
+                <div class="text-[10px] font-mono text-water mb-8 tracking-widest uppercase flex items-center gap-2 opacity-80">
+                    <span class="w-1.5 h-1.5 rounded-full bg-water animate-pulse shadow-[0_0_8px_#38bdf8]"></span> System Initialized...
+                </div>
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6">
+                    Hi, I'm <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-water to-white">Saif ul Islam</span>
+                </h1>
+                <div class="h-20 sm:h-12 mb-10">
+                    <span id="typing-text" class="text-base sm:text-lg lg:text-xl text-white/60 font-mono font-light leading-relaxed typing-cursor"></span>
+                </div>
+                <div class="flex flex-wrap gap-4 mt-6">
+                    <a href="#projects" class="water-btn"><i class="ph-light ph-stack"></i> View Systems</a>
+                    <a href="#contact" class="water-btn !bg-white/5 !border-white/10 !text-white/80 hover:!bg-white/10 hover:!text-white"><i class="ph-light ph-paper-plane-tilt"></i> Contact Node</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="py-20">
+            <div class="sec-title reveal">_About</div>
+            <div class="glass-panel p-6 sm:p-10 reveal delay-1">
+                <p class="text-sm sm:text-base md:text-lg text-white/70 leading-relaxed font-light">
+                    I am Saif ul Islam, a passionate Full-Stack Web Developer from Pakistan. I specialize in creating <span class="text-water font-medium">interactive, responsive, and modern web applications</span> that live on the bleeding edge of technology.
+                </p>
+            </div>
+        </section>
+
+ <!-- TECH STACK -->
+        <section id="tech" class="py-20">
+            <div class="sec-title reveal">_Stack</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+                <!-- Frontend -->
+                <div class="glass-panel p-6 reveal">
+                    <h3 class="font-mono font-medium text-water mb-4 border-b border-water/10 pb-3 flex items-center gap-2"><i class="ph-light ph-layout text-xl"></i> Frontend</h3>
+                    <ul class="space-y-3 text-xs sm:text-sm text-white/60 font-mono font-light">
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#E34F26]/20 group-hover:border-[#E34F26]/50 group-hover:shadow-[0_0_10px_rgba(227,79,38,0.3)]">
+                                <i class="ph-light ph-file-html text-lg transition-colors duration-300 group-hover:text-[#E34F26]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">HTML5 & CSS3</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#F7DF1E]/20 group-hover:border-[#F7DF1E]/50 group-hover:shadow-[0_0_10px_rgba(247,223,30,0.3)]">
+                                <i class="ph-light ph-file-js text-lg transition-colors duration-300 group-hover:text-[#F7DF1E]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">JavaScript (ES6+)</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#61DAFB]/20 group-hover:border-[#61DAFB]/50 group-hover:shadow-[0_0_10px_rgba(97,218,251,0.3)]">
+                                <i class="ph-light ph-atom text-lg transition-colors duration-300 group-hover:text-[#61DAFB]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">React.js</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#38BDF8]/20 group-hover:border-[#38BDF8]/50 group-hover:shadow-[0_0_10px_rgba(56,189,248,0.3)]">
+                                <i class="ph-light ph-waves text-lg transition-colors duration-300 group-hover:text-[#38BDF8]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">TailwindCSS</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Backend -->
+                <div class="glass-panel p-6 reveal delay-1">
+                    <h3 class="font-mono font-medium text-water mb-4 border-b border-water/10 pb-3 flex items-center gap-2"><i class="ph-light ph-database text-xl"></i> Backend</h3>
+                    <ul class="space-y-3 text-xs sm:text-sm text-white/60 font-mono font-light">
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#339933]/20 group-hover:border-[#339933]/50 group-hover:shadow-[0_0_10px_rgba(51,153,51,0.3)]">
+                                <i class="ph-light ph-hexagon text-lg transition-colors duration-300 group-hover:text-[#339933]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">Node.js</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#FF2D20]/20 group-hover:border-[#FF2D20]/50 group-hover:shadow-[0_0_10px_rgba(255,45,32,0.3)]">
+                                <i class="ph-light ph-fire text-lg transition-colors duration-300 group-hover:text-[#FF2D20]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">PHP / Laravel</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#00758F]/20 group-hover:border-[#00758F]/50 group-hover:shadow-[0_0_10px_rgba(0,117,143,0.3)]">
+                                <i class="ph-light ph-database text-lg transition-colors duration-300 group-hover:text-[#00758F]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">MySQL / SQL</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#bc13fe]/20 group-hover:border-[#bc13fe]/50 group-hover:shadow-[0_0_10px_rgba(188,19,254,0.3)]">
+                                <i class="ph-light ph-plugs-connected text-lg transition-colors duration-300 group-hover:text-[#bc13fe]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">REST APIs</span>
+                        </li>
+                    </ul>
+                </div>
+
+
+  <!-- Tools -->
+                <div class="glass-panel p-6 reveal delay-2">
+                    <h3 class="font-mono font-medium text-water mb-4 border-b border-water/10 pb-3 flex items-center gap-2"><i class="ph-light ph-wrench text-xl"></i> Tools</h3>
+                    <ul class="space-y-3 text-xs sm:text-sm text-white/60 font-mono font-light">
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-white/20 group-hover:border-white/50 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                                <i class="ph-light ph-github-logo text-lg transition-colors duration-300 group-hover:text-white"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">Git & GitHub</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#007ACC]/20 group-hover:border-[#007ACC]/50 group-hover:shadow-[0_0_10px_rgba(0,122,204,0.3)]">
+                                <i class="ph-light ph-code-block text-lg transition-colors duration-300 group-hover:text-[#007ACC]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">VS Code</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#F24E1E]/20 group-hover:border-[#F24E1E]/50 group-hover:shadow-[0_0_10px_rgba(242,78,30,0.3)]">
+                                <i class="ph-light ph-figma-logo text-lg transition-colors duration-300 group-hover:text-[#F24E1E]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">Figma</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#FF6C37]/20 group-hover:border-[#FF6C37]/50 group-hover:shadow-[0_0_10px_rgba(255,108,55,0.3)]">
+                                <i class="ph-light ph-paper-plane-right text-lg transition-colors duration-300 group-hover:text-[#FF6C37]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">Postman</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Architecture -->
+                <div class="glass-panel p-6 reveal delay-1">
+                    <h3 class="font-mono font-medium text-water mb-4 border-b border-water/10 pb-3 flex items-center gap-2"><i class="ph-light ph-graph text-xl"></i> Architecture</h3>
+                    <ul class="space-y-3 text-xs sm:text-sm text-white/60 font-mono font-light">
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#3178C6]/20 group-hover:border-[#3178C6]/50 group-hover:shadow-[0_0_10px_rgba(49,120,198,0.3)]">
+                                <i class="ph-light ph-file-code text-lg transition-colors duration-300 group-hover:text-[#3178C6]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">TypeScript</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#00ff41]/20 group-hover:border-[#00ff41]/50 group-hover:shadow-[0_0_10px_rgba(0,255,65,0.3)]">
+                                <i class="ph-light ph-devices text-lg transition-colors duration-300 group-hover:text-[#00ff41]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">Responsive Design</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#eab308]/20 group-hover:border-[#eab308]/50 group-hover:shadow-[0_0_10px_rgba(234,179,8,0.3)]">
+                                <i class="ph-light ph-moon-stars text-lg transition-colors duration-300 group-hover:text-[#eab308]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">Dark/Light Mode</span>
+                        </li>
+                        <li class="flex items-center gap-3 group cursor-default">
+                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#00ffff]/20 group-hover:border-[#00ffff]/50 group-hover:shadow-[0_0_10px_rgba(0,255,255,0.3)]">
+                                <i class="ph-light ph-tree-structure text-lg transition-colors duration-300 group-hover:text-[#00ffff]"></i>
+                            </div>
+                            <span class="transition-colors duration-300 group-hover:text-white">System Architecture</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section id="services" class="py-20">
+            <div class="sec-title reveal">_Services</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="glass-panel p-8 text-center reveal flex flex-col items-center justify-center group">
+                    <i class="ph-light ph-code text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
+                    <h3 class="font-medium text-sm text-white mb-1">Full-Stack Web Dev</h3>
+                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">End-to-end</p>
+                </div>
+                <div class="glass-panel p-8 text-center reveal delay-1 flex flex-col items-center justify-center group">
+                    <i class="ph-light ph-gauge text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
+                    <h3 class="font-medium text-sm text-white mb-1">CMS & Dashboards</h3>
+                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">Admin solutions</p>
+                </div>
+                <div class="glass-panel p-8 text-center reveal delay-2 flex flex-col items-center justify-center group">
+                    <i class="ph-light ph-shopping-cart text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
+                    <h3 class="font-medium text-sm text-white mb-1">eCommerce</h3>
+                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">Shopping apps</p>
+                </div>
+                <div class="glass-panel p-8 text-center reveal flex flex-col items-center justify-center group">
+                    <i class="ph-light ph-magic-wand text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
+                    <h3 class="font-medium text-sm text-white mb-1">AI Enhancement</h3>
+                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">Image & LLM API</p>
+                </div>
+                <div class="glass-panel p-8 text-center reveal delay-1 flex flex-col items-center justify-center group">
+                    <i class="ph-light ph-device-mobile text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
+                    <h3 class="font-medium text-sm text-white mb-1">Responsive UI</h3>
+                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">Mobile-first</p>
+                </div>
+                <div class="glass-panel p-8 text-center reveal delay-2 flex flex-col items-center justify-center group">
+                    <i class="ph-light ph-plugs-connected text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
+                    <h3 class="font-medium text-sm text-white mb-1">Custom Solutions</h3>
+                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">API Integrations</p>
+                </div>
+            </div>
+        </section>
+
+
+
+
+ <!-- ENTERPRISE PROJECTS -->
+        <section id="projects" class="py-20">
+            <div class="sec-title reveal">_Enterprise_Systems</div>
+            
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Proj 1 -->
+                <div class="glass-panel p-4 sm:p-6 reveal group cursor-pointer h-full flex flex-col">
+                    <div class="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-6 border border-white/5">
+                        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=800&auto=format&fit=crop" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-90 grayscale group-hover:grayscale-0">
+                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-medium text-water border border-white/10 font-mono">AI_VISION</div>
+                    </div>
+                    <div class="flex-1 flex flex-col">
+                        <h3 class="text-lg sm:text-xl font-medium mb-3 transition group-hover:text-water text-white">Next-Gen AI Image Editor</h3>
+                        <p class="text-xs sm:text-sm text-white/50 mb-6 flex-1 leading-relaxed font-light">
+                            Sophisticated image manipulation studio integrating Generative AI models. High-fidelity upscaling, inpainting, and real-time generation.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-[9px] sm:text-[10px] font-mono text-white/40">
+                            <span class="border border-water/20 px-2 py-1 rounded bg-water/5 text-water">React</span>
+                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Node.js</span>
+                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Diffusion API</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proj 2 -->
+                <div class="glass-panel p-4 sm:p-6 reveal delay-1 group cursor-pointer h-full flex flex-col">
+                    <div class="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-6 border border-white/5">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-90 grayscale group-hover:grayscale-0">
+                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-medium text-purple-400 border border-white/10 font-mono">LLM_NLP</div>
+                    </div>
+                    <div class="flex-1 flex flex-col">
+                        <h3 class="text-lg sm:text-xl font-medium mb-3 transition group-hover:text-purple-400 text-white">Liquid Context AI Chatbot</h3>
+                        <p class="text-xs sm:text-sm text-white/50 mb-6 flex-1 leading-relaxed font-light">
+                            Intelligent conversational agent utilizing RAG. Features deep context memory, real-time token streaming, and multi-model routing inside a glass UI.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-[9px] sm:text-[10px] font-mono text-white/40">
+                            <span class="border border-purple-500/20 px-2 py-1 rounded bg-purple-500/5 text-purple-400">OpenAI API</span>
+                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">WebSockets</span>
+                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Vector DB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proj 3 -->
+                <div class="glass-panel p-4 sm:p-6 reveal group cursor-pointer h-full flex flex-col">
+                    <div class="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-6 border border-white/5">
+                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-90 grayscale group-hover:grayscale-0">
+                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-medium text-green-400 border border-white/10 font-mono">FINTECH</div>
+                    </div>
+                    <div class="flex-1 flex flex-col">
+                        <h3 class="text-lg sm:text-xl font-medium mb-3 transition group-hover:text-green-400 text-white">Global Payment Hub API</h3>
+                        <p class="text-xs sm:text-sm text-white/50 mb-6 flex-1 leading-relaxed font-light">
+                            Architected a payment routing system for a SaaS platform. Supports seamless checkout flows handling Stripe, PayPal, and Crypto gateways.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-[9px] sm:text-[10px] font-mono text-white/40">
+                            <span class="border border-green-500/20 px-2 py-1 rounded bg-green-500/5 text-green-400">Laravel (PHP)</span>
+                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Stripe API</span>
+                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Webhooks</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proj 4 -->
+                <div class="glass-panel p-4 sm:p-6 reveal delay-1 group cursor-pointer h-full flex flex-col">
+                    <div class="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-6 border border-white/5">
+                        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-90 grayscale group-hover:grayscale-0">
+                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-medium text-yellow-400 border border-white/10 font-mono">ARCHITECTURE</div>
+                    </div>
+                    <div class="flex-1 flex flex-col">
+                        <h3 class="text-lg sm:text-xl font-medium mb-3 transition group-hover:text-yellow-400 text-white">Scalable Commerce Engine</h3>
+                        <p class="text-xs sm:text-sm text-white/50 mb-6 flex-1 leading-relaxed font-light">
+                            Built a headless e-commerce backend for high concurrency. Decoupled inventory, auth, and orders into microservices.
+                        </p>
+                        <div class="flex flex-wrap gap-2 text-[9px] sm:text-[10px] font-mono text-white/40">
+                            <span class="border border-yellow-500/20 px-2 py-1 rounded bg-yellow-500/5 text-yellow-400">TypeScript</span>
+                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Docker</span>
+                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">PostgreSQL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE & EDUCATION -->
+        <section id="experience" class="py-20">
+            <div class="grid lg:grid-cols-2 gap-16 lg:gap-12">
+                <!-- Experience -->
+                <div>
+                    <div class="sec-title reveal">_Exp</div>
+                    <div class="space-y-8 border-l border-white/10 ml-2 pl-6 sm:pl-8">
+                        <div class="relative reveal delay-1">
+                            <span class="absolute -left-[29px] sm:-left-[37px] top-1 w-2.5 h-2.5 rounded-full bg-water shadow-[0_0_10px_#38bdf8]"></span>
+                            <h4 class="text-sm sm:text-base font-medium text-white mb-1">Freelance Full-Stack Developer</h4>
+                            <div class="text-[10px] font-mono text-water mb-3">2023 - Present</div>
+                            <p class="text-xs sm:text-sm text-white/50 leading-relaxed font-light">Built CMS, eCommerce, dashboards, AI web apps, and management systems for diverse clients.</p>
+                        </div>
+                        <div class="relative reveal delay-2">
+                            <span class="absolute -left-[29px] sm:-left-[37px] top-1 w-2.5 h-2.5 rounded-full bg-white/20"></span>
+                            <h4 class="text-sm sm:text-base font-medium text-white mb-1">University Projects</h4>
+                            <div class="text-[10px] font-mono text-white/40 mb-3">2023 - Present</div>
+                            <p class="text-xs sm:text-sm text-white/50 leading-relaxed font-light">Developed robust DBMS, interactive dashboards, and web tools using Laravel & React.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div id="education">
+                    <div class="sec-title reveal">_Edu</div>
+                    <div class="space-y-6">
+                        <div class="glass-panel p-5 sm:p-6 reveal delay-1 border-l-2 border-l-water">
+                            <h4 class="font-medium text-sm sm:text-base text-white mb-1">BS. Software Engineering</h4>
+                            <p class="text-[10px] sm:text-[11px] text-water font-mono">University of Swat • 2023</p>
+                        </div>
+                        <div class="glass-panel p-5 sm:p-6 reveal delay-2 border-l-2 border-l-water">
+                            <h4 class="font-medium text-sm sm:text-base text-white mb-1">Certified Web Developer</h4>
+                            <p class="text-[10px] sm:text-[11px] text-water font-mono">Freelance / Online • 2023</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="py-20">
+            <div class="sec-title reveal">_Contact</div>
+            
+            <div class="glass-panel p-8 md:p-16 reveal max-w-2xl mx-auto text-center border-t border-water/20 relative overflow-hidden">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-water/30 to-transparent"></div>
+                
+                <i class="ph-light ph-envelope-simple-open text-4xl sm:text-5xl text-water mb-6 relative z-10 opacity-80"></i>
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-medium mb-4 text-white relative z-10">Open Secure Channel</h2>
+                <p class="text-white/50 mb-10 text-xs sm:text-sm max-w-md mx-auto relative z-10 font-light leading-relaxed">Initiate handshake protocol for freelance work, enterprise contracts, or technical inquiries.</p>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-sm mx-auto relative z-10">
+                    <a href="mailto:saifulislam.git@gmail.com" class="water-btn justify-center w-full">
+                        <i class="ph-light ph-paper-plane-right text-lg"></i> Email Me
+                    </a>
+                    <a href="chat.html" class="water-btn justify-center w-full !bg-white/5 !border-white/5 !text-white/70 hover:!bg-white/10 hover:!text-white">
+                        <i class="ph-light ph-robot text-lg"></i> AI Chatbot
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= RESPONSIVE FOOTER ================= -->
+        <footer class="mt-10 border-t border-white/5 relative overflow-hidden pb-32 lg:pb-10 pt-16">
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-40 bg-water/5 blur-[100px] z-0 pointer-events-none"></div>
+            
+            <div class="relative z-10">
+                <div class="flex flex-wrap justify-center items-center gap-6 sm:gap-8 lg:gap-12 mb-16 pb-12 border-b border-white/5">
+                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #E34F26;" title="HTML5"><i class="ph-light ph-file-html text-3xl sm:text-4xl"></i></div>
+                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #1572B6;" title="CSS3"><i class="ph-light ph-file-css text-3xl sm:text-4xl"></i></div>
+                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #F7DF1E;" title="JavaScript"><i class="ph-light ph-file-js text-3xl sm:text-4xl"></i></div>
+                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #61DAFB;" title="React"><i class="ph-light ph-atom text-3xl sm:text-4xl"></i></div>
+                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #38BDF8;" title="Tailwind"><i class="ph-light ph-waves text-3xl sm:text-4xl"></i></div>
+                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #339933;" title="Node.js"><i class="ph-light ph-hexagon text-3xl sm:text-4xl"></i></div>
+                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #FF2D20;" title="Laravel"><i class="ph-light ph-fire text-3xl sm:text-4xl"></i></div>
+                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #F24E1E;" title="Figma"><i class="ph-light ph-figma-logo text-3xl sm:text-4xl"></i></div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-8 mb-12">
+                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+                        <div class="flex items-center gap-2 mb-4">
+                            <i class="ph-light ph-drop text-2xl text-water"></i>
+                            <span class="text-xl font-bold tracking-tight text-white">Saif</span>
+                        </div>
+                        <p class="text-xs text-white/50 font-light leading-relaxed mb-6 max-w-[250px]">Architecting liquid smooth, intelligent web systems. Merging aesthetics with performance.</p>
+                        <div class="flex gap-4">
+                            <a href="https://github.com/saifulislaam" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/70 hover:text-white hover:bg-[#00ff41]/20 transition border border-white/5 hover:border-[#00ff41]/30"><i class="ph-light ph-github-logo text-lg"></i></a>
+                            <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/70 hover:text-white hover:bg-[#00ffff]/20 transition border border-white/5 hover:border-[#00ffff]/30"><i class="ph-light ph-linkedin-logo text-lg"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+                        <h4 class="text-sm font-medium text-white mb-5 uppercase tracking-widest font-mono">Ecosystem</h4>
+                        <ul class="space-y-3 text-sm font-light text-white/60">
+                            <li><a href="#hero" class="hover:text-water transition">System Origin</a></li>
+                            <li><a href="#about" class="hover:text-water transition">Developer Bio</a></li>
+                            <li><a href="#services" class="hover:text-water transition">Service Nodes</a></li>
+                            <li><a href="chat.html" class="hover:text-[#00ff41] transition flex items-center justify-center sm:justify-start gap-2"><i class="ph-light ph-robot"></i> Access AI Chat</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+                        <h4 class="text-sm font-medium text-white mb-5 uppercase tracking-widest font-mono">Comms Hub</h4>
+                        <ul class="space-y-3 text-sm font-light text-white/60">
+                            <li><a href="mailto:saifulislam.git@gmail.com" class="hover:text-water transition flex items-center justify-center sm:justify-start gap-2"><i class="ph-light ph-envelope-simple text-lg text-water"></i> saifulislam.git...</a></li>
+                            <li><a href="tel:+923442864308" class="hover:text-water transition flex items-center justify-center sm:justify-start gap-2"><i class="ph-light ph-phone text-lg text-water"></i> +92 344 2864308</a></li>
+                            <li class="flex items-center justify-center sm:justify-start gap-2 mt-2"><span class="w-2 h-2 rounded-full bg-[#00ff41] animate-pulse"></span><span class="text-[10px] font-mono text-[#00ff41]">AVAILABLE_FOR_HIRE</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
+                        <h4 class="text-sm font-medium text-white mb-5 uppercase tracking-widest font-mono">Deployments</h4>
+                        <div class="grid grid-cols-3 gap-2 w-full max-w-[200px]">
+                            <a href="#projects" class="block aspect-square rounded-lg overflow-hidden border border-white/10 hover:border-water transition relative group"><img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"></a>
+                            <a href="#projects" class="block aspect-square rounded-lg overflow-hidden border border-white/10 hover:border-water transition relative group"><img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"></a>
+                            <a href="#projects" class="block aspect-square rounded-lg overflow-hidden border border-white/10 hover:border-water transition relative group"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"></a>
+                        </div>
+                    </div>
+                </div>
+
+<div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <p class="text-[10px] sm:text-xs font-mono text-white/40">&copy; 2026 Saif ul Islam. All nodes secured.</p>
+                    <div class="flex gap-4 text-[10px] sm:text-xs text-white/40 font-mono"><a href="#" class="hover:text-water transition">PRIVACY_POLICY</a><a href="#" class="hover:text-water transition">TERMS_OF_SERVICE</a></div>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+
+<script>
+        // --- 1. JSON SIDEBAR HOVER LOGIC & MAGNETIC SCROLLSPY ---
+        const navItems = document.querySelectorAll('.nav-item');
+        const navIndicator = document.getElementById('navIndicator');
+        const navMenu = document.getElementById('navMenu');
+        
+        // Ensure navIndicator has initial state mapped from the first item
+        window.onload = () => {
+            if(navItems.length > 0) {
+                updateMagneticIndicator(navItems[0]);
+                navIndicator.style.opacity = '1';
             }
         }
-        setInterval(drawMatrix, 33);
 
+        function updateMagneticIndicator(targetItem) {
+            if(!targetItem) return;
+            const targetColor = targetItem.getAttribute('data-color');
+            const targetTop = targetItem.offsetTop;
+            
+            navIndicator.style.transform = `translateY(${targetTop}px)`;
+            navIndicator.style.backgroundColor = targetColor;
+            navIndicator.style.boxShadow = `0 0 15px ${targetColor}`;
+            navIndicator.style.opacity = '1';
+        }
 
-        // --- TYPEWRITER EFFECT ---
+        navItems.forEach(item => {
+            const hoverColor = item.getAttribute('data-color');
+            
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = "translateX(10px)";
+                item.style.color = hoverColor;
+                item.style.textShadow = `0 0 12px ${hoverColor}60`;
+                item.style.background = `linear-gradient(90deg, ${hoverColor}15, transparent)`;
+                
+                // Only move indicator on hover if not scrolling actively
+                updateMagneticIndicator(item);
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                if(!item.classList.contains('active')) {
+                    item.style.transform = "translateX(0)";
+                    item.style.color = "rgba(255,255,255,0.5)";
+                    item.style.textShadow = "none";
+                    item.style.background = "transparent";
+                }
+                // Return indicator to active item
+                const activeItem = document.querySelector('.nav-item.active');
+                updateMagneticIndicator(activeItem);
+            });
+        });
+
+        // --- 2. CLICK OUTSIDE TO CLOSE MOBILE MENU LOGIC ---
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileTopbar = document.getElementById('mobileTopbar');
+
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            sidebar.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if(window.innerWidth < 1024 && sidebar.classList.contains('open')) {
+                if(!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if(window.innerWidth < 1024) sidebar.classList.remove('open');
+            });
+        });
+
+        // Mobile Topbar Scroll Effect (Advanced Floating Pill)
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                mobileTopbar.classList.add('scrolled');
+            } else {
+                mobileTopbar.classList.remove('scrolled');
+            }
+        });
+
+        // --- 3. HARDWARE ACCELERATED SCROLL REVEAL ---
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -40px 0px" };
+
+        const revealOnScroll = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target); 
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => revealOnScroll.observe(el));
+
+        // --- 4. ADVANCED SCROLLSPY (Magnetic Indicator Sync) ---
+        const sections = document.querySelectorAll('section');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if(window.scrollY >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                const hoverColor = item.getAttribute('data-color');
+                item.classList.remove('active');
+                
+                // Reset styles
+                item.style.transform = "translateX(0)";
+                item.style.color = "rgba(255,255,255,0.5)";
+                item.style.textShadow = "none";
+                item.style.background = "transparent";
+                
+                // Apply active style & snap magnetic indicator
+                if(item.getAttribute('href') === `#${current}`) {
+                    item.classList.add('active');
+                    item.style.transform = "translateX(10px)";
+                    item.style.color = hoverColor;
+                    item.style.textShadow = `0 0 12px ${hoverColor}60`;
+                    item.style.background = `linear-gradient(90deg, ${hoverColor}15, transparent)`;
+                    
+                    updateMagneticIndicator(item);
+                }
+            });
+        });
+
+        // --- 5. FAST TYPEWRITER EFFECT ---
         const textToType = "Full-Stack Web Developer | HTML, CSS, React, Laravel | Building modern web apps.";
         const typeContainer = document.getElementById('typing-text');
         let typeIndex = 0;
@@ -684,79 +894,13 @@
             if (typeIndex < textToType.length) {
                 typeContainer.textContent += textToType.charAt(typeIndex);
                 typeIndex++;
-                setTimeout(typeWriter, 50); // Typing speed
+                setTimeout(typeWriter, 30); 
             }
         }
-        // Start typing after a brief delay
-        setTimeout(typeWriter, 1000);
-
-
-        // --- SCROLL ANIMATIONS (Intersection Observer) ---
-        const revealElements = document.querySelectorAll('.reveal');
-
-        const revealCallback = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        };
-
-        const revealOptions = {
-            threshold: 0.15,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const observer = new IntersectionObserver(revealCallback, revealOptions);
-        revealElements.forEach(el => observer.observe(el));
-
-
-        // --- MOBILE MENU TOGGLE ---
-        const menuBtn = document.getElementById('menu-btn');
-        const sidebar = document.getElementById('sidebar');
-        let isMenuOpen = false;
-
-        menuBtn.addEventListener('click', () => {
-            isMenuOpen = !isMenuOpen;
-            if(isMenuOpen) {
-                sidebar.classList.remove('-translate-x-full');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-            }
-        });
-
-        // Close menu when clicking a link on mobile
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                if(window.innerWidth < 1024) {
-                    sidebar.classList.add('-translate-x-full');
-                    isMenuOpen = false;
-                }
-            });
-        });
-
-        // --- ACTIVE LINK HIGHLIGHTER ---
-        const sections = document.querySelectorAll('section');
-        const navLi = document.querySelectorAll('.sidebar ul li a');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if(scrollY >= (sectionTop - sectionHeight / 3)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLi.forEach(a => {
-                a.classList.remove('active');
-                if(a.getAttribute('href').includes(current)) {
-                    a.classList.add('active');
-                }
-            });
-        });
-
+        setTimeout(typeWriter, 600);
     </script>
 </body>
 </html>
+
+
+
