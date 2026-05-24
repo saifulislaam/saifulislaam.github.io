@@ -1,906 +1,1352 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Saif | FULL_STACK_DEV</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Phosphor Icons (Ultra Advanced Thin Icons) -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        water: '#38bdf8',      
-                        deepwater: '#0ea5e9',  
-                        void: '#091224',       
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['Fira Code', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SAIF_UL_ISLAM // CYBER_OPS_TERMINAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<style>
+:root {
+  --primary: #00FF66;
+  --secondary: #00F0FF;
+  --accent: #7A00FF;
+  --danger: #FF003C;
+  --warning: #FFD000;
+  --bg: #030507;
+  --surface: rgba(8,12,15,0.75);
+  --glass: rgba(255,255,255,0.03);
+  --border: rgba(0,255,102,0.18);
+  --border2: rgba(0,240,255,0.15);
+  --text: #EAFBF1;
+  --text2: rgba(220,255,230,0.6);
+  --font-display: 'Orbitron', monospace;
+  --font-body: 'Rajdhani', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+  --font-code: 'JetBrains Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--font-body);
+  overflow-x:hidden;
+  overscroll-behavior-y:none;
+  min-height:100vh;
+}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(0,255,102,0.3);border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,255,102,0.6);}
 
-    <style>
-        /* --- CORE STYLES & HARDWARE ACCELERATION --- */
-        * {
-            margin: 0; padding: 0; box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+/* ======================== BACKGROUND SYSTEM ======================== */
+.cyber-bg{
+  position:fixed;inset:0;z-index:0;
+  overflow:hidden;pointer-events:none;
+  background:radial-gradient(ellipse 80% 80% at 50% -20%, rgba(0,255,102,0.04) 0%, transparent 60%),
+             radial-gradient(ellipse 60% 60% at 90% 90%, rgba(0,240,255,0.04) 0%, transparent 60%),
+             var(--bg);
+}
 
-        body {
-            background-color: #091224;
-            color: #ffffff;
-            overflow-x: hidden;
-            overscroll-behavior-y: none;
-        }
+/* Tactical grid */
+.tac-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,255,102,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,102,0.04) 1px, transparent 1px);
+  background-size:50px 50px;
+  animation:gridScroll 30s linear infinite;
+}
+@keyframes gridScroll{0%{transform:translate(0,0);}100%{transform:translate(50px,50px);}}
 
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.5); }
+/* Scan lines */
+.scanlines{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    0deg,transparent,transparent 2px,
+    rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px
+  );pointer-events:none;
+}
 
-        /* --- PURE CSS LIQUID WATER ORBS --- */
-        .liquid-bg {
-            position: fixed; inset: 0; z-index: -1;
-            overflow: hidden; pointer-events: none;
-            background: #091224;
-        }
-        .orb {
-            position: absolute; border-radius: 50%;
-            filter: blur(140px); 
-            opacity: 0.4;
-            animation: float 20s infinite ease-in-out alternate;
-            will-change: transform;
-        }
-        .orb-1 { top: -10%; left: -10%; width: 55vw; height: 55vw; background: rgba(56, 189, 248, 0.25); animation-duration: 25s; }
-        .orb-2 { bottom: -20%; right: -10%; width: 65vw; height: 65vw; background: rgba(14, 165, 233, 0.2); animation-delay: -8s; }
-        .orb-3 { top: 40%; left: 40%; width: 45vw; height: 45vw; background: rgba(125, 211, 252, 0.15); animation-delay: -15s; }
+/* Matrix rain canvas */
+#matrixCanvas{position:absolute;inset:0;opacity:0.06;}
 
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(3%, 5%) scale(1.05); }
-            100% { transform: translate(-3%, -3%) scale(0.95); }
-        }
+/* Radar circles */
+.radar-ring{
+  position:absolute;border-radius:50%;border:1px solid rgba(0,255,102,0.08);
+  transform:translate(-50%,-50%);animation:radarPulse 4s linear infinite;
+}
+.radar-ring:nth-child(1){width:300px;height:300px;top:15%;left:80%;animation-delay:0s;}
+.radar-ring:nth-child(2){width:500px;height:500px;top:15%;left:80%;animation-delay:-1.3s;}
+.radar-ring:nth-child(3){width:700px;height:700px;top:15%;left:80%;animation-delay:-2.6s;}
+@keyframes radarPulse{
+  0%{transform:translate(-50%,-50%) scale(0.4);opacity:0.6;}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:0;}
+}
 
-        /* --- ULTRA LIGHT WATER GLASS COMPONENTS --- */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.02); 
-            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.04); 
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 20, 50, 0.15); 
-            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        .glass-panel::before {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 100%);
-            pointer-events: none;
-        }
-        .glass-panel:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(56, 189, 248, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 40px 0 rgba(56, 189, 248, 0.08); 
-        }
+/* Noise overlay */
+.noise{
+  position:absolute;inset:0;opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
 
-        /* --- JSON SPECIFIC SIDEBAR --- */
-        .sidebar {
-            width: 280px;
-            position: fixed; top: 0; left: 0; bottom: 0; z-index: 50;
-            background: rgba(4, 9, 20, 0.7); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(0, 255, 65, 0.1); 
-            box-shadow: 10px 0 30px rgba(0, 255, 255, 0.05), 0 0 30px rgba(255, 0, 255, 0.05); 
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            display: flex; flex-direction: column; overflow-y: auto; overflow-x: hidden;
-            scrollbar-width: none;
-        }
-        .sidebar::-webkit-scrollbar { display: none; }
-        
-        @media (max-width: 1023px) {
-            .sidebar { transform: translateX(-100%); }
-            .sidebar.open { transform: translateX(0); }
-        }
+/* ======================== SIDEBAR ======================== */
+.sidebar{
+  width:270px;position:fixed;top:0;left:0;bottom:0;z-index:100;
+  background:rgba(3,5,7,0.85);
+  backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+  border-right:1px solid var(--border);
+  box-shadow:4px 0 40px rgba(0,255,102,0.05),inset -1px 0 0 rgba(0,255,102,0.08);
+  display:flex;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;scrollbar-width:none;
+  transition:transform 0.45s cubic-bezier(0.2,0.8,0.2,1);
+}
+.sidebar::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--primary),transparent);
+  animation:scanH 3s linear infinite;
+}
+@keyframes scanH{0%{transform:translateX(-100%);}100%{transform:translateX(100vw);}}
+.sidebar::-webkit-scrollbar{display:none;}
+@media(max-width:1023px){.sidebar{transform:translateX(-100%);}}
+@media(max-width:1023px){.sidebar.open{transform:translateX(0);}}
 
-        /* Profile JSON Animations */
-        .avatar-container {
-            width: 110px; height: 110px; margin: 0 auto;
-            border-radius: 50%; position: relative;
-            padding: 3px; display: flex; align-items: center; justify-content: center;
-        }
-        .avatar-container::before {
-            content: ''; position: absolute; inset: 0; border-radius: 50%;
-            border: 1px dashed #00ff41; 
-            box-shadow: 0 0 15px rgba(0,255,65,0.3); 
-            animation: rotate 12s linear infinite, pulse 2s infinite;
-        }
-        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; z-index: 10; animation: reverseRotate 12s linear infinite;}
-        
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
-        @keyframes reverseRotate { 100% { transform: rotate(-360deg); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+/* sidebar top HUD bar */
+.sb-hud{
+  padding:16px 20px;
+  border-bottom:1px solid rgba(0,255,102,0.08);
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--font-mono);font-size:9px;color:rgba(0,255,102,0.5);
+  text-transform:uppercase;letter-spacing:2px;
+  flex-shrink:0;
+}
+.sb-hud-dot{width:6px;height:6px;border-radius:50%;background:var(--primary);
+  box-shadow:0 0 8px var(--primary);animation:blink 1.4s step-end infinite;}
+@keyframes blink{50%{opacity:0;}}
 
-        /* JSON Nav Items */
-        .nav-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 24px; color: rgba(255,255,255,0.5);
-            text-decoration: none; font-size: 12px; font-weight: 400; font-family: 'Fira Code', monospace;
-            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            position: relative;
-            z-index: 2;
-        }
-        .nav-item i { width: 24px; text-align: center; margin-right: 12px; font-size: 18px; transition: all 0.3s; }
-        .nav-badge { font-size: 9px; padding: 2px 6px; border-radius: 4px; background: rgba(0,0,0,0.3); font-weight: 600; }
-        
-        /* 2026 Advanced Magnetic Nav Indicator */
-        .nav-indicator {
-            position: absolute;
-            left: 0; width: 4px; height: 42px; /* Matches item height */
-            background: #00ff41; 
-            border-top-right-radius: 4px; border-bottom-right-radius: 4px;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy magnetic ease */
-            box-shadow: 0 0 15px #00ff41;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0; /* Hidden until activated */
-        }
+/* Profile area */
+.profile-zone{
+  padding:28px 20px 20px;
+  display:flex;flex-direction:column;align-items:center;
+  border-bottom:1px solid rgba(0,255,102,0.06);
+  flex-shrink:0;
+}
+.avatar-wrap{
+  width:90px;height:90px;border-radius:50%;
+  position:relative;margin-bottom:14px;
+}
+.avatar-wrap::before{
+  content:'';position:absolute;inset:-3px;border-radius:50%;
+  border:1px dashed var(--primary);opacity:0.6;
+  box-shadow:0 0 20px rgba(0,255,102,0.2);
+  animation:spinSlow 12s linear infinite;
+}
+.avatar-wrap::after{
+  content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:1px solid rgba(0,240,255,0.2);
+  animation:spinSlow 20s linear infinite reverse;
+}
+@keyframes spinSlow{100%{transform:rotate(360deg);}}
+.avatar-img{
+  width:100%;height:100%;border-radius:50%;object-fit:cover;
+  position:relative;z-index:2;
+  filter:brightness(0.9) contrast(1.1) saturate(0.8);
+}
+.profile-name{
+  font-family:var(--font-display);font-size:13px;font-weight:700;
+  color:var(--text);letter-spacing:2px;margin-bottom:4px;
+  text-transform:uppercase;
+}
+.profile-rank{
+  font-family:var(--font-mono);font-size:9px;color:var(--primary);
+  letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;
+}
+.status-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:2px;
+  background:rgba(0,255,102,0.06);
+  border:1px solid rgba(0,255,102,0.2);
+  font-family:var(--font-mono);font-size:8px;
+  color:var(--primary);letter-spacing:2px;text-transform:uppercase;
+}
 
-        /* Social Bounce */
-        .social-icon { animation: bounce 2s infinite; transition: all 0.3s; font-size: 24px;}
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+/* Nav */
+.nav-section-label{
+  font-family:var(--font-mono);font-size:8px;
+  color:rgba(0,255,102,0.3);letter-spacing:3px;text-transform:uppercase;
+  padding:16px 20px 6px;
+}
+.nav-wrap{position:relative;padding:0 0 4px;}
+.nav-indicator{
+  position:absolute;left:0;width:3px;height:46px;
+  background:var(--primary);border-radius:0 2px 2px 0;
+  box-shadow:0 0 12px var(--primary);
+  transition:all 0.45s cubic-bezier(0.34,1.56,0.64,1);
+  opacity:0;pointer-events:none;
+}
+.nav-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 20px;
+  color:rgba(220,255,230,0.4);
+  text-decoration:none;
+  font-family:var(--font-mono);font-size:11px;
+  transition:all 0.35s cubic-bezier(0.2,0.8,0.2,1);
+  position:relative;z-index:2;letter-spacing:1px;
+  border-left:3px solid transparent;
+  border-bottom:1px solid rgba(0,255,102,0.03);
+}
+.nav-item:hover{
+  color:var(--primary);background:rgba(0,255,102,0.05);
+  transform:translateX(6px);
+  text-shadow:0 0 10px rgba(0,255,102,0.4);
+}
+.nav-item-left{display:flex;align-items:center;gap:12px;}
+.nav-item-left i{font-size:16px;width:18px;text-align:center;}
+.nav-badge{
+  font-size:9px;padding:2px 6px;border-radius:2px;
+  background:rgba(0,0,0,0.4);font-family:var(--font-mono);
+  border:1px solid rgba(0,255,102,0.15);color:rgba(0,255,102,0.5);
+}
 
-        /* Glitch Animation */
-        .glitch { animation: glitchAnim 3s infinite; }
-        @keyframes glitchAnim {
-            0%, 100% { text-shadow: 1px 0 #00ff41, -1px 0 #ff00ff; }
-            50% { text-shadow: -1px 0 #00ff41, 1px 0 #00ffff; }
-        }
+/* sidebar socials */
+.sb-socials{
+  padding:14px 20px;
+  border-top:1px solid rgba(0,255,102,0.08);
+  display:flex;gap:10px;justify-content:center;flex-shrink:0;
+}
+.sb-social-btn{
+  width:34px;height:34px;border-radius:2px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,255,102,0.05);
+  border:1px solid rgba(0,255,102,0.15);
+  color:rgba(0,255,102,0.5);font-size:16px;
+  text-decoration:none;transition:all 0.3s;cursor:pointer;
+}
+.sb-social-btn:hover{background:rgba(0,255,102,0.12);color:var(--primary);
+  box-shadow:0 0 15px rgba(0,255,102,0.2);}
 
-        /* --- MAIN CONTENT & REVEAL ANIMATIONS --- */
-        .main-content { 
-            flex: 1; position: relative; z-index: 10; transition: margin 0.3s; 
-            padding-top: 100px; 
-        }
-        @media (min-width: 1024px) { 
-            .main-content { margin-left: 280px; padding-top: 0; } 
-        }
+/* sidebar sys info */
+.sb-sysinfo{
+  padding:12px 20px;flex-shrink:0;
+  border-top:1px solid rgba(0,255,102,0.05);
+}
+.sys-row{
+  display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--font-mono);font-size:8px;
+  color:rgba(0,255,102,0.3);margin-bottom:6px;letter-spacing:1px;
+}
+.sys-bar-wrap{width:80px;height:3px;background:rgba(0,255,102,0.1);border-radius:1px;overflow:hidden;}
+.sys-bar{height:100%;border-radius:1px;background:var(--primary);box-shadow:0 0 6px var(--primary);}
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
+/* ======================== MOBILE TOPBAR ======================== */
+.mob-topbar{
+  position:fixed;top:12px;left:12px;right:12px;height:54px;
+  background:rgba(3,5,7,0.88);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border:1px solid var(--border);
+  border-radius:4px;z-index:90;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 16px;
+  box-shadow:0 4px 30px rgba(0,0,0,0.6),0 0 20px rgba(0,255,102,0.05);
+  transition:all 0.3s;
+}
+.mob-topbar.scrolled{
+  border-color:rgba(0,255,102,0.3);
+  box-shadow:0 4px 30px rgba(0,0,0,0.8),0 0 30px rgba(0,255,102,0.08);
+}
+.mob-logo{
+  font-family:var(--font-display);font-size:12px;font-weight:700;
+  color:var(--primary);letter-spacing:3px;text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;
+}
+.mob-logo-sq{
+  width:24px;height:24px;border:1px solid var(--primary);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;box-shadow:0 0 10px rgba(0,255,102,0.3);
+  animation:cornerBlink 2s step-end infinite;
+}
+@keyframes cornerBlink{0%,100%{box-shadow:0 0 10px rgba(0,255,102,0.3);}50%{box-shadow:0 0 20px rgba(0,255,102,0.6);}}
+.menu-btn{
+  width:36px;height:36px;background:transparent;
+  border:1px solid rgba(0,255,102,0.25);border-radius:2px;
+  color:var(--primary);font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s;
+}
+.menu-btn:hover{background:rgba(0,255,102,0.1);box-shadow:0 0 12px rgba(0,255,102,0.2);}
+@media(min-width:1024px){.mob-topbar{display:none;}}
 
-        /* Titles */
-        .sec-title {
-            font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 4px;
-            color: #38bdf8; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
-        }
-        .sec-title::before { content: ''; width: 30px; height: 1px; background: rgba(56, 189, 248, 0.4); }
-        
-        /* Typewriter */
-        .typing-cursor::after { content: '█'; animation: blink 1s step-end infinite; color: #38bdf8; margin-left: 4px; font-weight: 300;}
-        @keyframes blink { 50% { opacity: 0; } }
+/* ======================== MAIN CONTENT ======================== */
+.main{
+  position:relative;z-index:10;
+  padding:0 24px 60px 24px;
+  min-height:100vh;
+}
+@media(min-width:1024px){.main{margin-left:270px;padding:0 60px 80px 60px;}}
+@media(max-width:1023px){.main{padding-top:80px;}}
 
-        /* Water Buttons */
-        .water-btn {
-            background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.2);
-            backdrop-filter: blur(10px); color: #38bdf8; font-weight: 400; padding: 12px 28px; border-radius: 100px;
-            display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s;
-            text-transform: uppercase; letter-spacing: 1px; font-size: 12px; cursor: pointer;
-        }
-        .water-btn:hover {
-            background: rgba(56, 189, 248, 0.2); color: white;
-            box-shadow: 0 8px 20px -5px rgba(56, 189, 248, 0.2); transform: translateY(-2px);
-        }
+/* ======================== GLASS CARDS ======================== */
+.glass{
+  background:rgba(8,14,10,0.7);
+  backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);
+  border:1px solid var(--border);
+  position:relative;overflow:hidden;
+  transition:all 0.4s cubic-bezier(0.2,0.8,0.2,1);
+}
+.glass::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,255,102,0.3),transparent);
+  pointer-events:none;
+}
+.glass:hover{
+  border-color:rgba(0,255,102,0.35);
+  box-shadow:0 0 40px rgba(0,255,102,0.06),inset 0 0 40px rgba(0,255,102,0.02);
+  transform:translateY(-2px);
+}
+/* corner brackets */
+.glass::after{
+  content:'';position:absolute;bottom:0;right:0;
+  width:16px;height:16px;
+  border-bottom:1px solid rgba(0,240,255,0.3);
+  border-right:1px solid rgba(0,240,255,0.3);
+  pointer-events:none;
+}
+.corner-tl{
+  position:absolute;top:0;left:0;
+  width:16px;height:16px;
+  border-top:1px solid rgba(0,240,255,0.3);
+  border-left:1px solid rgba(0,240,255,0.3);
+  pointer-events:none;z-index:2;
+}
 
-        /* --- 2026 FLOATING DYNAMIC ISLAND TOPBAR --- */
-        .mobile-topbar {
-            position: fixed; top: 16px; left: 16px; right: 16px; height: 60px;
-            background: rgba(5, 11, 24, 0.65); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08); z-index: 40;
-            display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
-            border-radius: 100px; /* Floating Pill Design */
-            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .mobile-topbar.scrolled {
-            background: rgba(5, 11, 24, 0.9);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8); 
-            border-color: rgba(56, 189, 248, 0.2);
-            transform: translateY(-4px); /* Tucks up slightly when scrolling */
-        }
-        @media (min-width: 1024px) { .mobile-topbar { display: none; } }
-        
-        #menuBtn {
-            width: 36px; height: 36px; border-radius: 50%; background: transparent;
-            color: #fff; border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer;
-            transition: all 0.3s;
-        }
-        #menuBtn:hover { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;}
+/* ======================== SEC TITLES ======================== */
+.sec-title{
+  display:flex;align-items:center;gap:14px;
+  font-family:var(--font-mono);font-size:10px;
+  color:rgba(0,255,102,0.6);letter-spacing:4px;
+  text-transform:uppercase;margin-bottom:32px;
+}
+.sec-title::before{content:'//';color:rgba(0,255,102,0.3);}
+.sec-title-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(0,255,102,0.2),transparent);}
 
-        .ph-light { font-weight: 300; }
-        
-        .tech-icon-glow {
-            transition: all 0.3s ease;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.1));
-        }
-        .tech-icon-glow:hover {
-            transform: translateY(-4px) scale(1.1);
-            filter: drop-shadow(0 0 15px currentColor);
-        }
-    </style>
+/* ======================== REVEAL ANIMS ======================== */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.8s ease,transform 0.8s cubic-bezier(0.2,0.8,0.2,1);}
+.reveal.active{opacity:1;transform:none;}
+.d1{transition-delay:0.1s;}.d2{transition-delay:0.2s;}.d3{transition-delay:0.3s;}.d4{transition-delay:0.4s;}
+
+/* ======================== HERO ======================== */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:20px 0;}
+.hero-sys-line{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:10px;
+  color:rgba(0,255,102,0.5);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:40px;
+}
+.hero-sys-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--primary);box-shadow:0 0 10px var(--primary);
+  animation:blink 1.4s step-end infinite;
+}
+.hero-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-mono);font-size:9px;
+  padding:4px 12px;border:1px solid rgba(0,240,255,0.2);
+  color:rgba(0,240,255,0.6);letter-spacing:3px;
+  background:rgba(0,240,255,0.04);margin-bottom:20px;
+  text-transform:uppercase;
+}
+.hero-h1{
+  font-family:var(--font-display);
+  font-size:clamp(2.4rem,8vw,5.5rem);
+  font-weight:900;line-height:1.05;
+  letter-spacing:-1px;margin-bottom:12px;
+  color:var(--text);
+}
+.hero-h1 .name-green{
+  color:var(--primary);
+  text-shadow:0 0 40px rgba(0,255,102,0.4),0 0 80px rgba(0,255,102,0.15);
+  animation:nameFlicker 6s ease-in-out infinite;
+}
+@keyframes nameFlicker{
+  0%,95%,100%{opacity:1;}
+  96%{opacity:0.7;}
+  97%{opacity:1;}
+  98%{opacity:0.5;}
+  99%{opacity:1;}
+}
+.hero-sub{
+  font-family:var(--font-code);font-size:clamp(0.72rem,2vw,0.9rem);
+  color:rgba(0,255,102,0.7);letter-spacing:1px;
+  margin-bottom:40px;height:28px;
+}
+.cursor{display:inline-block;width:10px;height:2px;background:var(--primary);
+  margin-left:2px;vertical-align:middle;animation:cursorBlink 1s step-end infinite;}
+@keyframes cursorBlink{50%{opacity:0;}}
+.hero-btns{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:60px;}
+
+/* CMD BUTTONS */
+.cmd-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 26px;font-family:var(--font-mono);font-size:11px;
+  letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:pointer;
+  border:1px solid var(--border);color:var(--primary);
+  background:rgba(0,255,102,0.06);
+  transition:all 0.35s cubic-bezier(0.2,0.8,0.2,1);
+  position:relative;overflow:hidden;border-radius:2px;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+.cmd-btn::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,255,102,0.12) 0%,transparent 60%);
+  opacity:0;transition:opacity 0.3s;
+}
+.cmd-btn:hover{
+  border-color:var(--primary);color:#fff;
+  box-shadow:0 0 25px rgba(0,255,102,0.25),inset 0 0 20px rgba(0,255,102,0.08);
+  transform:translateY(-2px);
+}
+.cmd-btn:hover::after{opacity:1;}
+.cmd-btn-ghost{
+  background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.12);
+  color:rgba(220,255,230,0.6);
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+.cmd-btn-ghost:hover{border-color:rgba(0,240,255,0.4);color:var(--secondary);
+  box-shadow:0 0 25px rgba(0,240,255,0.15);}
+
+/* Hero stats */
+.hero-stats{display:flex;flex-wrap:wrap;gap:24px;}
+.stat-box{
+  min-width:110px;padding:14px 18px;
+  background:rgba(0,255,102,0.03);
+  border:1px solid rgba(0,255,102,0.1);
+  border-radius:2px;
+  clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px));
+}
+.stat-val{
+  font-family:var(--font-display);font-size:1.6rem;font-weight:700;
+  color:var(--primary);text-shadow:0 0 20px rgba(0,255,102,0.4);
+  line-height:1;margin-bottom:4px;
+}
+.stat-label{font-family:var(--font-mono);font-size:8px;color:rgba(0,255,102,0.4);
+  letter-spacing:2px;text-transform:uppercase;}
+
+/* ======================== ABOUT ======================== */
+#about{padding:80px 0;}
+.about-grid{display:grid;grid-template-columns:1fr;gap:24px;}
+@media(min-width:768px){.about-grid{grid-template-columns:1fr 1fr;}}
+.about-card{padding:28px;border-radius:2px;}
+.classified-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-mono);font-size:8px;letter-spacing:3px;
+  color:var(--danger);border:1px solid rgba(255,0,60,0.25);
+  padding:3px 8px;text-transform:uppercase;margin-bottom:16px;
+  background:rgba(255,0,60,0.05);
+}
+.about-text{
+  font-family:var(--font-body);font-size:1rem;
+  color:rgba(220,255,230,0.65);line-height:1.8;
+  font-weight:400;
+}
+.about-text strong{color:var(--primary);font-weight:600;}
+.intel-list{list-style:none;margin-top:16px;}
+.intel-list li{
+  display:flex;align-items:flex-start;gap:10px;
+  font-family:var(--font-mono);font-size:11px;
+  color:rgba(0,255,102,0.6);padding:6px 0;
+  border-bottom:1px solid rgba(0,255,102,0.06);
+}
+.intel-list li::before{content:'▸';color:var(--primary);}
+
+/* ======================== TECH STACK ======================== */
+#tech{padding:80px 0;}
+.stack-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+@media(min-width:768px){.stack-grid{grid-template-columns:repeat(4,1fr);}}
+.stack-card{padding:20px;border-radius:2px;cursor:default;}
+.stack-cat{
+  font-family:var(--font-mono);font-size:9px;
+  color:var(--secondary);letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:16px;display:flex;align-items:center;gap:8px;
+}
+.stack-cat::before{content:'';width:20px;height:1px;background:var(--secondary);opacity:0.4;}
+.stack-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;
+  border-bottom:1px solid rgba(0,255,102,0.04);
+  font-family:var(--font-body);font-size:0.9rem;
+  color:rgba(220,255,230,0.55);
+  transition:all 0.3s;cursor:default;
+}
+.stack-item:hover{color:var(--text);transform:translateX(4px);}
+.stack-item-icon{
+  width:28px;height:28px;border-radius:2px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+  background:rgba(0,255,102,0.06);border:1px solid rgba(0,255,102,0.1);
+  transition:all 0.3s;
+}
+.stack-item:hover .stack-item-icon{
+  background:rgba(0,255,102,0.12);border-color:rgba(0,255,102,0.3);
+  box-shadow:0 0 10px rgba(0,255,102,0.15);
+}
+
+/* ======================== SERVICES ======================== */
+#services{padding:80px 0;}
+.svc-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+@media(min-width:640px){.svc-grid{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:1024px){.svc-grid{grid-template-columns:repeat(3,1fr);}}
+.svc-card{
+  padding:28px;border-radius:2px;
+  display:flex;flex-direction:column;gap:12px;
+}
+.svc-card:hover .svc-icon{transform:scale(1.1);box-shadow:0 0 25px var(--icon-color);}
+.svc-icon{
+  width:46px;height:46px;border-radius:2px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;border:1px solid var(--icon-color);
+  color:var(--icon-color);
+  background:rgba(0,0,0,0.3);
+  transition:all 0.3s;
+  clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,0 100%);
+}
+.svc-title{
+  font-family:var(--font-display);font-size:12px;font-weight:600;
+  color:var(--text);letter-spacing:1px;text-transform:uppercase;
+}
+.svc-desc{font-family:var(--font-body);font-size:0.88rem;color:var(--text2);line-height:1.7;}
+.svc-tag{
+  display:inline-block;font-family:var(--font-mono);font-size:8px;
+  padding:2px 7px;border-radius:1px;
+  background:rgba(0,255,102,0.05);border:1px solid rgba(0,255,102,0.12);
+  color:rgba(0,255,102,0.5);letter-spacing:2px;margin-right:4px;margin-top:4px;
+}
+
+/* ======================== PROJECTS ======================== */
+#projects{padding:80px 0;}
+.proj-grid{display:grid;grid-template-columns:1fr;gap:20px;}
+@media(min-width:768px){.proj-grid{grid-template-columns:repeat(2,1fr);}}
+.proj-card{border-radius:2px;overflow:hidden;cursor:pointer;}
+.proj-img-wrap{
+  position:relative;height:200px;overflow:hidden;
+  border-bottom:1px solid rgba(0,255,102,0.1);
+}
+.proj-img-wrap img{
+  width:100%;height:100%;object-fit:cover;
+  filter:brightness(0.45) saturate(0.3);
+  transition:all 0.6s;
+}
+.proj-card:hover .proj-img-wrap img{filter:brightness(0.65) saturate(0.6);}
+.proj-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 30%,rgba(3,5,7,0.85) 100%);
+}
+.proj-badge{
+  position:absolute;top:12px;right:12px;
+  font-family:var(--font-mono);font-size:8px;
+  padding:4px 10px;border-radius:1px;
+  background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);
+  letter-spacing:2px;text-transform:uppercase;
+}
+.proj-scan{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--primary),transparent);
+  transform:translateY(-100%);
+  transition:transform 2s linear;
+}
+.proj-card:hover .proj-scan{transform:translateY(200px);}
+.proj-body{padding:20px;}
+.proj-title{
+  font-family:var(--font-display);font-size:14px;font-weight:600;
+  color:var(--text);letter-spacing:1px;margin-bottom:8px;
+  text-transform:uppercase;
+  transition:color 0.3s;
+}
+.proj-card:hover .proj-title{color:var(--primary);}
+.proj-desc{
+  font-family:var(--font-body);font-size:0.87rem;
+  color:rgba(220,255,230,0.5);line-height:1.7;margin-bottom:14px;
+}
+.proj-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.proj-tag{
+  font-family:var(--font-mono);font-size:8px;
+  padding:3px 8px;border-radius:1px;
+  background:rgba(0,255,102,0.05);
+  border:1px solid rgba(0,255,102,0.12);
+  color:rgba(0,255,102,0.55);letter-spacing:1px;
+}
+
+/* ======================== EXPERIENCE ======================== */
+#experience{padding:80px 0;}
+.exp-grid{display:grid;grid-template-columns:1fr;gap:48px;}
+@media(min-width:768px){.exp-grid{grid-template-columns:1fr 1fr;}}
+.timeline{border-left:1px solid rgba(0,255,102,0.15);padding-left:24px;margin-left:6px;}
+.tl-item{position:relative;margin-bottom:32px;}
+.tl-dot{
+  position:absolute;left:-31px;top:4px;
+  width:12px;height:12px;border-radius:50%;
+  border:1px solid var(--primary);background:rgba(0,255,102,0.2);
+  box-shadow:0 0 10px rgba(0,255,102,0.3);
+}
+.tl-date{font-family:var(--font-mono);font-size:9px;color:var(--primary);letter-spacing:2px;margin-bottom:6px;}
+.tl-title{font-family:var(--font-display);font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;letter-spacing:1px;}
+.tl-desc{font-family:var(--font-body);font-size:0.87rem;color:rgba(220,255,230,0.5);line-height:1.7;}
+.edu-card{padding:20px;border-radius:2px;border-left:2px solid var(--primary);margin-bottom:14px;}
+.edu-title{font-family:var(--font-display);font-size:12px;font-weight:600;color:var(--text);margin-bottom:5px;letter-spacing:1px;}
+.edu-org{font-family:var(--font-mono);font-size:9px;color:var(--secondary);letter-spacing:2px;}
+
+/* ======================== TESTIMONIALS ======================== */
+#testimonials{padding:80px 0;}
+.test-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+@media(min-width:640px){.test-grid{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:1024px){.test-grid{grid-template-columns:repeat(3,1fr);}}
+.test-card{padding:24px;border-radius:2px;}
+.test-stars{color:var(--warning);font-size:12px;margin-bottom:12px;letter-spacing:2px;}
+.test-text{font-family:var(--font-body);font-size:0.9rem;color:var(--text2);line-height:1.7;margin-bottom:16px;font-style:italic;}
+.test-author{font-family:var(--font-mono);font-size:9px;color:var(--primary);letter-spacing:2px;text-transform:uppercase;}
+.test-role{font-family:var(--font-mono);font-size:8px;color:rgba(0,255,102,0.35);letter-spacing:1px;}
+
+/* ======================== CONTACT ======================== */
+#contact{padding:80px 0;}
+.contact-wrap{
+  max-width:640px;margin:0 auto;text-align:center;padding:50px 30px;
+  border-radius:2px;
+}
+.contact-icon{
+  font-size:48px;color:var(--primary);margin-bottom:20px;
+  text-shadow:0 0 30px rgba(0,255,102,0.4);
+}
+.contact-h2{
+  font-family:var(--font-display);font-size:clamp(1.2rem,4vw,1.8rem);
+  font-weight:700;color:var(--text);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:12px;
+}
+.contact-p{font-family:var(--font-body);font-size:0.95rem;color:var(--text2);
+  line-height:1.7;margin-bottom:36px;max-width:420px;margin-left:auto;margin-right:auto;}
+.contact-btns{display:flex;flex-direction:column;gap:12px;}
+@media(min-width:480px){.contact-btns{flex-direction:row;justify-content:center;}}
+
+/* ======================== FOOTER ======================== */
+footer{
+  margin-top:40px;border-top:1px solid rgba(0,255,102,0.08);
+  padding:40px 0 20px;position:relative;z-index:10;
+}
+@media(min-width:1024px){footer{margin-left:0;}}
+.footer-grid{
+  display:grid;grid-template-columns:1fr;gap:32px;margin-bottom:32px;
+  padding:0 24px;
+}
+@media(min-width:640px){.footer-grid{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:1024px){.footer-grid{grid-template-columns:repeat(4,1fr);padding:0 60px;}}
+.footer-logo{
+  font-family:var(--font-display);font-size:14px;font-weight:700;
+  color:var(--primary);letter-spacing:3px;margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.footer-desc{font-family:var(--font-body);font-size:0.88rem;color:rgba(220,255,230,0.4);line-height:1.7;margin-bottom:16px;}
+.footer-h{font-family:var(--font-mono);font-size:9px;color:rgba(0,255,102,0.5);letter-spacing:3px;
+  text-transform:uppercase;margin-bottom:16px;}
+.footer-links{list-style:none;}
+.footer-links li{margin-bottom:10px;}
+.footer-links a{
+  font-family:var(--font-body);font-size:0.88rem;color:rgba(220,255,230,0.4);
+  text-decoration:none;transition:color 0.3s;
+  display:flex;align-items:center;gap:8px;
+}
+.footer-links a:hover{color:var(--primary);}
+.footer-bottom{
+  border-top:1px solid rgba(0,255,102,0.06);
+  padding:16px 24px 0;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:9px;color:rgba(0,255,102,0.3);
+  letter-spacing:2px;
+}
+@media(min-width:640px){.footer-bottom{flex-direction:row;justify-content:space-between;padding:16px 60px 0;}}
+
+/* Tech logos bar */
+.tech-bar{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:20px;
+  padding:32px 24px;border-bottom:1px solid rgba(0,255,102,0.06);
+}
+@media(min-width:1024px){.tech-bar{padding:32px 60px;}}
+.tech-logo{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  transition:all 0.3s;cursor:default;
+}
+.tech-logo i{font-size:28px;transition:filter 0.3s;}
+.tech-logo:hover{transform:translateY(-4px);}
+.tech-logo:hover i{filter:drop-shadow(0 0 8px currentColor);}
+.tech-logo span{font-family:var(--font-mono);font-size:8px;color:rgba(0,255,102,0.3);letter-spacing:1px;}
+
+/* ======================== TERMINAL BOOT OVERLAY ======================== */
+#bootScreen{
+  position:fixed;inset:0;z-index:999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px;
+  transition:opacity 0.8s;
+}
+.boot-logo{
+  font-family:var(--font-display);font-size:clamp(1.5rem,5vw,2.8rem);
+  font-weight:900;color:var(--primary);letter-spacing:6px;
+  text-shadow:0 0 40px rgba(0,255,102,0.5);
+  margin-bottom:8px;text-align:center;
+}
+.boot-sub{
+  font-family:var(--font-mono);font-size:11px;color:rgba(0,255,102,0.4);
+  letter-spacing:4px;text-transform:uppercase;margin-bottom:40px;text-align:center;
+}
+.boot-lines{
+  width:100%;max-width:540px;
+  font-family:var(--font-code);font-size:11px;
+  color:rgba(0,255,102,0.55);line-height:2;
+}
+.boot-line{opacity:0;animation:fadeInLine 0.1s forwards;}
+@keyframes fadeInLine{to{opacity:1;}}
+.boot-bar-wrap{
+  width:100%;max-width:540px;height:3px;
+  background:rgba(0,255,102,0.1);margin-top:24px;border-radius:1px;overflow:hidden;
+}
+.boot-bar{
+  height:100%;background:var(--primary);
+  box-shadow:0 0 10px var(--primary);
+  width:0%;transition:width 2.5s linear;
+}
+
+/* Glitch effect utility */
+.glitch{animation:glitch 4s infinite;}
+@keyframes glitch{
+  0%,95%,100%{text-shadow:1px 0 var(--primary),-1px 0 var(--secondary);}
+  96%{text-shadow:-2px 0 var(--primary),2px 0 var(--secondary);transform:translate(2px,0);}
+  97%{text-shadow:2px 0 var(--primary),-2px 0 var(--danger);transform:translate(-2px,0);}
+  98%{text-shadow:none;transform:translate(0,0);}
+}
+
+/* HUD corner decoration */
+.hud-corners{
+  position:absolute;inset:0;pointer-events:none;
+  border:1px solid transparent;
+}
+</style>
 </head>
 <body>
 
-    <div class="liquid-bg">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+<!-- =================== BOOT SCREEN =================== -->
+<div id="bootScreen">
+  <div class="boot-logo glitch">SAIF_OPS</div>
+  <div class="boot-sub">Cyber Intelligence Terminal // v4.2.1</div>
+  <div class="boot-lines" id="bootLines"></div>
+  <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
+</div>
+
+<!-- =================== CYBER BACKGROUND =================== -->
+<div class="cyber-bg">
+  <div class="tac-grid"></div>
+  <canvas id="matrixCanvas"></canvas>
+  <div class="radar-ring"></div>
+  <div class="radar-ring"></div>
+  <div class="radar-ring"></div>
+  <div class="scanlines"></div>
+  <div class="noise"></div>
+</div>
+
+<!-- =================== MOBILE TOPBAR =================== -->
+<div class="mob-topbar" id="mobTopbar">
+  <div class="mob-logo">
+    <div class="mob-logo-sq"><i class="ph ph-terminal-window" style="font-size:12px;"></i></div>
+    SAIF_OPS
+  </div>
+  <button class="menu-btn" id="menuBtn"><i class="ph ph-list"></i></button>
+</div>
+
+<!-- =================== SIDEBAR =================== -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sb-hud">
+    <span>SYS_ACTIVE</span>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <div class="sb-hud-dot"></div>
+      <span id="sidebarTime">--:--:--</span>
     </div>
+  </div>
 
-    <!-- 2026 Advanced Mobile Topbar -->
-    <div id="mobileTopbar" class="mobile-topbar">
-        <div class="text-white font-medium text-lg tracking-wide flex items-center gap-2">
-            <!-- Advanced dual-tone icon vibe -->
-            <div class="relative flex items-center justify-center">
-                <i class="ph-light ph-asterisk text-water animate-spin-slow" style="animation-duration: 8s;"></i>
-                <i class="ph-light ph-drop text-water absolute opacity-50"></i>
-            </div>
-            Saif
-        </div>
-        <button id="menuBtn">
-            <i class="ph-light ph-list"></i>
-        </button>
+  <div class="profile-zone">
+    <div class="avatar-wrap">
+      <img src="https://plus.unsplash.com/premium_photo-1734637616808-14fc29f2a155?q=80&w=400&auto=format&fit=crop" alt="Saif ul Islam" class="avatar-img">
     </div>
+    <div class="profile-name">Saif ul Islam</div>
+    <div class="profile-rank">FULL_STACK_DEV // UNIT_01</div>
+    <div class="status-badge"><div class="sb-hud-dot" style="width:5px;height:5px;"></div> AVAILABLE_FOR_HIRE</div>
+  </div>
 
-    <!-- ================= JSON SIDEBAR ================= -->
-    <aside id="sidebar" class="sidebar py-8">
-        
-        <div class="text-center mb-8 px-6 animate-[fadeInScale_0.6s_ease-out_0.4s_both]">
-            <div class="avatar-container mb-4">
-                <img src="https://plus.unsplash.com/premium_photo-1734637616808-14fc29f2a155?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Saif ul Islam" class="avatar-img">
-            </div>
-            <h2 class="text-lg font-medium text-white mb-1 tracking-wide">Saif ul Islam</h2>
-            <h3 class="text-[10px] text-[#00ff41] font-mono mb-3 uppercase tracking-widest">FULL_STACK_DEV</h3>
-            <div class="inline-flex items-center gap-2 text-[9px] font-medium px-3 py-1 rounded-full bg-black/30 border border-[#00ff41]/30 text-[#00ff41] animate-[pulse_1.5s_infinite]">
-                ● ONLINE
-            </div>
+  <div class="nav-section-label">// NAVIGATION_ARRAY</div>
+  <div class="nav-wrap" id="navWrap">
+    <div class="nav-indicator" id="navIndicator"></div>
+    <nav id="navMenu">
+      <a href="#hero" class="nav-item" data-color="#00FF66"><div class="nav-item-left"><i class="ph ph-terminal-window" style="color:#00FF66;"></i>_HERO</div><span class="nav-badge">01</span></a>
+      <a href="#about" class="nav-item" data-color="#00F0FF"><div class="nav-item-left"><i class="ph ph-user-focus" style="color:#00F0FF;"></i>_ABOUT</div><span class="nav-badge">02</span></a>
+      <a href="#tech" class="nav-item" data-color="#7A00FF"><div class="nav-item-left"><i class="ph ph-code" style="color:#7A00FF;"></i>_STACK</div><span class="nav-badge">03</span></a>
+      <a href="#services" class="nav-item" data-color="#00FF66"><div class="nav-item-left"><i class="ph ph-hard-drives" style="color:#00FF66;"></i>_SERVICES</div><span class="nav-badge">04</span></a>
+      <a href="#projects" class="nav-item" data-color="#FFD000"><div class="nav-item-left"><i class="ph ph-projector-screen" style="color:#FFD000;"></i>_PROJECTS</div><span class="nav-badge">05</span></a>
+      <a href="#experience" class="nav-item" data-color="#00F0FF"><div class="nav-item-left"><i class="ph ph-briefcase" style="color:#00F0FF;"></i>_EXP</div><span class="nav-badge">06</span></a>
+      <a href="#testimonials" class="nav-item" data-color="#7A00FF"><div class="nav-item-left"><i class="ph ph-star" style="color:#7A00FF;"></i>_REVIEWS</div><span class="nav-badge">07</span></a>
+      <a href="#contact" class="nav-item" data-color="#FF003C"><div class="nav-item-left"><i class="ph ph-envelope-simple" style="color:#FF003C;"></i>_CONTACT</div><span class="nav-badge">08</span></a>
+    </nav>
+  </div>
+
+  <div style="flex:1;"></div>
+
+  <div class="sb-sysinfo">
+    <div class="sys-row"><span>CPU_LOAD</span><div class="sys-bar-wrap"><div class="sys-bar" style="width:72%;"></div></div></div>
+    <div class="sys-row"><span>MEM_USAGE</span><div class="sys-bar-wrap"><div class="sys-bar" style="width:58%;background:var(--secondary);box-shadow:0 0 6px var(--secondary);"></div></div></div>
+    <div class="sys-row"><span>NET_STATUS</span><div class="sys-bar-wrap"><div class="sys-bar" style="width:91%;background:var(--primary);"></div></div></div>
+  </div>
+
+  <div class="sb-socials">
+    <a href="https://github.com/saifulislaam" target="_blank" class="sb-social-btn"><i class="ph ph-github-logo"></i></a>
+    <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="sb-social-btn" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);"><i class="ph ph-linkedin-logo"></i></a>
+    <a href="#" class="sb-social-btn" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);"><i class="ph ph-instagram-logo"></i></a>
+    <a href="mailto:saifulislam.git@gmail.com" class="sb-social-btn" style="border-color:rgba(255,0,60,0.2);color:rgba(255,0,60,0.5);"><i class="ph ph-envelope-simple"></i></a>
+  </div>
+
+</aside>
+
+<!-- =================== MAIN CONTENT =================== -->
+<main class="main">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-sys-line reveal active">
+      <div class="hero-sys-dot"></div>
+      <span>SYSTEM INITIALIZED // OPERATOR SAIF_UL_ISLAM // ACCESS_GRANTED</span>
+    </div>
+    <div class="hero-label">
+      <i class="ph ph-shield-check" style="font-size:10px;"></i>
+      CLASSIFIED // CLEARANCE LEVEL 5 // CYBER_OPS_TERMINAL
+    </div>
+    <h1 class="hero-h1 reveal active">
+      SAIF<br><span class="name-green">UL ISLAM</span>
+    </h1>
+    <div class="hero-sub reveal active d1">
+      <span id="typingText"></span><span class="cursor"></span>
+    </div>
+    <div class="hero-btns reveal active d2">
+      <a href="#projects" class="cmd-btn"><i class="ph ph-stack"></i> VIEW_SYSTEMS</a>
+      <a href="#contact" class="cmd-btn cmd-btn-ghost"><i class="ph ph-paper-plane-tilt"></i> OPEN_COMMS</a>
+    </div>
+    <div class="hero-stats reveal active d3">
+      <div class="stat-box"><div class="stat-val">3+</div><div class="stat-label">YRS_OPS</div></div>
+      <div class="stat-box"><div class="stat-val">50+</div><div class="stat-label">DEPLOYMENTS</div></div>
+      <div class="stat-box"><div class="stat-val">15+</div><div class="stat-label">TECH_STACK</div></div>
+      <div class="stat-box"><div class="stat-val">∞</div><div class="stat-label">UPTIME</div></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="sec-title reveal"><span>OPERATOR_PROFILE</span><div class="sec-title-line"></div></div>
+    <div class="about-grid">
+      <div class="glass about-card reveal">
+        <div class="corner-tl"></div>
+        <div class="classified-tag"><i class="ph ph-warning" style="font-size:10px;"></i> CLASSIFIED_INTEL</div>
+        <p class="about-text">
+          I am <strong>Saif ul Islam</strong> — a Full-Stack Web Developer from Pakistan, operating at the intersection of engineering precision and design innovation.<br><br>
+          I specialize in building <strong>high-performance, intelligent web systems</strong> — from AI-powered tools to enterprise platforms — deployed with military-grade reliability and aesthetic excellence.
+        </p>
+      </div>
+      <div class="glass about-card reveal d1">
+        <div class="corner-tl"></div>
+        <ul class="intel-list">
+          <li>BS Software Engineering // University of Swat</li>
+          <li>Full-Stack: React + Laravel Specialist</li>
+          <li>AI Integration & LLM API Expert</li>
+          <li>Mobile-first, Performance Obsessed</li>
+          <li>Freelance Contractor // Open to Remote</li>
+          <li>Location: Pakistan // Remote Capable</li>
+          <li>Clearance: Available_for_hire</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH STACK -->
+  <section id="tech">
+    <div class="sec-title reveal"><span>TECH_ARSENAL</span><div class="sec-title-line"></div></div>
+    <div class="stack-grid">
+      <!-- Frontend -->
+      <div class="glass stack-card reveal">
+        <div class="corner-tl"></div>
+        <div class="stack-cat">FRONTEND</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#E34F26;border-color:rgba(227,79,38,0.2);"><i class="ph ph-file-html"></i></div>HTML5 &amp; CSS3</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#F7DF1E;border-color:rgba(247,223,30,0.2);"><i class="ph ph-file-js"></i></div>JavaScript ES6+</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#61DAFB;border-color:rgba(97,218,251,0.2);"><i class="ph ph-atom"></i></div>React.js</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#38BDF8;border-color:rgba(56,189,248,0.2);"><i class="ph ph-waves"></i></div>Tailwind CSS</div>
+      </div>
+      <!-- Backend -->
+      <div class="glass stack-card reveal d1">
+        <div class="corner-tl"></div>
+        <div class="stack-cat" style="color:var(--secondary);">BACKEND</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#FF2D20;border-color:rgba(255,45,32,0.2);"><i class="ph ph-fire"></i></div>Laravel (PHP)</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#339933;border-color:rgba(51,153,51,0.2);"><i class="ph ph-hexagon"></i></div>Node.js</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#4479A1;border-color:rgba(68,121,161,0.2);"><i class="ph ph-database"></i></div>MySQL / PostgreSQL</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#4EA94B;border-color:rgba(78,169,75,0.2);"><i class="ph ph-cylinder"></i></div>MongoDB</div>
+      </div>
+      <!-- AI & Tools -->
+      <div class="glass stack-card reveal d2">
+        <div class="corner-tl"></div>
+        <div class="stack-cat" style="color:var(--accent);">AI / TOOLS</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#74AA9C;border-color:rgba(116,170,156,0.2);"><i class="ph ph-robot"></i></div>OpenAI / LLM APIs</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#F24E1E;border-color:rgba(242,78,30,0.2);"><i class="ph ph-figma-logo"></i></div>Figma / UI Design</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#2496ED;border-color:rgba(36,150,237,0.2);"><i class="ph ph-cube"></i></div>Docker</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#F05032;border-color:rgba(240,80,50,0.2);"><i class="ph ph-git-branch"></i></div>Git / GitHub</div>
+      </div>
+      <!-- Advanced -->
+      <div class="glass stack-card reveal d3">
+        <div class="corner-tl"></div>
+        <div class="stack-cat" style="color:var(--warning);">ADVANCED</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#3178C6;border-color:rgba(49,120,198,0.2);"><i class="ph ph-file-ts"></i></div>TypeScript</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#FF4154;border-color:rgba(255,65,84,0.2);"><i class="ph ph-vector-two"></i></div>Redis / Cache</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#764ABC;border-color:rgba(118,74,188,0.2);"><i class="ph ph-arrows-left-right"></i></div>REST / GraphQL</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#00FF66;border-color:rgba(0,255,102,0.2);"><i class="ph ph-cloud"></i></div>AWS / Cloud Deploy</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="sec-title reveal"><span>SERVICE_MODULES</span><div class="sec-title-line"></div></div>
+    <div class="svc-grid">
+      <div class="glass svc-card reveal" style="--icon-color:#00FF66;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon"><i class="ph ph-layout"></i></div>
+        <div class="svc-title">FRONTEND_OPS</div>
+        <div class="svc-desc">Precision-engineered interfaces built with React, Tailwind CSS, and advanced animation systems. Pixel-perfect, blazing fast.</div>
+        <div><span class="svc-tag">REACT</span><span class="svc-tag">TAILWIND</span><span class="svc-tag">ANIMATION</span></div>
+      </div>
+      <div class="glass svc-card reveal d1" style="--icon-color:#00F0FF;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon" style="border-color:rgba(0,240,255,0.3);color:var(--secondary);"><i class="ph ph-hard-drives"></i></div>
+        <div class="svc-title">BACKEND_SYSTEMS</div>
+        <div class="svc-desc">Scalable server architectures, REST APIs, database design, and microservices using Laravel and Node.js.</div>
+        <div><span class="svc-tag" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);">LARAVEL</span><span class="svc-tag" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);">NODE.JS</span></div>
+      </div>
+      <div class="glass svc-card reveal d2" style="--icon-color:#7A00FF;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon" style="border-color:rgba(122,0,255,0.3);color:var(--accent);"><i class="ph ph-robot"></i></div>
+        <div class="svc-title">AI_ENHANCEMENT</div>
+        <div class="svc-desc">LLM integrations, AI chatbots, image generation pipelines, and intelligent automation modules for modern applications.</div>
+        <div><span class="svc-tag" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);">LLM_API</span><span class="svc-tag" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);">RAG</span></div>
+      </div>
+      <div class="glass svc-card reveal d3" style="--icon-color:#FFD000;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon" style="border-color:rgba(255,208,0,0.3);color:var(--warning);"><i class="ph ph-device-mobile"></i></div>
+        <div class="svc-title">MOBILE_READY</div>
+        <div class="svc-desc">Every deployment is mobile-first, touch-optimized, and tested across all device classes with fluid responsive systems.</div>
+        <div><span class="svc-tag" style="border-color:rgba(255,208,0,0.15);color:rgba(255,208,0,0.5);">PWA</span><span class="svc-tag" style="border-color:rgba(255,208,0,0.15);color:rgba(255,208,0,0.5);">RESPONSIVE</span></div>
+      </div>
+      <div class="glass svc-card reveal" style="--icon-color:#FF003C;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon" style="border-color:rgba(255,0,60,0.3);color:var(--danger);"><i class="ph ph-plugs-connected"></i></div>
+        <div class="svc-title">API_INTEGRATION</div>
+        <div class="svc-desc">Seamless third-party integrations: payment gateways, CRMs, analytics, maps, and custom webhook systems.</div>
+        <div><span class="svc-tag" style="border-color:rgba(255,0,60,0.15);color:rgba(255,0,60,0.5);">STRIPE</span><span class="svc-tag" style="border-color:rgba(255,0,60,0.15);color:rgba(255,0,60,0.5);">WEBHOOKS</span></div>
+      </div>
+      <div class="glass svc-card reveal d1" style="--icon-color:#00FF66;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon"><i class="ph ph-magic-wand"></i></div>
+        <div class="svc-title">UI_DESIGN</div>
+        <div class="svc-desc">Luxury UI/UX design with Figma, custom design systems, dark interfaces, glassmorphism, and cinematic aesthetics.</div>
+        <div><span class="svc-tag">FIGMA</span><span class="svc-tag">DESIGN_SYS</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec-title reveal"><span>DEPLOYED_SYSTEMS</span><div class="sec-title-line"></div></div>
+    <div class="proj-grid">
+      <!-- Proj 1 -->
+      <div class="glass proj-card reveal">
+        <div class="proj-img-wrap">
+          <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=800&auto=format&fit=crop" loading="lazy" alt="AI Image Editor">
+          <div class="proj-overlay"></div>
+          <div class="proj-badge" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">AI_VISION</div>
+          <div class="proj-scan"></div>
         </div>
-
-        <!-- Navigation Array with Advanced Magnetic Indicator -->
-        <div class="relative flex-1 mb-8" id="navMenuContainer">
-            <!-- The Magnetic Liquid Indicator -->
-            <div id="navIndicator" class="nav-indicator"></div>
-
-            <nav class="flex flex-col gap-1 w-full relative z-10" id="navMenu">
-                <a href="#hero" class="nav-item group" data-color="#00ff41">
-                    <div><i class="ph-light ph-terminal-window" style="color: #00ff41;"></i> _HERO</div>
-                    <span class="nav-badge" style="color: #00ff41; border: 1px solid #00ff4130;">01</span>
-                </a>
-                <a href="#about" class="nav-item group" data-color="#ff00ff">
-                    <div><i class="ph-light ph-user-focus" style="color: #ff00ff;"></i> _ABOUT</div>
-                    <span class="nav-badge" style="color: #ff00ff; border: 1px solid #ff00ff30;">02</span>
-                </a>
-                <a href="#tech" class="nav-item group" data-color="#00ffff">
-                    <div><i class="ph-light ph-code" style="color: #00ffff;"></i> _STACK</div>
-                    <span class="nav-badge" style="color: #00ffff; border: 1px solid #00ffff30;">03</span>
-                </a>
-                <a href="#services" class="nav-item group" data-color="#bc13fe">
-                    <div><i class="ph-light ph-hard-drives" style="color: #bc13fe;"></i> _SERVICES</div>
-                    <span class="nav-badge" style="color: #bc13fe; border: 1px solid #bc13fe30;">04</span>
-                </a>
-                <a href="#projects" class="nav-item group" data-color="#00ff41">
-                    <div><i class="ph-light ph-projector-screen" style="color: #00ff41;"></i> _PROJECTS</div>
-                    <span class="nav-badge" style="color: #00ff41; border: 1px solid #00ff4130;">05</span>
-                </a>
-                <a href="#experience" class="nav-item group" data-color="#00ffff">
-                    <div><i class="ph-light ph-briefcase" style="color: #00ffff;"></i> _EXP</div>
-                    <span class="nav-badge" style="color: #00ffff; border: 1px solid #00ffff30;">07</span>
-                </a>
-                <a href="#education" class="nav-item group" data-color="#bc13fe">
-                    <div><i class="ph-light ph-graduation-cap" style="color: #bc13fe;"></i> _EDU</div>
-                    <span class="nav-badge" style="color: #bc13fe; border: 1px solid #bc13fe30;">08</span>
-                </a>
-                <a href="#testimonials" class="nav-item group" data-color="#00ff41">
-                    <div><i class="ph-light ph-star" style="color: #00ff41;"></i> _REVIEWS</div>
-                    <span class="nav-badge" style="color: #00ff41; border: 1px solid #00ff4130;">09</span>
-                </a>
-                <a href="#contact" class="nav-item group" data-color="#ff00ff">
-                    <div><i class="ph-light ph-envelope-simple" style="color: #ff00ff;"></i> _CONTACT</div>
-                    <span class="nav-badge" style="color: #ff00ff; border: 1px solid #ff00ff30;">10</span>
-                </a>
-            </nav>
+        <div class="proj-body">
+          <div class="proj-title">NEXT-GEN AI IMAGE EDITOR</div>
+          <div class="proj-desc">Sophisticated image manipulation studio integrating Generative AI models. High-fidelity upscaling, inpainting, and real-time generation.</div>
+          <div class="proj-tags">
+            <span class="proj-tag" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">REACT</span>
+            <span class="proj-tag">NODE.JS</span><span class="proj-tag">DIFFUSION_API</span>
+          </div>
         </div>
-
-        <div class="flex justify-center gap-6 px-6 pb-6 border-b border-white/5">
-            <a href="https://github.com/saifulislaam" target="_blank" class="social-icon" style="color:#fff;" onmouseover="this.style.color='#00ff41'" onmouseout="this.style.color='#fff'"><i class="ph-light ph-github-logo"></i></a>
-            <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="social-icon" style="color:#fff; animation-delay: 0.2s;" onmouseover="this.style.color='#00ffff'" onmouseout="this.style.color='#fff'"><i class="ph-light ph-linkedin-logo"></i></a>
-            <a href="#" class="social-icon" style="color:#fff; animation-delay: 0.4s;" onmouseover="this.style.color='#ff00ff'" onmouseout="this.style.color='#fff'"><i class="ph-light ph-instagram-logo"></i></a>
+      </div>
+      <!-- Proj 2 -->
+      <div class="glass proj-card reveal d1">
+        <div class="proj-img-wrap">
+          <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop" loading="lazy" alt="AI Chatbot">
+          <div class="proj-overlay"></div>
+          <div class="proj-badge" style="color:var(--accent);border-color:rgba(122,0,255,0.2);">LLM_NLP</div>
+          <div class="proj-scan" style="background:linear-gradient(90deg,transparent,var(--accent),transparent);"></div>
         </div>
-
-        <div class="pt-6 px-6 text-center">
-            <p class="font-mono text-[9px] font-medium glitch" style="color: #00ff41; opacity: 0.7;">SYSTEM v2.0</p>
+        <div class="proj-body">
+          <div class="proj-title">LIQUID CONTEXT AI CHATBOT</div>
+          <div class="proj-desc">Intelligent conversational agent using RAG. Deep context memory, real-time token streaming, multi-model routing inside a glass UI.</div>
+          <div class="proj-tags">
+            <span class="proj-tag" style="color:rgba(122,0,255,0.8);border-color:rgba(122,0,255,0.2);">OPENAI_API</span>
+            <span class="proj-tag">WEBSOCKETS</span><span class="proj-tag">VECTOR_DB</span>
+          </div>
         </div>
-    </aside>
+      </div>
+      <!-- Proj 3 -->
+      <div class="glass proj-card reveal d2">
+        <div class="proj-img-wrap">
+          <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop" loading="lazy" alt="Payment Hub">
+          <div class="proj-overlay"></div>
+          <div class="proj-badge" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">FINTECH</div>
+          <div class="proj-scan"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-title">GLOBAL PAYMENT HUB API</div>
+          <div class="proj-desc">Payment routing system for SaaS platform. Seamless checkout flows handling Stripe, PayPal, and Crypto gateways under high load.</div>
+          <div class="proj-tags">
+            <span class="proj-tag" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">LARAVEL</span>
+            <span class="proj-tag">STRIPE_API</span><span class="proj-tag">WEBHOOKS</span>
+          </div>
+        </div>
+      </div>
+      <!-- Proj 4 -->
+      <div class="glass proj-card reveal d3">
+        <div class="proj-img-wrap">
+          <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop" loading="lazy" alt="Commerce Engine">
+          <div class="proj-overlay"></div>
+          <div class="proj-badge" style="color:var(--warning);border-color:rgba(255,208,0,0.2);">ARCHITECTURE</div>
+          <div class="proj-scan" style="background:linear-gradient(90deg,transparent,var(--warning),transparent);"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-title">SCALABLE COMMERCE ENGINE</div>
+          <div class="proj-desc">Headless e-commerce backend for high concurrency. Decoupled inventory, auth, and orders into microservices with event sourcing.</div>
+          <div class="proj-tags">
+            <span class="proj-tag" style="color:var(--warning);border-color:rgba(255,208,0,0.2);">TYPESCRIPT</span>
+            <span class="proj-tag">DOCKER</span><span class="proj-tag">POSTGRESQL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- ================= MAIN CONTENT ================= -->
-    <main class="main-content px-4 md:px-12 lg:px-16 pb-24 lg:pt-0">
+  <!-- EXPERIENCE & EDUCATION -->
+  <section id="experience">
+    <div class="sec-title reveal"><span>MISSION_LOG</span><div class="sec-title-line"></div></div>
+    <div class="exp-grid">
+      <div class="reveal">
+        <div class="nav-section-label" style="padding:0 0 20px;">// FIELD_EXPERIENCE</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">2023 — PRESENT</div>
+            <div class="tl-title">FREELANCE FULL-STACK DEVELOPER</div>
+            <div class="tl-desc">Built CMS platforms, eCommerce systems, dashboards, AI web apps, and management systems for diverse global clients with high delivery standards.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:rgba(0,240,255,0.2);border-color:var(--secondary);box-shadow:0 0 10px rgba(0,240,255,0.3);"></div>
+            <div class="tl-date" style="color:var(--secondary);">2023 — PRESENT</div>
+            <div class="tl-title">UNIVERSITY PROJECTS</div>
+            <div class="tl-desc">Developed robust DBMS, interactive dashboards, and web tools using Laravel and React for academic and research initiatives.</div>
+          </div>
+        </div>
+      </div>
+      <div id="education" class="reveal d1">
+        <div class="nav-section-label" style="padding:0 0 20px;">// TRAINING_RECORDS</div>
+        <div class="glass edu-card">
+          <div class="corner-tl"></div>
+          <div class="edu-title">BS. SOFTWARE ENGINEERING</div>
+          <div class="edu-org">UNIVERSITY OF SWAT // 2023 — PRESENT</div>
+        </div>
+        <div class="glass edu-card" style="border-left-color:var(--secondary);">
+          <div class="corner-tl"></div>
+          <div class="edu-title">CERTIFIED WEB DEVELOPER</div>
+          <div class="edu-org">FREELANCE / ONLINE // 2023</div>
+        </div>
+        <div class="glass edu-card" style="border-left-color:var(--accent);">
+          <div class="corner-tl"></div>
+          <div class="edu-title">AI & ML FUNDAMENTALS</div>
+          <div class="edu-org">SELF-DIRECTED STUDY // 2024</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <!-- HERO SECTION -->
-        <section id="hero" class="min-h-screen flex flex-col justify-center py-10">
-            <div class="max-w-4xl reveal active">
-                <div class="text-[10px] font-mono text-water mb-8 tracking-widest uppercase flex items-center gap-2 opacity-80">
-                    <span class="w-1.5 h-1.5 rounded-full bg-water animate-pulse shadow-[0_0_8px_#38bdf8]"></span> System Initialized...
-                </div>
-                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-6">
-                    Hi, I'm <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-water to-white">Saif ul Islam</span>
-                </h1>
-                <div class="h-20 sm:h-12 mb-10">
-                    <span id="typing-text" class="text-base sm:text-lg lg:text-xl text-white/60 font-mono font-light leading-relaxed typing-cursor"></span>
-                </div>
-                <div class="flex flex-wrap gap-4 mt-6">
-                    <a href="#projects" class="water-btn"><i class="ph-light ph-stack"></i> View Systems</a>
-                    <a href="#contact" class="water-btn !bg-white/5 !border-white/10 !text-white/80 hover:!bg-white/10 hover:!text-white"><i class="ph-light ph-paper-plane-tilt"></i> Contact Node</a>
-                </div>
-            </div>
-        </section>
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="sec-title reveal"><span>FIELD_REPORTS</span><div class="sec-title-line"></div></div>
+    <div class="test-grid">
+      <div class="glass test-card reveal">
+        <div class="corner-tl"></div>
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text">"Saif delivered a blazing fast dashboard ahead of schedule. His attention to detail and UI quality is on another level. Highly recommended."</div>
+        <div class="test-author">ALEX_TURNER</div>
+        <div class="test-role">CTO // TECHCORP_USA</div>
+      </div>
+      <div class="glass test-card reveal d1">
+        <div class="corner-tl"></div>
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text">"The AI chatbot he built for us exceeded expectations. Deep understanding of LLMs and clean code architecture. Will hire again."</div>
+        <div class="test-author">SARA_MALIK</div>
+        <div class="test-role">FOUNDER // AI_STARTUP</div>
+      </div>
+      <div class="glass test-card reveal d2">
+        <div class="corner-tl"></div>
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text">"Our e-commerce platform handles 10x more load after Saif's microservices refactor. Exceptional backend engineering skills."</div>
+        <div class="test-author">JAMES_RODRIGUEZ</div>
+        <div class="test-role">ENGINEERING_LEAD // E-COMMERCE</div>
+      </div>
+    </div>
+  </section>
 
-        <!-- ABOUT SECTION -->
-        <section id="about" class="py-20">
-            <div class="sec-title reveal">_About</div>
-            <div class="glass-panel p-6 sm:p-10 reveal delay-1">
-                <p class="text-sm sm:text-base md:text-lg text-white/70 leading-relaxed font-light">
-                    I am Saif ul Islam, a passionate Full-Stack Web Developer from Pakistan. I specialize in creating <span class="text-water font-medium">interactive, responsive, and modern web applications</span> that live on the bleeding edge of technology.
-                </p>
-            </div>
-        </section>
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="sec-title reveal"><span>OPEN_COMMS_CHANNEL</span><div class="sec-title-line"></div></div>
+    <div class="glass contact-wrap reveal">
+      <div class="corner-tl"></div>
+      <div class="classified-tag" style="margin:0 auto 20px;"><i class="ph ph-shield-check" style="font-size:10px;"></i>SECURE_CHANNEL_AVAILABLE</div>
+      <div class="contact-icon"><i class="ph ph-envelope-simple-open"></i></div>
+      <div class="contact-h2">INITIATE HANDSHAKE</div>
+      <p class="contact-p">Open a secure comms channel for freelance contracts, enterprise deployments, or technical collaborations. Response within 24 mission hours.</p>
+      <div class="contact-btns">
+        <a href="mailto:saifulislam.git@gmail.com" class="cmd-btn"><i class="ph ph-paper-plane-right"></i> SEND_MESSAGE</a>
+        <a href="chat.html" class="cmd-btn cmd-btn-ghost"><i class="ph ph-robot"></i> AI_CHATBOT</a>
+      </div>
+    </div>
+  </section>
 
- <!-- TECH STACK -->
-        <section id="tech" class="py-20">
-            <div class="sec-title reveal">_Stack</div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-                <!-- Frontend -->
-                <div class="glass-panel p-6 reveal">
-                    <h3 class="font-mono font-medium text-water mb-4 border-b border-water/10 pb-3 flex items-center gap-2"><i class="ph-light ph-layout text-xl"></i> Frontend</h3>
-                    <ul class="space-y-3 text-xs sm:text-sm text-white/60 font-mono font-light">
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#E34F26]/20 group-hover:border-[#E34F26]/50 group-hover:shadow-[0_0_10px_rgba(227,79,38,0.3)]">
-                                <i class="ph-light ph-file-html text-lg transition-colors duration-300 group-hover:text-[#E34F26]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">HTML5 & CSS3</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#F7DF1E]/20 group-hover:border-[#F7DF1E]/50 group-hover:shadow-[0_0_10px_rgba(247,223,30,0.3)]">
-                                <i class="ph-light ph-file-js text-lg transition-colors duration-300 group-hover:text-[#F7DF1E]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">JavaScript (ES6+)</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#61DAFB]/20 group-hover:border-[#61DAFB]/50 group-hover:shadow-[0_0_10px_rgba(97,218,251,0.3)]">
-                                <i class="ph-light ph-atom text-lg transition-colors duration-300 group-hover:text-[#61DAFB]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">React.js</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#38BDF8]/20 group-hover:border-[#38BDF8]/50 group-hover:shadow-[0_0_10px_rgba(56,189,248,0.3)]">
-                                <i class="ph-light ph-waves text-lg transition-colors duration-300 group-hover:text-[#38BDF8]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">TailwindCSS</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Backend -->
-                <div class="glass-panel p-6 reveal delay-1">
-                    <h3 class="font-mono font-medium text-water mb-4 border-b border-water/10 pb-3 flex items-center gap-2"><i class="ph-light ph-database text-xl"></i> Backend</h3>
-                    <ul class="space-y-3 text-xs sm:text-sm text-white/60 font-mono font-light">
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#339933]/20 group-hover:border-[#339933]/50 group-hover:shadow-[0_0_10px_rgba(51,153,51,0.3)]">
-                                <i class="ph-light ph-hexagon text-lg transition-colors duration-300 group-hover:text-[#339933]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">Node.js</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#FF2D20]/20 group-hover:border-[#FF2D20]/50 group-hover:shadow-[0_0_10px_rgba(255,45,32,0.3)]">
-                                <i class="ph-light ph-fire text-lg transition-colors duration-300 group-hover:text-[#FF2D20]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">PHP / Laravel</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#00758F]/20 group-hover:border-[#00758F]/50 group-hover:shadow-[0_0_10px_rgba(0,117,143,0.3)]">
-                                <i class="ph-light ph-database text-lg transition-colors duration-300 group-hover:text-[#00758F]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">MySQL / SQL</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#bc13fe]/20 group-hover:border-[#bc13fe]/50 group-hover:shadow-[0_0_10px_rgba(188,19,254,0.3)]">
-                                <i class="ph-light ph-plugs-connected text-lg transition-colors duration-300 group-hover:text-[#bc13fe]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">REST APIs</span>
-                        </li>
-                    </ul>
-                </div>
+</main>
 
-
-  <!-- Tools -->
-                <div class="glass-panel p-6 reveal delay-2">
-                    <h3 class="font-mono font-medium text-water mb-4 border-b border-water/10 pb-3 flex items-center gap-2"><i class="ph-light ph-wrench text-xl"></i> Tools</h3>
-                    <ul class="space-y-3 text-xs sm:text-sm text-white/60 font-mono font-light">
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-white/20 group-hover:border-white/50 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                                <i class="ph-light ph-github-logo text-lg transition-colors duration-300 group-hover:text-white"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">Git & GitHub</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#007ACC]/20 group-hover:border-[#007ACC]/50 group-hover:shadow-[0_0_10px_rgba(0,122,204,0.3)]">
-                                <i class="ph-light ph-code-block text-lg transition-colors duration-300 group-hover:text-[#007ACC]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">VS Code</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#F24E1E]/20 group-hover:border-[#F24E1E]/50 group-hover:shadow-[0_0_10px_rgba(242,78,30,0.3)]">
-                                <i class="ph-light ph-figma-logo text-lg transition-colors duration-300 group-hover:text-[#F24E1E]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">Figma</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#FF6C37]/20 group-hover:border-[#FF6C37]/50 group-hover:shadow-[0_0_10px_rgba(255,108,55,0.3)]">
-                                <i class="ph-light ph-paper-plane-right text-lg transition-colors duration-300 group-hover:text-[#FF6C37]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">Postman</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Architecture -->
-                <div class="glass-panel p-6 reveal delay-1">
-                    <h3 class="font-mono font-medium text-water mb-4 border-b border-water/10 pb-3 flex items-center gap-2"><i class="ph-light ph-graph text-xl"></i> Architecture</h3>
-                    <ul class="space-y-3 text-xs sm:text-sm text-white/60 font-mono font-light">
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#3178C6]/20 group-hover:border-[#3178C6]/50 group-hover:shadow-[0_0_10px_rgba(49,120,198,0.3)]">
-                                <i class="ph-light ph-file-code text-lg transition-colors duration-300 group-hover:text-[#3178C6]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">TypeScript</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#00ff41]/20 group-hover:border-[#00ff41]/50 group-hover:shadow-[0_0_10px_rgba(0,255,65,0.3)]">
-                                <i class="ph-light ph-devices text-lg transition-colors duration-300 group-hover:text-[#00ff41]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">Responsive Design</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#eab308]/20 group-hover:border-[#eab308]/50 group-hover:shadow-[0_0_10px_rgba(234,179,8,0.3)]">
-                                <i class="ph-light ph-moon-stars text-lg transition-colors duration-300 group-hover:text-[#eab308]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">Dark/Light Mode</span>
-                        </li>
-                        <li class="flex items-center gap-3 group cursor-default">
-                            <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center transition-all duration-300 group-hover:bg-[#00ffff]/20 group-hover:border-[#00ffff]/50 group-hover:shadow-[0_0_10px_rgba(0,255,255,0.3)]">
-                                <i class="ph-light ph-tree-structure text-lg transition-colors duration-300 group-hover:text-[#00ffff]"></i>
-                            </div>
-                            <span class="transition-colors duration-300 group-hover:text-white">System Architecture</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- SERVICES -->
-        <section id="services" class="py-20">
-            <div class="sec-title reveal">_Services</div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="glass-panel p-8 text-center reveal flex flex-col items-center justify-center group">
-                    <i class="ph-light ph-code text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
-                    <h3 class="font-medium text-sm text-white mb-1">Full-Stack Web Dev</h3>
-                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">End-to-end</p>
-                </div>
-                <div class="glass-panel p-8 text-center reveal delay-1 flex flex-col items-center justify-center group">
-                    <i class="ph-light ph-gauge text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
-                    <h3 class="font-medium text-sm text-white mb-1">CMS & Dashboards</h3>
-                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">Admin solutions</p>
-                </div>
-                <div class="glass-panel p-8 text-center reveal delay-2 flex flex-col items-center justify-center group">
-                    <i class="ph-light ph-shopping-cart text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
-                    <h3 class="font-medium text-sm text-white mb-1">eCommerce</h3>
-                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">Shopping apps</p>
-                </div>
-                <div class="glass-panel p-8 text-center reveal flex flex-col items-center justify-center group">
-                    <i class="ph-light ph-magic-wand text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
-                    <h3 class="font-medium text-sm text-white mb-1">AI Enhancement</h3>
-                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">Image & LLM API</p>
-                </div>
-                <div class="glass-panel p-8 text-center reveal delay-1 flex flex-col items-center justify-center group">
-                    <i class="ph-light ph-device-mobile text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
-                    <h3 class="font-medium text-sm text-white mb-1">Responsive UI</h3>
-                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">Mobile-first</p>
-                </div>
-                <div class="glass-panel p-8 text-center reveal delay-2 flex flex-col items-center justify-center group">
-                    <i class="ph-light ph-plugs-connected text-4xl text-water mb-4 transition transform group-hover:scale-110 opacity-80"></i>
-                    <h3 class="font-medium text-sm text-white mb-1">Custom Solutions</h3>
-                    <p class="text-[10px] text-white/40 uppercase tracking-widest font-mono">API Integrations</p>
-                </div>
-            </div>
-        </section>
-
-
-
-
- <!-- ENTERPRISE PROJECTS -->
-        <section id="projects" class="py-20">
-            <div class="sec-title reveal">_Enterprise_Systems</div>
-            
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Proj 1 -->
-                <div class="glass-panel p-4 sm:p-6 reveal group cursor-pointer h-full flex flex-col">
-                    <div class="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-6 border border-white/5">
-                        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=800&auto=format&fit=crop" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-90 grayscale group-hover:grayscale-0">
-                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-medium text-water border border-white/10 font-mono">AI_VISION</div>
-                    </div>
-                    <div class="flex-1 flex flex-col">
-                        <h3 class="text-lg sm:text-xl font-medium mb-3 transition group-hover:text-water text-white">Next-Gen AI Image Editor</h3>
-                        <p class="text-xs sm:text-sm text-white/50 mb-6 flex-1 leading-relaxed font-light">
-                            Sophisticated image manipulation studio integrating Generative AI models. High-fidelity upscaling, inpainting, and real-time generation.
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-[9px] sm:text-[10px] font-mono text-white/40">
-                            <span class="border border-water/20 px-2 py-1 rounded bg-water/5 text-water">React</span>
-                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Node.js</span>
-                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Diffusion API</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Proj 2 -->
-                <div class="glass-panel p-4 sm:p-6 reveal delay-1 group cursor-pointer h-full flex flex-col">
-                    <div class="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-6 border border-white/5">
-                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-90 grayscale group-hover:grayscale-0">
-                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-medium text-purple-400 border border-white/10 font-mono">LLM_NLP</div>
-                    </div>
-                    <div class="flex-1 flex flex-col">
-                        <h3 class="text-lg sm:text-xl font-medium mb-3 transition group-hover:text-purple-400 text-white">Liquid Context AI Chatbot</h3>
-                        <p class="text-xs sm:text-sm text-white/50 mb-6 flex-1 leading-relaxed font-light">
-                            Intelligent conversational agent utilizing RAG. Features deep context memory, real-time token streaming, and multi-model routing inside a glass UI.
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-[9px] sm:text-[10px] font-mono text-white/40">
-                            <span class="border border-purple-500/20 px-2 py-1 rounded bg-purple-500/5 text-purple-400">OpenAI API</span>
-                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">WebSockets</span>
-                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Vector DB</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Proj 3 -->
-                <div class="glass-panel p-4 sm:p-6 reveal group cursor-pointer h-full flex flex-col">
-                    <div class="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-6 border border-white/5">
-                        <img src="https://images.unsplash.com/photo-=80&w=800&auto=format&fit=crop" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-90 grayscale group-hover:grayscale-0">
-                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-medium text-green-400 border border-white/10 font-mono">FINTECH</div>
-                    </div>
-                    <div class="flex-1 flex flex-col">
-                        <h3 class="text-lg sm:text-xl font-medium mb-3 transition group-hover:text-green-400 text-white">Global Payment Hub API</h3>
-                        <p class="text-xs sm:text-sm text-white/50 mb-6 flex-1 leading-relaxed font-light">
-                            Architected a payment routing system for a SaaS platform. Supports seamless checkout flows handling Stripe, PayPal, and Crypto gateways.
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-[9px] sm:text-[10px] font-mono text-white/40">
-                            <span class="border border-green-500/20 px-2 py-1 rounded bg-green-500/5 text-green-400">Laravel (PHP)</span>
-                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Stripe API</span>
-                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Webhooks</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Proj 4 -->
-                <div class="glass-panel p-4 sm:p-6 reveal delay-1 group cursor-pointer h-full flex flex-col">
-                    <div class="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-6 border border-white/5">
-                        <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop" loading="lazy" class="w-full h-full object-cover transition duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-90 grayscale group-hover:grayscale-0">
-                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[9px] font-medium text-yellow-400 border border-white/10 font-mono">ARCHITECTURE</div>
-                    </div>
-                    <div class="flex-1 flex flex-col">
-                        <h3 class="text-lg sm:text-xl font-medium mb-3 transition group-hover:text-yellow-400 text-white">Scalable Commerce Engine</h3>
-                        <p class="text-xs sm:text-sm text-white/50 mb-6 flex-1 leading-relaxed font-light">
-                            Built a headless e-commerce backend for high concurrency. Decoupled inventory, auth, and orders into microservices.
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-[9px] sm:text-[10px] font-mono text-white/40">
-                            <span class="border border-yellow-500/20 px-2 py-1 rounded bg-yellow-500/5 text-yellow-400">TypeScript</span>
-                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">Docker</span>
-                            <span class="border border-white/5 px-2 py-1 rounded bg-white/5">PostgreSQL</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- EXPERIENCE & EDUCATION -->
-        <section id="experience" class="py-20">
-            <div class="grid lg:grid-cols-2 gap-16 lg:gap-12">
-                <!-- Experience -->
-                <div>
-                    <div class="sec-title reveal">_Exp</div>
-                    <div class="space-y-8 border-l border-white/10 ml-2 pl-6 sm:pl-8">
-                        <div class="relative reveal delay-1">
-                            <span class="absolute -left-[29px] sm:-left-[37px] top-1 w-2.5 h-2.5 rounded-full bg-water shadow-[0_0_10px_#38bdf8]"></span>
-                            <h4 class="text-sm sm:text-base font-medium text-white mb-1">Freelance Full-Stack Developer</h4>
-                            <div class="text-[10px] font-mono text-water mb-3">2023 - Present</div>
-                            <p class="text-xs sm:text-sm text-white/50 leading-relaxed font-light">Built CMS, eCommerce, dashboards, AI web apps, and management systems for diverse clients.</p>
-                        </div>
-                        <div class="relative reveal delay-2">
-                            <span class="absolute -left-[29px] sm:-left-[37px] top-1 w-2.5 h-2.5 rounded-full bg-white/20"></span>
-                            <h4 class="text-sm sm:text-base font-medium text-white mb-1">University Projects</h4>
-                            <div class="text-[10px] font-mono text-white/40 mb-3">2023 - Present</div>
-                            <p class="text-xs sm:text-sm text-white/50 leading-relaxed font-light">Developed robust DBMS, interactive dashboards, and web tools using Laravel & React.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Education -->
-                <div id="education">
-                    <div class="sec-title reveal">_Edu</div>
-                    <div class="space-y-6">
-                        <div class="glass-panel p-5 sm:p-6 reveal delay-1 border-l-2 border-l-water">
-                            <h4 class="font-medium text-sm sm:text-base text-white mb-1">BS. Software Engineering</h4>
-                            <p class="text-[10px] sm:text-[11px] text-water font-mono">University of Swat • 2023</p>
-                        </div>
-                        <div class="glass-panel p-5 sm:p-6 reveal delay-2 border-l-2 border-l-water">
-                            <h4 class="font-medium text-sm sm:text-base text-white mb-1">Certified Web Developer</h4>
-                            <p class="text-[10px] sm:text-[11px] text-water font-mono">Freelance / Online • 2023</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CONTACT -->
-        <section id="contact" class="py-20">
-            <div class="sec-title reveal">_Contact</div>
-            
-            <div class="glass-panel p-8 md:p-16 reveal max-w-2xl mx-auto text-center border-t border-water/20 relative overflow-hidden">
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-1 bg-gradient-to-r from-transparent via-water/30 to-transparent"></div>
-                
-                <i class="ph-light ph-envelope-simple-open text-4xl sm:text-5xl text-water mb-6 relative z-10 opacity-80"></i>
-                <h2 class="text-xl sm:text-2xl md:text-3xl font-medium mb-4 text-white relative z-10">Open Secure Channel</h2>
-                <p class="text-white/50 mb-10 text-xs sm:text-sm max-w-md mx-auto relative z-10 font-light leading-relaxed">Initiate handshake protocol for freelance work, enterprise contracts, or technical inquiries.</p>
-                
-                <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-sm mx-auto relative z-10">
-                    <a href="mailto:saifulislam.git@gmail.com" class="water-btn justify-center w-full">
-                        <i class="ph-light ph-paper-plane-right text-lg"></i> Email Me
-                    </a>
-                    <a href="chat.html" class="water-btn justify-center w-full !bg-white/5 !border-white/5 !text-white/70 hover:!bg-white/10 hover:!text-white">
-                        <i class="ph-light ph-robot text-lg"></i> AI Chatbot
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= RESPONSIVE FOOTER ================= -->
-        <footer class="mt-10 border-t border-white/5 relative overflow-hidden pb-32 lg:pb-10 pt-16">
-            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-40 bg-water/5 blur-[100px] z-0 pointer-events-none"></div>
-            
-            <div class="relative z-10">
-                <div class="flex flex-wrap justify-center items-center gap-6 sm:gap-8 lg:gap-12 mb-16 pb-12 border-b border-white/5">
-                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #E34F26;" title="HTML5"><i class="ph-light ph-file-html text-3xl sm:text-4xl"></i></div>
-                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #1572B6;" title="CSS3"><i class="ph-light ph-file-css text-3xl sm:text-4xl"></i></div>
-                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #F7DF1E;" title="JavaScript"><i class="ph-light ph-file-js text-3xl sm:text-4xl"></i></div>
-                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #61DAFB;" title="React"><i class="ph-light ph-atom text-3xl sm:text-4xl"></i></div>
-                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #38BDF8;" title="Tailwind"><i class="ph-light ph-waves text-3xl sm:text-4xl"></i></div>
-                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #339933;" title="Node.js"><i class="ph-light ph-hexagon text-3xl sm:text-4xl"></i></div>
-                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #FF2D20;" title="Laravel"><i class="ph-light ph-fire text-3xl sm:text-4xl"></i></div>
-                    <div class="flex flex-col items-center gap-2 tech-icon-glow" style="color: #F24E1E;" title="Figma"><i class="ph-light ph-figma-logo text-3xl sm:text-4xl"></i></div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-8 mb-12">
-                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
-                        <div class="flex items-center gap-2 mb-4">
-                            <i class="ph-light ph-drop text-2xl text-water"></i>
-                            <span class="text-xl font-bold tracking-tight text-white">Saif</span>
-                        </div>
-                        <p class="text-xs text-white/50 font-light leading-relaxed mb-6 max-w-[250px]">Architecting liquid smooth, intelligent web systems. Merging aesthetics with performance.</p>
-                        <div class="flex gap-4">
-                            <a href="https://github.com/saifulislaam" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/70 hover:text-white hover:bg-[#00ff41]/20 transition border border-white/5 hover:border-[#00ff41]/30"><i class="ph-light ph-github-logo text-lg"></i></a>
-                            <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/70 hover:text-white hover:bg-[#00ffff]/20 transition border border-white/5 hover:border-[#00ffff]/30"><i class="ph-light ph-linkedin-logo text-lg"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
-                        <h4 class="text-sm font-medium text-white mb-5 uppercase tracking-widest font-mono">Ecosystem</h4>
-                        <ul class="space-y-3 text-sm font-light text-white/60">
-                            <li><a href="#hero" class="hover:text-water transition">System Origin</a></li>
-                            <li><a href="#about" class="hover:text-water transition">Developer Bio</a></li>
-                            <li><a href="#services" class="hover:text-water transition">Service Nodes</a></li>
-                            <li><a href="chat.html" class="hover:text-[#00ff41] transition flex items-center justify-center sm:justify-start gap-2"><i class="ph-light ph-robot"></i> Access AI Chat</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
-                        <h4 class="text-sm font-medium text-white mb-5 uppercase tracking-widest font-mono">Comms Hub</h4>
-                        <ul class="space-y-3 text-sm font-light text-white/60">
-                            <li><a href="mailto:saifulislam.git@gmail.com" class="hover:text-water transition flex items-center justify-center sm:justify-start gap-2"><i class="ph-light ph-envelope-simple text-lg text-water"></i> saifulislam.git...</a></li>
-                            <li><a href="tel:+923442864308" class="hover:text-water transition flex items-center justify-center sm:justify-start gap-2"><i class="ph-light ph-phone text-lg text-water"></i> +92 344 2864308</a></li>
-                            <li class="flex items-center justify-center sm:justify-start gap-2 mt-2"><span class="w-2 h-2 rounded-full bg-[#00ff41] animate-pulse"></span><span class="text-[10px] font-mono text-[#00ff41]">AVAILABLE_FOR_HIRE</span></li>
-                        </ul>
-                    </div>
-
-                    <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
-                        <h4 class="text-sm font-medium text-white mb-5 uppercase tracking-widest font-mono">Deployments</h4>
-                        <div class="grid grid-cols-3 gap-2 w-full max-w-[200px]">
-                            <a href="#projects" class="block aspect-square rounded-lg overflow-hidden border border-white/10 hover:border-water transition relative group"><img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"></a>
-                            <a href="#projects" class="block aspect-square rounded-lg overflow-hidden border border-white/10 hover:border-water transition relative group"><img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"></a>
-                            <a href="#projects" class="block aspect-square rounded-lg overflow-hidden border border-white/10 hover:border-water transition relative group"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"></a>
-                        </div>
-                    </div>
-                </div>
-
-<div class="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <p class="text-[10px] sm:text-xs font-mono text-white/40">&copy; 2026 Saif ul Islam. All nodes secured.</p>
-                    <div class="flex gap-4 text-[10px] sm:text-xs text-white/40 font-mono"><a href="#" class="hover:text-water transition">PRIVACY_POLICY</a><a href="#" class="hover:text-water transition">TERMS_OF_SERVICE</a></div>
-                </div>
-            </div>
-        </footer>
-
-    </main>
-
+<!-- =================== FOOTER =================== -->
+<div style="position:relative;z-index:10;" id="footerWrap">
+<div class="tech-bar" style="margin-left:0;" id="techBar">
+  <div class="tech-logo" style="color:#E34F26;"><i class="ph ph-file-html" style="font-size:30px;"></i><span>HTML5</span></div>
+  <div class="tech-logo" style="color:#1572B6;"><i class="ph ph-file-css" style="font-size:30px;"></i><span>CSS3</span></div>
+  <div class="tech-logo" style="color:#F7DF1E;"><i class="ph ph-file-js" style="font-size:30px;"></i><span>JS</span></div>
+  <div class="tech-logo" style="color:#61DAFB;"><i class="ph ph-atom" style="font-size:30px;"></i><span>REACT</span></div>
+  <div class="tech-logo" style="color:#38BDF8;"><i class="ph ph-waves" style="font-size:30px;"></i><span>TAILWIND</span></div>
+  <div class="tech-logo" style="color:#339933;"><i class="ph ph-hexagon" style="font-size:30px;"></i><span>NODE</span></div>
+  <div class="tech-logo" style="color:#FF2D20;"><i class="ph ph-fire" style="font-size:30px;"></i><span>LARAVEL</span></div>
+  <div class="tech-logo" style="color:#F24E1E;"><i class="ph ph-figma-logo" style="font-size:30px;"></i><span>FIGMA</span></div>
+</div>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo"><i class="ph ph-terminal-window"></i>SAIF_OPS</div>
+      <p class="footer-desc">Architecting intelligent, high-performance web systems. Military-grade reliability meets cinematic design.</p>
+      <div style="display:flex;gap:10px;">
+        <a href="https://github.com/saifulislaam" target="_blank" class="sb-social-btn"><i class="ph ph-github-logo"></i></a>
+        <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="sb-social-btn" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);"><i class="ph ph-linkedin-logo"></i></a>
+        <a href="#" class="sb-social-btn" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);"><i class="ph ph-instagram-logo"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-h">NAVIGATION</div>
+      <ul class="footer-links">
+        <li><a href="#hero">_HERO</a></li>
+        <li><a href="#about">_ABOUT</a></li>
+        <li><a href="#services">_SERVICES</a></li>
+        <li><a href="chat.html"><i class="ph ph-robot" style="color:var(--primary);"></i>AI_CHATBOT</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-h">COMMS_HUB</div>
+      <ul class="footer-links">
+        <li><a href="mailto:saifulislam.git@gmail.com"><i class="ph ph-envelope-simple" style="color:var(--primary);"></i>saifulislam.git@gmail.com</a></li>
+        <li><a href="tel:+923442864308"><i class="ph ph-phone" style="color:var(--secondary);"></i>+92 344 2864308</a></li>
+        <li style="display:flex;align-items:center;gap:8px;padding-top:8px;"><div class="sb-hud-dot" style="width:6px;height:6px;"></div><span style="font-family:var(--font-mono);font-size:9px;color:var(--primary);letter-spacing:2px;">AVAILABLE_FOR_HIRE</span></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-h">DEPLOYMENTS</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:180px;">
+        <a href="#projects" style="display:block;aspect-ratio:1;border:1px solid rgba(0,255,102,0.1);border-radius:2px;overflow:hidden;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(0,255,102,0.4)'" onmouseout="this.style.borderColor='rgba(0,255,102,0.1)'"><img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.3);transition:filter 0.3s;" onmouseover="this.style.filter='saturate(0.8)'" onmouseout="this.style.filter='saturate(0.3)'"></a>
+        <a href="#projects" style="display:block;aspect-ratio:1;border:1px solid rgba(0,255,102,0.1);border-radius:2px;overflow:hidden;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(0,255,102,0.4)'" onmouseout="this.style.borderColor='rgba(0,255,102,0.1)'"><img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.3);transition:filter 0.3s;" onmouseover="this.style.filter='saturate(0.8)'" onmouseout="this.style.filter='saturate(0.3)'"></a>
+        <a href="#projects" style="display:block;aspect-ratio:1;border:1px solid rgba(0,255,102,0.1);border-radius:2px;overflow:hidden;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(0,255,102,0.4)'" onmouseout="this.style.borderColor='rgba(0,255,102,0.1)'"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.3);transition:filter 0.3s;" onmouseover="this.style.filter='saturate(0.8)'" onmouseout="this.style.filter='saturate(0.3)'"></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SAIF_UL_ISLAM // ALL_NODES_SECURED</span>
+    <div style="display:flex;gap:16px;">
+      <a href="#" style="color:inherit;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">PRIVACY_POLICY</a>
+      <a href="#" style="color:inherit;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">TERMS_OF_SERVICE</a>
+    </div>
+  </div>
+</footer>
+</div>
 
 <script>
-        // --- 1. JSON SIDEBAR HOVER LOGIC & MAGNETIC SCROLLSPY ---
-        const navItems = document.querySelectorAll('.nav-item');
-        const navIndicator = document.getElementById('navIndicator');
-        const navMenu = document.getElementById('navMenu');
-        
-        // Ensure navIndicator has initial state mapped from the first item
-        window.onload = () => {
-            if(navItems.length > 0) {
-                updateMagneticIndicator(navItems[0]);
-                navIndicator.style.opacity = '1';
-            }
-        }
+// ======================== MATRIX RAIN ========================
+(function(){
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+  const chars='01アイウエオカキクケコサシスセソタチツテトナニヌネノABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%&';
+  const fontSize=13;
+  let cols=Math.floor(canvas.width/fontSize);
+  let drops=Array(cols).fill(1);
+  function draw(){
+    ctx.fillStyle='rgba(3,5,7,0.04)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#00FF66';
+    ctx.font=fontSize+'px Share Tech Mono, monospace';
+    for(let i=0;i<drops.length;i++){
+      const c=chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillText(c,i*fontSize,drops[i]*fontSize);
+      if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0;
+      drops[i]++;
+    }
+  }
+  setInterval(draw,45);
+  window.addEventListener('resize',()=>{cols=Math.floor(canvas.width/fontSize);drops=Array(cols).fill(1);});
+})();
 
-        function updateMagneticIndicator(targetItem) {
-            if(!targetItem) return;
-            const targetColor = targetItem.getAttribute('data-color');
-            const targetTop = targetItem.offsetTop;
-            
-            navIndicator.style.transform = `translateY(${targetTop}px)`;
-            navIndicator.style.backgroundColor = targetColor;
-            navIndicator.style.boxShadow = `0 0 15px ${targetColor}`;
-            navIndicator.style.opacity = '1';
-        }
+// ======================== BOOT SCREEN ========================
+const bootLines=[
+  '> INITIALIZING SAIF_OPS CYBER TERMINAL v4.2.1...',
+  '> LOADING ENCRYPTION PROTOCOLS...',
+  '> ESTABLISHING SECURE CONNECTION...',
+  '> SCANNING THREAT VECTORS...',
+  '> MOUNTING CLASSIFIED DATABASES...',
+  '> AUTHENTICATING OPERATOR CREDENTIALS...',
+  '> ACCESS GRANTED // CLEARANCE LEVEL 5',
+  '> RENDERING TACTICAL INTERFACE...',
+  '> SYSTEM ONLINE // STANDBY FOR DEPLOYMENT',
+];
+const bl=document.getElementById('bootLines');
+const bb=document.getElementById('bootBar');
+const bs=document.getElementById('bootScreen');
+let lineIdx=0;
+function showNextLine(){
+  if(lineIdx<bootLines.length){
+    const d=document.createElement('div');
+    d.textContent=bootLines[lineIdx];
+    d.style.animation='fadeInLine 0.05s forwards';
+    bl.appendChild(d);
+    lineIdx++;
+    bb.style.width=Math.round((lineIdx/bootLines.length)*100)+'%';
+    setTimeout(showNextLine,200+Math.random()*150);
+  } else {
+    setTimeout(()=>{bs.style.opacity='0';setTimeout(()=>{bs.style.display='none';},800);},400);
+  }
+}
+setTimeout(showNextLine,300);
 
-        navItems.forEach(item => {
-            const hoverColor = item.getAttribute('data-color');
-            
-            item.addEventListener('mouseenter', () => {
-                item.style.transform = "translateX(10px)";
-                item.style.color = hoverColor;
-                item.style.textShadow = `0 0 12px ${hoverColor}60`;
-                item.style.background = `linear-gradient(90deg, ${hoverColor}15, transparent)`;
-                
-                // Only move indicator on hover if not scrolling actively
-                updateMagneticIndicator(item);
-            });
-            
-            item.addEventListener('mouseleave', () => {
-                if(!item.classList.contains('active')) {
-                    item.style.transform = "translateX(0)";
-                    item.style.color = "rgba(255,255,255,0.5)";
-                    item.style.textShadow = "none";
-                    item.style.background = "transparent";
-                }
-                // Return indicator to active item
-                const activeItem = document.querySelector('.nav-item.active');
-                updateMagneticIndicator(activeItem);
-            });
-        });
+// ======================== SIDEBAR CLOCK ========================
+function updateClock(){
+  const t=new Date();
+  const h=String(t.getHours()).padStart(2,'0');
+  const m=String(t.getMinutes()).padStart(2,'0');
+  const s=String(t.getSeconds()).padStart(2,'0');
+  const el=document.getElementById('sidebarTime');
+  if(el)el.textContent=h+':'+m+':'+s;
+}
+setInterval(updateClock,1000);updateClock();
 
-        // --- 2. CLICK OUTSIDE TO CLOSE MOBILE MENU LOGIC ---
-        const sidebar = document.getElementById('sidebar');
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileTopbar = document.getElementById('mobileTopbar');
+// ======================== NAV INDICATOR ========================
+const navItems=document.querySelectorAll('.nav-item');
+const navIndicator=document.getElementById('navIndicator');
+const navWrap=document.getElementById('navWrap');
+function moveIndicator(item){
+  if(!item)return;
+  const wrapTop=navWrap.getBoundingClientRect().top;
+  const itemTop=item.getBoundingClientRect().top;
+  const offset=itemTop-wrapTop+navWrap.scrollTop;
+  navIndicator.style.transform='translateY('+offset+'px)';
+  navIndicator.style.backgroundColor=item.getAttribute('data-color')||'var(--primary)';
+  navIndicator.style.boxShadow='0 0 12px '+(item.getAttribute('data-color')||'var(--primary)');
+  navIndicator.style.opacity='1';
+}
+navItems.forEach(item=>{
+  item.addEventListener('mouseenter',()=>moveIndicator(item));
+  item.addEventListener('mouseleave',()=>{
+    const active=document.querySelector('.nav-item.active');
+    if(active)moveIndicator(active);
+  });
+});
+window.addEventListener('load',()=>{if(navItems[0])moveIndicator(navItems[0]);});
 
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); 
-            sidebar.classList.toggle('open');
-        });
+// ======================== SCROLLSPY ========================
+const sections=document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let current='';
+  sections.forEach(sec=>{
+    if(window.scrollY>=(sec.offsetTop-200))current=sec.id;
+  });
+  navItems.forEach(item=>{
+    item.classList.remove('active');
+    const href=item.getAttribute('href');
+    if(href==='#'+current){
+      item.classList.add('active');
+      moveIndicator(item);
+    }
+  });
+  // Mobile topbar scroll effect
+  const mob=document.getElementById('mobTopbar');
+  if(window.scrollY>20)mob.classList.add('scrolled');
+  else mob.classList.remove('scrolled');
+});
 
-        document.addEventListener('click', (e) => {
-            if(window.innerWidth < 1024 && sidebar.classList.contains('open')) {
-                if(!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
-                    sidebar.classList.remove('open');
-                }
-            }
-        });
+// ======================== MOBILE MENU ========================
+const sidebar=document.getElementById('sidebar');
+document.getElementById('menuBtn').addEventListener('click',e=>{
+  e.stopPropagation();sidebar.classList.toggle('open');});
+document.addEventListener('click',e=>{
+  if(window.innerWidth<1024&&sidebar.classList.contains('open')){
+    if(!sidebar.contains(e.target)&&!document.getElementById('menuBtn').contains(e.target))
+      sidebar.classList.remove('open');
+  }
+});
+navItems.forEach(i=>i.addEventListener('click',()=>{if(window.innerWidth<1024)sidebar.classList.remove('open');}));
 
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                if(window.innerWidth < 1024) sidebar.classList.remove('open');
-            });
-        });
+// ======================== REVEAL ON SCROLL ========================
+const revealEls=document.querySelectorAll('.reveal:not(.active)');
+const revealObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('active');revealObs.unobserve(e.target);}});
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+revealEls.forEach(el=>revealObs.observe(el));
 
-        // Mobile Topbar Scroll Effect (Advanced Floating Pill)
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 20) {
-                mobileTopbar.classList.add('scrolled');
-            } else {
-                mobileTopbar.classList.remove('scrolled');
-            }
-        });
+// ======================== TYPING EFFECT ========================
+const typingStrings=[
+  'Full-Stack Web Developer',
+  'React + Laravel Specialist',
+  'AI Integration Engineer',
+  'UI/UX System Architect',
+];
+let tsIdx=0,tCharIdx=0,tDeleting=false;
+const typingEl=document.getElementById('typingText');
+function typeLoop(){
+  const cur=typingStrings[tsIdx];
+  if(!tDeleting){
+    typingEl.textContent=cur.substring(0,tCharIdx+1);
+    tCharIdx++;
+    if(tCharIdx===cur.length){tDeleting=true;setTimeout(typeLoop,1800);return;}
+  } else {
+    typingEl.textContent=cur.substring(0,tCharIdx-1);
+    tCharIdx--;
+    if(tCharIdx===0){tDeleting=false;tsIdx=(tsIdx+1)%typingStrings.length;}
+  }
+  setTimeout(typeLoop,tDeleting?45:65);
+}
+setTimeout(typeLoop,3200);
 
-        // --- 3. HARDWARE ACCELERATED SCROLL REVEAL ---
-        const revealElements = document.querySelectorAll('.reveal');
-        const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -40px 0px" };
-
-        const revealOnScroll = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('active');
-                observer.unobserve(entry.target); 
-            });
-        }, revealOptions);
-
-        revealElements.forEach(el => revealOnScroll.observe(el));
-
-        // --- 4. ADVANCED SCROLLSPY (Magnetic Indicator Sync) ---
-        const sections = document.querySelectorAll('section');
-        
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if(window.scrollY >= (sectionTop - sectionHeight / 3)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navItems.forEach(item => {
-                const hoverColor = item.getAttribute('data-color');
-                item.classList.remove('active');
-                
-                // Reset styles
-                item.style.transform = "translateX(0)";
-                item.style.color = "rgba(255,255,255,0.5)";
-                item.style.textShadow = "none";
-                item.style.background = "transparent";
-                
-                // Apply active style & snap magnetic indicator
-                if(item.getAttribute('href') === `#${current}`) {
-                    item.classList.add('active');
-                    item.style.transform = "translateX(10px)";
-                    item.style.color = hoverColor;
-                    item.style.textShadow = `0 0 12px ${hoverColor}60`;
-                    item.style.background = `linear-gradient(90deg, ${hoverColor}15, transparent)`;
-                    
-                    updateMagneticIndicator(item);
-                }
-            });
-        });
-
-        // --- 5. FAST TYPEWRITER EFFECT ---
-        const textToType = "Full-Stack Web Developer | HTML, CSS, React, Laravel | Building modern web apps.";
-        const typeContainer = document.getElementById('typing-text');
-        let typeIndex = 0;
-
-        function typeWriter() {
-            if (typeIndex < textToType.length) {
-                typeContainer.textContent += textToType.charAt(typeIndex);
-                typeIndex++;
-                setTimeout(typeWriter, 30); 
-            }
-        }
-        setTimeout(typeWriter, 600);
-    </script>
+// ======================== FOOTER OFFSET (sidebar) ========================
+function adjustFooter(){
+  const fw=document.getElementById('footerWrap');
+  if(!fw)return;
+  if(window.innerWidth>=1024){fw.style.marginLeft='270px';}
+  else{fw.style.marginLeft='0';}
+}
+adjustFooter();window.addEventListener('resize',adjustFooter);
+</script>
 </body>
 </html>
-
-
-
