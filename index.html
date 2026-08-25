@@ -2,373 +2,402 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saif ul Islam — Full-Stack &amp; AI Developer</title>
-<meta name="description" content="Saif ul Islam is a full-stack developer building high-performance web platforms and AI-powered products.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SAIF_UL_ISLAM // CYBER_OPS_TERMINAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
 <link rel="stylesheet" href="css/style.css">
+
 </head>
 <body>
 
-<!-- =================== BACKDROP =================== -->
-<div class="bg" aria-hidden="true">
-  <div class="bg-grid"></div>
-  <div class="bg-glow"></div>
-  <div class="bg-noise"></div>
-  <canvas id="particles"></canvas>
+<!-- =================== BOOT SCREEN =================== -->
+<div id="bootScreen">
+  <div class="boot-logo glitch">SAIF_OPS</div>
+  <div class="boot-sub">Cyber Intelligence Terminal // v4.2.1</div>
+  <div class="boot-lines" id="bootLines"></div>
+  <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
 </div>
 
-<!-- =================== NAV =================== -->
-<header class="nav" id="nav">
-  <div class="nav-inner">
-    <a href="#top" class="logo">
-      <span class="logo-mark">S</span>
-      <span class="logo-text">saif<span class="dim">.dev</span></span>
-    </a>
+<!-- =================== CYBER BACKGROUND =================== -->
+<div class="cyber-bg">
+  <div class="tac-grid"></div>
+  <canvas id="matrixCanvas"></canvas>
+  <div class="radar-ring"></div>
+  <div class="radar-ring"></div>
+  <div class="radar-ring"></div>
+  <div class="scanlines"></div>
+  <div class="noise"></div>
+</div>
 
-    <nav class="nav-menu" id="navMenu">
-      <a href="#about" class="nav-link">About</a>
-      <a href="#tech" class="nav-link">Stack</a>
-      <a href="#services" class="nav-link">Services</a>
-      <a href="#projects" class="nav-link">Projects</a>
-      <a href="#experience" class="nav-link">Experience</a>
-      <a href="#testimonials" class="nav-link">Reviews</a>
+<!-- =================== MOBILE TOPBAR =================== -->
+<div class="mob-topbar" id="mobTopbar">
+  <div class="mob-logo">
+    <div class="mob-logo-sq"><i class="ph ph-terminal-window" style="font-size:12px;"></i></div>
+    SAIF_OPS
+  </div>
+  <button class="menu-btn" id="menuBtn"><i class="ph ph-list"></i></button>
+</div>
+
+<!-- =================== SIDEBAR =================== -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="sb-hud">
+    <span>SYS_ACTIVE</span>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <div class="sb-hud-dot"></div>
+      <span id="sidebarTime">--:--:--</span>
+    </div>
+  </div>
+
+  <div class="profile-zone">
+    <div class="avatar-wrap">
+      <img src="https://plus.unsplash.com/premium_photo-1734637616808-14fc29f2a155?q=80&w=400&auto=format&fit=crop" alt="Saif ul Islam" class="avatar-img">
+    </div>
+    <div class="profile-name">Saif ul Islam</div>
+    <div class="profile-rank">FULL_STACK_DEV // UNIT_01</div>
+    <div class="status-badge"><div class="sb-hud-dot" style="width:5px;height:5px;"></div> AVAILABLE_FOR_HIRE</div>
+  </div>
+
+  <div class="nav-section-label">// NAVIGATION_ARRAY</div>
+  <div class="nav-wrap" id="navWrap">
+    <div class="nav-indicator" id="navIndicator"></div>
+    <nav id="navMenu">
+      <a href="#hero" class="nav-item" data-color="#00FF66"><div class="nav-item-left"><i class="ph ph-terminal-window" style="color:#00FF66;"></i>_HERO</div><span class="nav-badge">01</span></a>
+      <a href="#about" class="nav-item" data-color="#00F0FF"><div class="nav-item-left"><i class="ph ph-user-focus" style="color:#00F0FF;"></i>_ABOUT</div><span class="nav-badge">02</span></a>
+      <a href="#tech" class="nav-item" data-color="#7A00FF"><div class="nav-item-left"><i class="ph ph-code" style="color:#7A00FF;"></i>_STACK</div><span class="nav-badge">03</span></a>
+      <a href="#services" class="nav-item" data-color="#00FF66"><div class="nav-item-left"><i class="ph ph-hard-drives" style="color:#00FF66;"></i>_SERVICES</div><span class="nav-badge">04</span></a>
+      <a href="#projects" class="nav-item" data-color="#FFD000"><div class="nav-item-left"><i class="ph ph-projector-screen" style="color:#FFD000;"></i>_PROJECTS</div><span class="nav-badge">05</span></a>
+      <a href="#experience" class="nav-item" data-color="#00F0FF"><div class="nav-item-left"><i class="ph ph-briefcase" style="color:#00F0FF;"></i>_EXP</div><span class="nav-badge">06</span></a>
+      <a href="#testimonials" class="nav-item" data-color="#7A00FF"><div class="nav-item-left"><i class="ph ph-star" style="color:#7A00FF;"></i>_REVIEWS</div><span class="nav-badge">07</span></a>
+      <a href="#contact" class="nav-item" data-color="#FF003C"><div class="nav-item-left"><i class="ph ph-envelope-simple" style="color:#FF003C;"></i>_CONTACT</div><span class="nav-badge">08</span></a>
     </nav>
-
-    <div class="nav-actions">
-      <a href="https://github.com/saifulislaam" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub"><i data-lucide="github"></i></a>
-      <a href="#contact" class="btn btn-primary btn-sm">Get in touch</a>
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
-        <i data-lucide="menu"></i>
-      </button>
-    </div>
   </div>
-</header>
 
-<!-- =================== MOBILE DRAWER =================== -->
-<div class="drawer" id="drawer">
-  <div class="drawer-head">
-    <span class="logo-text">saif<span class="dim">.dev</span></span>
-    <button class="menu-btn" id="drawerClose" aria-label="Close menu"><i data-lucide="x"></i></button>
+  <div style="flex:1;"></div>
+
+  <div class="sb-sysinfo">
+    <div class="sys-row"><span>CPU_LOAD</span><div class="sys-bar-wrap"><div class="sys-bar" style="width:72%;"></div></div></div>
+    <div class="sys-row"><span>MEM_USAGE</span><div class="sys-bar-wrap"><div class="sys-bar" style="width:58%;background:var(--secondary);box-shadow:0 0 6px var(--secondary);"></div></div></div>
+    <div class="sys-row"><span>NET_STATUS</span><div class="sys-bar-wrap"><div class="sys-bar" style="width:91%;background:var(--primary);"></div></div></div>
   </div>
-  <nav class="drawer-menu">
-    <a href="#about" class="drawer-link"><span>01</span>About</a>
-    <a href="#tech" class="drawer-link"><span>02</span>Stack</a>
-    <a href="#services" class="drawer-link"><span>03</span>Services</a>
-    <a href="#projects" class="drawer-link"><span>04</span>Projects</a>
-    <a href="#experience" class="drawer-link"><span>05</span>Experience</a>
-    <a href="#testimonials" class="drawer-link"><span>06</span>Reviews</a>
-    <a href="#contact" class="drawer-link"><span>07</span>Contact</a>
-  </nav>
-  <a href="#contact" class="btn btn-primary" style="width:100%;justify-content:center;">Get in touch</a>
-</div>
-<div class="drawer-backdrop" id="drawerBackdrop"></div>
 
-<main id="top">
+  <div class="sb-socials">
+    <a href="https://github.com/saifulislaam" target="_blank" class="sb-social-btn"><i class="ph ph-github-logo"></i></a>
+    <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="sb-social-btn" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);"><i class="ph ph-linkedin-logo"></i></a>
+    <a href="#" class="sb-social-btn" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);"><i class="ph ph-instagram-logo"></i></a>
+    <a href="mailto:saifulislam.git@gmail.com" class="sb-social-btn" style="border-color:rgba(255,0,60,0.2);color:rgba(255,0,60,0.5);"><i class="ph ph-envelope-simple"></i></a>
+  </div>
 
-  <!-- =================== HERO =================== -->
-  <section class="hero" id="hero">
-    <div class="hero-badge reveal">
-      <span class="dot"></span>
-      Available for freelance &amp; remote work
+</aside>
+
+<!-- =================== MAIN CONTENT =================== -->
+<main class="main">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-sys-line reveal active">
+      <div class="hero-sys-dot"></div>
+      <span>SYSTEM INITIALIZED // OPERATOR SAIF_UL_ISLAM // ACCESS_GRANTED</span>
     </div>
-    <h1 class="hero-title reveal">
-      I build software that<br><em>actually</em> works.
+    <div class="hero-label">
+      <i class="ph ph-shield-check" style="font-size:10px;"></i>
+      CLASSIFIED // CLEARANCE LEVEL 5 // CYBER_OPS_TERMINAL
+    </div>
+    <h1 class="hero-h1 reveal active">
+      SAIF<br><span class="name-green">UL ISLAM</span>
     </h1>
-    <p class="hero-sub reveal d1">
-      Full-stack developer from Pakistan specializing in React, Laravel and AI-powered
-      products. I turn ambitious ideas into fast, reliable, production-ready systems.
-    </p>
-    <div class="hero-actions reveal d2">
-      <a href="#projects" class="btn btn-primary">View projects</a>
-      <a href="#contact" class="btn btn-ghost">Contact me</a>
+    <div class="hero-sub reveal active d1">
+      <span id="typingText"></span><span class="cursor"></span>
     </div>
-
-    <div class="hero-stats reveal d3">
-      <div class="stat"><span class="stat-val">3+</span><span class="stat-label">Years experience</span></div>
-      <div class="stat"><span class="stat-val">50+</span><span class="stat-label">Projects shipped</span></div>
-      <div class="stat"><span class="stat-val">15+</span><span class="stat-label">Technologies</span></div>
-      <div class="stat"><span class="stat-val">24h</span><span class="stat-label">Avg. response time</span></div>
+    <div class="hero-btns reveal active d2">
+      <a href="#projects" class="cmd-btn"><i class="ph ph-stack"></i> VIEW_SYSTEMS</a>
+      <a href="#contact" class="cmd-btn cmd-btn-ghost"><i class="ph ph-paper-plane-tilt"></i> OPEN_COMMS</a>
+    </div>
+    <div class="hero-stats reveal active d3">
+      <div class="stat-box"><div class="stat-val">3+</div><div class="stat-label">YRS_OPS</div></div>
+      <div class="stat-box"><div class="stat-val">50+</div><div class="stat-label">DEPLOYMENTS</div></div>
+      <div class="stat-box"><div class="stat-val">15+</div><div class="stat-label">TECH_STACK</div></div>
+      <div class="stat-box"><div class="stat-val">∞</div><div class="stat-label">UPTIME</div></div>
     </div>
   </section>
 
-  <!-- =================== TERMINAL / QUICK INTRO =================== -->
-  <section class="section">
-    <div class="terminal reveal">
-      <div class="terminal-head">
-        <div class="terminal-tabs">
-          <button class="terminal-tab active" data-tab="whoami">whoami</button>
-          <button class="terminal-tab" data-tab="stack">stack --list</button>
-          <button class="terminal-tab" data-tab="contact">contact --info</button>
-        </div>
-        <button class="copy-btn" id="copyBtn"><i data-lucide="copy"></i><span>Copy</span></button>
-      </div>
-      <div class="terminal-body">
-        <pre class="terminal-pane active" data-pane="whoami"><code><span class="tok-comment"># Full-stack developer &amp; AI engineer</span>
-<span class="tok-key">$</span> <span class="tok-cmd">whoami</span>
-name       Saif ul Islam
-role       Full-Stack Web Developer
-based_in   Pakistan · Remote
-focus      React · Laravel · LLM integrations
-education  BS Software Engineering, University of Swat
-status     <span class="tok-str">"available_for_hire"</span></code></pre>
-        <pre class="terminal-pane" data-pane="stack"><code><span class="tok-comment"># Primary tools of the trade</span>
-<span class="tok-key">$</span> <span class="tok-cmd">stack --list</span>
-frontend   React, TypeScript, Tailwind CSS
-backend    Laravel, Node.js, PostgreSQL, MongoDB
-ai         OpenAI / LLM APIs, RAG, vector search
-devops     Docker, AWS, Git</code></pre>
-        <pre class="terminal-pane" data-pane="contact"><code><span class="tok-comment"># Let's build something</span>
-<span class="tok-key">$</span> <span class="tok-cmd">contact --info</span>
-email      saifulislam.git@gmail.com
-phone      +92 344 2864308
-github     github.com/saifulislaam
-linkedin   linkedin.com/in/saifxeven</code></pre>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================== ABOUT =================== -->
-  <section class="section" id="about">
-    <div class="section-head reveal">
-      <span class="eyebrow">About</span>
-      <h2 class="section-title">A developer who cares about the details.</h2>
-    </div>
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="sec-title reveal"><span>OPERATOR_PROFILE</span><div class="sec-title-line"></div></div>
     <div class="about-grid">
-      <div class="card about-card reveal">
+      <div class="glass about-card reveal">
+        <div class="corner-tl"></div>
+        <div class="classified-tag"><i class="ph ph-warning" style="font-size:10px;"></i> CLASSIFIED_INTEL</div>
         <p class="about-text">
-          I'm <strong>Saif ul Islam</strong> — a full-stack web developer from Pakistan, working
-          at the intersection of solid engineering and thoughtful design.
-        </p>
-        <p class="about-text">
-          I specialize in building <strong>high-performance, intelligent web systems</strong> —
-          from AI-powered tools to enterprise platforms — shipped fast, without cutting corners
-          on quality.
+          I am <strong>Saif ul Islam</strong> — a Full-Stack Web Developer from Pakistan, operating at the intersection of engineering precision and design innovation.<br><br>
+          I specialize in building <strong>high-performance, intelligent web systems</strong> — from AI-powered tools to enterprise platforms — deployed with military-grade reliability and aesthetic excellence.
         </p>
       </div>
-      <div class="card about-card reveal d1">
-        <ul class="fact-list">
-          <li><i data-lucide="graduation-cap"></i>BS Software Engineering — University of Swat</li>
-          <li><i data-lucide="code-2"></i>Full-stack: React + Laravel specialist</li>
-          <li><i data-lucide="sparkles"></i>AI integration &amp; LLM API expert</li>
-          <li><i data-lucide="smartphone"></i>Mobile-first, performance obsessed</li>
-          <li><i data-lucide="briefcase"></i>Freelance contractor, open to remote roles</li>
-          <li><i data-lucide="map-pin"></i>Pakistan — remote capable, any timezone</li>
+      <div class="glass about-card reveal d1">
+        <div class="corner-tl"></div>
+        <ul class="intel-list">
+          <li>BS Software Engineering // University of Swat</li>
+          <li>Full-Stack: React + Laravel Specialist</li>
+          <li>AI Integration & LLM API Expert</li>
+          <li>Mobile-first, Performance Obsessed</li>
+          <li>Freelance Contractor // Open to Remote</li>
+          <li>Location: Pakistan // Remote Capable</li>
+          <li>Clearance: Available_for_hire</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <!-- =================== TECH STACK =================== -->
-  <section class="section" id="tech">
-    <div class="section-head reveal">
-      <span class="eyebrow">Tech stack</span>
-      <h2 class="section-title">Tools I reach for.</h2>
-    </div>
+  <!-- TECH STACK -->
+  <section id="tech">
+    <div class="sec-title reveal"><span>TECH_ARSENAL</span><div class="sec-title-line"></div></div>
     <div class="stack-grid">
-      <div class="card stack-card reveal">
-        <div class="stack-cat">Frontend</div>
-        <div class="stack-item"><i data-lucide="file-code-2"></i>HTML5 &amp; CSS3</div>
-        <div class="stack-item"><i data-lucide="braces"></i>JavaScript ES6+</div>
-        <div class="stack-item"><i data-lucide="atom"></i>React.js</div>
-        <div class="stack-item"><i data-lucide="wind"></i>Tailwind CSS</div>
+      <!-- Frontend -->
+      <div class="glass stack-card reveal">
+        <div class="corner-tl"></div>
+        <div class="stack-cat">FRONTEND</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#E34F26;border-color:rgba(227,79,38,0.2);"><i class="ph ph-file-html"></i></div>HTML5 &amp; CSS3</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#F7DF1E;border-color:rgba(247,223,30,0.2);"><i class="ph ph-file-js"></i></div>JavaScript ES6+</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#61DAFB;border-color:rgba(97,218,251,0.2);"><i class="ph ph-atom"></i></div>React.js</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#38BDF8;border-color:rgba(56,189,248,0.2);"><i class="ph ph-waves"></i></div>Tailwind CSS</div>
       </div>
-      <div class="card stack-card reveal d1">
-        <div class="stack-cat">Backend</div>
-        <div class="stack-item"><i data-lucide="flame"></i>Laravel (PHP)</div>
-        <div class="stack-item"><i data-lucide="hexagon"></i>Node.js</div>
-        <div class="stack-item"><i data-lucide="database"></i>MySQL / PostgreSQL</div>
-        <div class="stack-item"><i data-lucide="layers"></i>MongoDB</div>
+      <!-- Backend -->
+      <div class="glass stack-card reveal d1">
+        <div class="corner-tl"></div>
+        <div class="stack-cat" style="color:var(--secondary);">BACKEND</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#FF2D20;border-color:rgba(255,45,32,0.2);"><i class="ph ph-fire"></i></div>Laravel (PHP)</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#339933;border-color:rgba(51,153,51,0.2);"><i class="ph ph-hexagon"></i></div>Node.js</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#4479A1;border-color:rgba(68,121,161,0.2);"><i class="ph ph-database"></i></div>MySQL / PostgreSQL</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#4EA94B;border-color:rgba(78,169,75,0.2);"><i class="ph ph-cylinder"></i></div>MongoDB</div>
       </div>
-      <div class="card stack-card reveal d2">
-        <div class="stack-cat">AI &amp; Tools</div>
-        <div class="stack-item"><i data-lucide="bot"></i>OpenAI / LLM APIs</div>
-        <div class="stack-item"><i data-lucide="figma"></i>Figma / UI design</div>
-        <div class="stack-item"><i data-lucide="box"></i>Docker</div>
-        <div class="stack-item"><i data-lucide="git-branch"></i>Git / GitHub</div>
+      <!-- AI & Tools -->
+      <div class="glass stack-card reveal d2">
+        <div class="corner-tl"></div>
+        <div class="stack-cat" style="color:var(--accent);">AI / TOOLS</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#74AA9C;border-color:rgba(116,170,156,0.2);"><i class="ph ph-robot"></i></div>OpenAI / LLM APIs</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#F24E1E;border-color:rgba(242,78,30,0.2);"><i class="ph ph-figma-logo"></i></div>Figma / UI Design</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#2496ED;border-color:rgba(36,150,237,0.2);"><i class="ph ph-cube"></i></div>Docker</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#F05032;border-color:rgba(240,80,50,0.2);"><i class="ph ph-git-branch"></i></div>Git / GitHub</div>
       </div>
-      <div class="card stack-card reveal d3">
-        <div class="stack-cat">Advanced</div>
-        <div class="stack-item"><i data-lucide="file-type"></i>TypeScript</div>
-        <div class="stack-item"><i data-lucide="zap"></i>Redis / caching</div>
-        <div class="stack-item"><i data-lucide="shuffle"></i>REST / GraphQL</div>
-        <div class="stack-item"><i data-lucide="cloud"></i>AWS / cloud deploy</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =================== SERVICES =================== -->
-  <section class="section" id="services">
-    <div class="section-head reveal">
-      <span class="eyebrow">Services</span>
-      <h2 class="section-title">What I can build for you.</h2>
-    </div>
-    <div class="services-grid">
-      <div class="card feature-card reveal">
-        <div class="feature-icon"><i data-lucide="layout-panel-left"></i></div>
-        <div class="feature-title">Frontend engineering</div>
-        <p class="feature-desc">Precision-built interfaces with React, Tailwind and thoughtful animation. Fast, accessible, pixel-accurate.</p>
-        <div class="tag-row"><span class="tag">React</span><span class="tag">Tailwind</span></div>
-      </div>
-      <div class="card feature-card reveal d1">
-        <div class="feature-icon"><i data-lucide="server"></i></div>
-        <div class="feature-title">Backend systems</div>
-        <p class="feature-desc">Scalable APIs, database design and microservices architecture using Laravel and Node.js.</p>
-        <div class="tag-row"><span class="tag">Laravel</span><span class="tag">Node.js</span></div>
-      </div>
-      <div class="card feature-card reveal d2">
-        <div class="feature-icon"><i data-lucide="bot"></i></div>
-        <div class="feature-title">AI integration</div>
-        <p class="feature-desc">LLM-powered features, chatbots, RAG pipelines and automation built into your product.</p>
-        <div class="tag-row"><span class="tag">LLM APIs</span><span class="tag">RAG</span></div>
-      </div>
-      <div class="card feature-card reveal">
-        <div class="feature-icon"><i data-lucide="smartphone"></i></div>
-        <div class="feature-title">Mobile-ready builds</div>
-        <p class="feature-desc">Every project is mobile-first and tested across devices with a fluid, responsive layout system.</p>
-        <div class="tag-row"><span class="tag">PWA</span><span class="tag">Responsive</span></div>
-      </div>
-      <div class="card feature-card reveal d1">
-        <div class="feature-icon"><i data-lucide="plug-zap"></i></div>
-        <div class="feature-title">API integrations</div>
-        <p class="feature-desc">Payment gateways, CRMs, analytics and custom webhook systems, connected cleanly.</p>
-        <div class="tag-row"><span class="tag">Stripe</span><span class="tag">Webhooks</span></div>
-      </div>
-      <div class="card feature-card reveal d2">
-        <div class="feature-icon"><i data-lucide="wand-2"></i></div>
-        <div class="feature-title">UI / UX design</div>
-        <p class="feature-desc">Modern interface design in Figma, from wireframe to design system, ready to build.</p>
-        <div class="tag-row"><span class="tag">Figma</span><span class="tag">Design systems</span></div>
+      <!-- Advanced -->
+      <div class="glass stack-card reveal d3">
+        <div class="corner-tl"></div>
+        <div class="stack-cat" style="color:var(--warning);">ADVANCED</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#3178C6;border-color:rgba(49,120,198,0.2);"><i class="ph ph-file-ts"></i></div>TypeScript</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#FF4154;border-color:rgba(255,65,84,0.2);"><i class="ph ph-vector-two"></i></div>Redis / Cache</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#764ABC;border-color:rgba(118,74,188,0.2);"><i class="ph ph-arrows-left-right"></i></div>REST / GraphQL</div>
+        <div class="stack-item"><div class="stack-item-icon" style="color:#00FF66;border-color:rgba(0,255,102,0.2);"><i class="ph ph-cloud"></i></div>AWS / Cloud Deploy</div>
       </div>
     </div>
   </section>
 
-  <!-- =================== PROJECTS =================== -->
-  <section class="section" id="projects">
-    <div class="section-head reveal">
-      <span class="eyebrow">Projects</span>
-      <h2 class="section-title">Recent work.</h2>
-    </div>
-    <div class="projects-grid">
-      <article class="card project-card reveal">
-        <div class="project-img"><img src="img/AIimg.jpeg" loading="lazy" alt="AI image editor product screenshot"><span class="project-badge">AI / Vision</span></div>
-        <div class="project-body">
-          <h3 class="project-title">AI Image Editor</h3>
-          <p class="project-desc">A generative-AI image studio with high-fidelity upscaling, inpainting and real-time generation.</p>
-          <div class="tag-row"><span class="tag">React</span><span class="tag">Node.js</span><span class="tag">Diffusion API</span></div>
-        </div>
-      </article>
-      <article class="card project-card reveal d1">
-        <div class="project-img"><img src="img/chatbot.jpeg" loading="lazy" alt="AI chatbot product screenshot"><span class="project-badge">LLM / NLP</span></div>
-        <div class="project-body">
-          <h3 class="project-title">Context-Aware AI Chatbot</h3>
-          <p class="project-desc">A RAG-powered conversational agent with deep context memory and real-time token streaming.</p>
-          <div class="tag-row"><span class="tag">OpenAI API</span><span class="tag">WebSockets</span><span class="tag">Vector DB</span></div>
-        </div>
-      </article>
-      <article class="card project-card reveal d2">
-        <div class="project-img"><img src="img/payload.jpeg" loading="lazy" alt="Payment platform product screenshot"><span class="project-badge">Fintech</span></div>
-        <div class="project-body">
-          <h3 class="project-title">Global Payment Hub</h3>
-          <p class="project-desc">A payment routing system handling Stripe, PayPal and crypto checkout under high load.</p>
-          <div class="tag-row"><span class="tag">Laravel</span><span class="tag">Stripe API</span><span class="tag">Webhooks</span></div>
-        </div>
-      </article>
-      <article class="card project-card reveal d3">
-        <div class="project-img"><img src="img/ecom.jpeg" loading="lazy" alt="Commerce platform product screenshot"><span class="project-badge">Architecture</span></div>
-        <div class="project-body">
-          <h3 class="project-title">Scalable Commerce Engine</h3>
-          <p class="project-desc">A headless e-commerce backend with decoupled inventory, auth and orders via event sourcing.</p>
-          <div class="tag-row"><span class="tag">TypeScript</span><span class="tag">Docker</span><span class="tag">PostgreSQL</span></div>
-        </div>
-      </article>
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="sec-title reveal"><span>SERVICE_MODULES</span><div class="sec-title-line"></div></div>
+    <div class="svc-grid">
+      <div class="glass svc-card reveal" style="--icon-color:#00FF66;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon"><i class="ph ph-layout"></i></div>
+        <div class="svc-title">FRONTEND_OPS</div>
+        <div class="svc-desc">Precision-engineered interfaces built with React, Tailwind CSS, and advanced animation systems. Pixel-perfect, blazing fast.</div>
+        <div><span class="svc-tag">REACT</span><span class="svc-tag">TAILWIND</span><span class="svc-tag">ANIMATION</span></div>
+      </div>
+      <div class="glass svc-card reveal d1" style="--icon-color:#00F0FF;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon" style="border-color:rgba(0,240,255,0.3);color:var(--secondary);"><i class="ph ph-hard-drives"></i></div>
+        <div class="svc-title">BACKEND_SYSTEMS</div>
+        <div class="svc-desc">Scalable server architectures, REST APIs, database design, and microservices using Laravel and Node.js.</div>
+        <div><span class="svc-tag" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);">LARAVEL</span><span class="svc-tag" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);">NODE.JS</span></div>
+      </div>
+      <div class="glass svc-card reveal d2" style="--icon-color:#7A00FF;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon" style="border-color:rgba(122,0,255,0.3);color:var(--accent);"><i class="ph ph-robot"></i></div>
+        <div class="svc-title">AI_ENHANCEMENT</div>
+        <div class="svc-desc">LLM integrations, AI chatbots, image generation pipelines, and intelligent automation modules for modern applications.</div>
+        <div><span class="svc-tag" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);">LLM_API</span><span class="svc-tag" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);">RAG</span></div>
+      </div>
+      <div class="glass svc-card reveal d3" style="--icon-color:#FFD000;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon" style="border-color:rgba(255,208,0,0.3);color:var(--warning);"><i class="ph ph-device-mobile"></i></div>
+        <div class="svc-title">MOBILE_READY</div>
+        <div class="svc-desc">Every deployment is mobile-first, touch-optimized, and tested across all device classes with fluid responsive systems.</div>
+        <div><span class="svc-tag" style="border-color:rgba(255,208,0,0.15);color:rgba(255,208,0,0.5);">PWA</span><span class="svc-tag" style="border-color:rgba(255,208,0,0.15);color:rgba(255,208,0,0.5);">RESPONSIVE</span></div>
+      </div>
+      <div class="glass svc-card reveal" style="--icon-color:#FF003C;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon" style="border-color:rgba(255,0,60,0.3);color:var(--danger);"><i class="ph ph-plugs-connected"></i></div>
+        <div class="svc-title">API_INTEGRATION</div>
+        <div class="svc-desc">Seamless third-party integrations: payment gateways, CRMs, analytics, maps, and custom webhook systems.</div>
+        <div><span class="svc-tag" style="border-color:rgba(255,0,60,0.15);color:rgba(255,0,60,0.5);">STRIPE</span><span class="svc-tag" style="border-color:rgba(255,0,60,0.15);color:rgba(255,0,60,0.5);">WEBHOOKS</span></div>
+      </div>
+      <div class="glass svc-card reveal d1" style="--icon-color:#00FF66;">
+        <div class="corner-tl"></div>
+        <div class="svc-icon"><i class="ph ph-magic-wand"></i></div>
+        <div class="svc-title">UI_DESIGN</div>
+        <div class="svc-desc">Luxury UI/UX design with Figma, custom design systems, dark interfaces, glassmorphism, and cinematic aesthetics.</div>
+        <div><span class="svc-tag">FIGMA</span><span class="svc-tag">DESIGN_SYS</span></div>
+      </div>
     </div>
   </section>
 
-  <!-- =================== EXPERIENCE =================== -->
-  <section class="section" id="experience">
-    <div class="section-head reveal">
-      <span class="eyebrow">Experience</span>
-      <h2 class="section-title">Where I've worked.</h2>
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="sec-title reveal"><span>DEPLOYED_SYSTEMS</span><div class="sec-title-line"></div></div>
+    <div class="proj-grid">
+      <!-- Proj 1 -->
+      <div class="glass proj-card reveal">
+        <div class="proj-img-wrap">
+          <img src="img/AIimg.jpeg" loading="lazy" alt="AI Image Editor">
+          <div class="proj-overlay"></div>
+          <div class="proj-badge" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">AI_VISION</div>
+          <div class="proj-scan"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-title">NEXT-GEN AI IMAGE EDITOR</div>
+          <div class="proj-desc">Sophisticated image manipulation studio integrating Generative AI models. High-fidelity upscaling, inpainting, and real-time generation.</div>
+          <div class="proj-tags">
+            <span class="proj-tag" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">REACT</span>
+            <span class="proj-tag">NODE.JS</span><span class="proj-tag">DIFFUSION_API</span>
+          </div>
+        </div>
+      </div>
+      <!-- Proj 2 -->
+      <div class="glass proj-card reveal d1">
+        <div class="proj-img-wrap">
+          <img src="img/chatbot.jpeg" loading="lazy" alt="AI Chatbot">
+          <div class="proj-overlay"></div>
+          <div class="proj-badge" style="color:var(--accent);border-color:rgba(122,0,255,0.2);">LLM_NLP</div>
+          <div class="proj-scan" style="background:linear-gradient(90deg,transparent,var(--accent),transparent);"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-title">LIQUID CONTEXT AI CHATBOT</div>
+          <div class="proj-desc">Intelligent conversational agent using RAG. Deep context memory, real-time token streaming, multi-model routing inside a glass UI.</div>
+          <div class="proj-tags">
+            <span class="proj-tag" style="color:rgba(122,0,255,0.8);border-color:rgba(122,0,255,0.2);">OPENAI_API</span>
+            <span class="proj-tag">WEBSOCKETS</span><span class="proj-tag">VECTOR_DB</span>
+          </div>
+        </div>
+      </div>
+      <!-- Proj 3 -->
+      <div class="glass proj-card reveal d2">
+        <div class="proj-img-wrap">
+          <img src="img/payload.jpeg" loading="lazy" alt="Payment Hub">
+          <div class="proj-overlay"></div>
+          <div class="proj-badge" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">FINTECH</div>
+          <div class="proj-scan"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-title">GLOBAL PAYMENT HUB API</div>
+          <div class="proj-desc">Payment routing system for SaaS platform. Seamless checkout flows handling Stripe, PayPal, and Crypto gateways under high load.</div>
+          <div class="proj-tags">
+            <span class="proj-tag" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">LARAVEL</span>
+            <span class="proj-tag">STRIPE_API</span><span class="proj-tag">WEBHOOKS</span>
+          </div>
+        </div>
+      </div>
+      <!-- Proj 4 -->
+      <div class="glass proj-card reveal d3">
+        <div class="proj-img-wrap">
+          <img src="img/ecom.jpeg" loading="lazy" alt="Commerce Engine">
+          <div class="proj-overlay"></div>
+          <div class="proj-badge" style="color:var(--warning);border-color:rgba(255,208,0,0.2);">ARCHITECTURE</div>
+          <div class="proj-scan" style="background:linear-gradient(90deg,transparent,var(--warning),transparent);"></div>
+        </div>
+        <div class="proj-body">
+          <div class="proj-title">SCALABLE COMMERCE ENGINE</div>
+          <div class="proj-desc">Headless e-commerce backend for high concurrency. Decoupled inventory, auth, and orders into microservices with event sourcing.</div>
+          <div class="proj-tags">
+            <span class="proj-tag" style="color:var(--warning);border-color:rgba(255,208,0,0.2);">TYPESCRIPT</span>
+            <span class="proj-tag">DOCKER</span><span class="proj-tag">POSTGRESQL</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <!-- EXPERIENCE & EDUCATION -->
+  <section id="experience">
+    <div class="sec-title reveal"><span>MISSION_LOG</span><div class="sec-title-line"></div></div>
     <div class="exp-grid">
       <div class="reveal">
-        <div class="sub-label">Field experience</div>
+        <div class="nav-section-label" style="padding:0 0 20px;">// FIELD_EXPERIENCE</div>
         <div class="timeline">
           <div class="tl-item">
             <div class="tl-dot"></div>
-            <div class="tl-date">2023 — Present</div>
-            <div class="tl-title">Freelance Full-Stack Developer</div>
-            <div class="tl-desc">Built CMS platforms, e-commerce systems, dashboards and AI web apps for clients worldwide, with high delivery standards.</div>
+            <div class="tl-date">2023 — PRESENT</div>
+            <div class="tl-title">FREELANCE FULL-STACK DEVELOPER</div>
+            <div class="tl-desc">Built CMS platforms, eCommerce systems, dashboards, AI web apps, and management systems for diverse global clients with high delivery standards.</div>
           </div>
           <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">2023 — Present</div>
-            <div class="tl-title">University Projects</div>
-            <div class="tl-desc">Developed database systems, interactive dashboards and web tools using Laravel and React for academic and research work.</div>
+            <div class="tl-dot" style="background:rgba(0,240,255,0.2);border-color:var(--secondary);box-shadow:0 0 10px rgba(0,240,255,0.3);"></div>
+            <div class="tl-date" style="color:var(--secondary);">2023 — PRESENT</div>
+            <div class="tl-title">UNIVERSITY PROJECTS</div>
+            <div class="tl-desc">Developed robust DBMS, interactive dashboards, and web tools using Laravel and React for academic and research initiatives.</div>
           </div>
         </div>
       </div>
-      <div class="reveal d1">
-        <div class="sub-label">Training &amp; education</div>
-        <div class="edu-list">
-          <div class="card edu-card">
-            <div class="edu-title">BS Software Engineering</div>
-            <div class="edu-org">University of Swat · 2023 — Present</div>
-          </div>
-          <div class="card edu-card">
-            <div class="edu-title">Certified Web Developer</div>
-            <div class="edu-org">Freelance / Online · 2023</div>
-          </div>
-          <div class="card edu-card">
-            <div class="edu-title">AI &amp; ML Fundamentals</div>
-            <div class="edu-org">Self-directed study · 2024</div>
-          </div>
+      <div id="education" class="reveal d1">
+        <div class="nav-section-label" style="padding:0 0 20px;">// TRAINING_RECORDS</div>
+        <div class="glass edu-card">
+          <div class="corner-tl"></div>
+          <div class="edu-title">BS. SOFTWARE ENGINEERING</div>
+          <div class="edu-org">UNIVERSITY OF SWAT // 2023 — PRESENT</div>
+        </div>
+        <div class="glass edu-card" style="border-left-color:var(--secondary);">
+          <div class="corner-tl"></div>
+          <div class="edu-title">CERTIFIED WEB DEVELOPER</div>
+          <div class="edu-org">FREELANCE / ONLINE // 2023</div>
+        </div>
+        <div class="glass edu-card" style="border-left-color:var(--accent);">
+          <div class="corner-tl"></div>
+          <div class="edu-title">AI & ML FUNDAMENTALS</div>
+          <div class="edu-org">SELF-DIRECTED STUDY // 2024</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- =================== TESTIMONIALS =================== -->
-  <section class="section" id="testimonials">
-    <div class="section-head reveal">
-      <span class="eyebrow">Reviews</span>
-      <h2 class="section-title">What clients say.</h2>
-    </div>
-    <div class="testimonial-grid">
-      <div class="card testimonial-card reveal">
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"Saif delivered a blazing fast dashboard ahead of schedule. His attention to detail and UI quality is on another level."</p>
-        <div class="testimonial-author">Alex Turner</div>
-        <div class="testimonial-role">CTO, TechCorp USA</div>
+  <!-- TESTIMONIALS -->
+  <section id="testimonials">
+    <div class="sec-title reveal"><span>FIELD_REPORTS</span><div class="sec-title-line"></div></div>
+    <div class="test-grid">
+      <div class="glass test-card reveal">
+        <div class="corner-tl"></div>
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text">"Saif delivered a blazing fast dashboard ahead of schedule. His attention to detail and UI quality is on another level. Highly recommended."</div>
+        <div class="test-author">ALEX_TURNER</div>
+        <div class="test-role">CTO // TECHCORP_USA</div>
       </div>
-      <div class="card testimonial-card reveal d1">
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"The AI chatbot he built exceeded expectations — deep understanding of LLMs and clean architecture. Will hire again."</p>
-        <div class="testimonial-author">Sara Malik</div>
-        <div class="testimonial-role">Founder, AI Startup</div>
+      <div class="glass test-card reveal d1">
+        <div class="corner-tl"></div>
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text">"The AI chatbot he built for us exceeded expectations. Deep understanding of LLMs and clean code architecture. Will hire again."</div>
+        <div class="test-author">SARA_MALIK</div>
+        <div class="test-role">FOUNDER // AI_STARTUP</div>
       </div>
-      <div class="card testimonial-card reveal d2">
-        <div class="stars">★★★★★</div>
-        <p class="testimonial-text">"Our platform handles 10x more load after Saif's backend refactor. Exceptional engineering skills."</p>
-        <div class="testimonial-author">James Rodriguez</div>
-        <div class="testimonial-role">Engineering Lead, E-Commerce</div>
+      <div class="glass test-card reveal d2">
+        <div class="corner-tl"></div>
+        <div class="test-stars">★★★★★</div>
+        <div class="test-text">"Our e-commerce platform handles 10x more load after Saif's microservices refactor. Exceptional backend engineering skills."</div>
+        <div class="test-author">JAMES_RODRIGUEZ</div>
+        <div class="test-role">ENGINEERING_LEAD // E-COMMERCE</div>
       </div>
     </div>
   </section>
 
-  <!-- =================== CONTACT =================== -->
-  <section class="section" id="contact">
-    <div class="contact-card card reveal">
-      <div class="contact-icon"><i data-lucide="mail"></i></div>
-      <h2 class="contact-title">Let's build something together.</h2>
-      <p class="contact-desc">Open for freelance contracts, product builds and technical collaborations. I usually respond within 24 hours.</p>
-      <div class="hero-actions">
-        <a href="mailto:saifulislam.git@gmail.com" class="btn btn-primary"><i data-lucide="send"></i>Send a message</a>
-        <a href="chat.html" class="btn btn-ghost"><i data-lucide="bot"></i>Chat with my AI</a>
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="sec-title reveal"><span>OPEN_COMMS_CHANNEL</span><div class="sec-title-line"></div></div>
+    <div class="glass contact-wrap reveal">
+      <div class="corner-tl"></div>
+      <div class="classified-tag" style="margin:0 auto 20px;"><i class="ph ph-shield-check" style="font-size:10px;"></i>SECURE_CHANNEL_AVAILABLE</div>
+      <div class="contact-icon"><i class="ph ph-envelope-simple-open"></i></div>
+      <div class="contact-h2">INITIATE HANDSHAKE</div>
+      <p class="contact-p">Open a secure comms channel for freelance contracts, enterprise deployments, or technical collaborations. Response within 24 mission hours.</p>
+      <div class="contact-btns">
+        <a href="mailto:saifulislam.git@gmail.com" class="cmd-btn"><i class="ph ph-paper-plane-right"></i> SEND_MESSAGE</a>
+        <a href="chat.html" class="cmd-btn cmd-btn-ghost"><i class="ph ph-robot"></i> AI_CHATBOT</a>
       </div>
     </div>
   </section>
@@ -376,57 +405,63 @@ linkedin   linkedin.com/in/saifxeven</code></pre>
 </main>
 
 <!-- =================== FOOTER =================== -->
-<footer class="footer">
-  <div class="tech-strip">
-    <div class="tech-logo"><i data-lucide="file-code-2"></i>HTML5</div>
-    <div class="tech-logo"><i data-lucide="palette"></i>CSS3</div>
-    <div class="tech-logo"><i data-lucide="braces"></i>JavaScript</div>
-    <div class="tech-logo"><i data-lucide="atom"></i>React</div>
-    <div class="tech-logo"><i data-lucide="wind"></i>Tailwind</div>
-    <div class="tech-logo"><i data-lucide="hexagon"></i>Node</div>
-    <div class="tech-logo"><i data-lucide="flame"></i>Laravel</div>
-    <div class="tech-logo"><i data-lucide="figma"></i>Figma</div>
-  </div>
-
-  <div class="footer-main">
-    <div class="footer-grid">
-      <div class="footer-col footer-brand">
-        <div class="logo-text">saif<span class="dim">.dev</span></div>
-        <p class="footer-desc">Architecting intelligent, high-performance web systems — solid engineering meets clean design.</p>
-        <div class="footer-socials">
-          <a href="https://github.com/saifulislaam" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub"><i data-lucide="github"></i></a>
-          <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" rel="noopener" class="icon-btn" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
-          <a href="mailto:saifulislam.git@gmail.com" class="icon-btn" aria-label="Email"><i data-lucide="mail"></i></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <div class="footer-h">Navigation</div>
-        <ul class="footer-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="chat.html">AI Chatbot</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <div class="footer-h">Contact</div>
-        <ul class="footer-links">
-          <li><a href="mailto:saifulislam.git@gmail.com"><i data-lucide="mail"></i>saifulislam.git@gmail.com</a></li>
-          <li><a href="tel:+923442864308"><i data-lucide="phone"></i>+92 344 2864308</a></li>
-          <li class="status-line"><span class="dot"></span>Available for hire</li>
-        </ul>
+<div style="position:relative;z-index:10;" id="footerWrap">
+<div class="tech-bar" style="margin-left:0;" id="techBar">
+  <div class="tech-logo" style="color:#E34F26;"><i class="ph ph-file-html" style="font-size:30px;"></i><span>HTML5</span></div>
+  <div class="tech-logo" style="color:#1572B6;"><i class="ph ph-file-css" style="font-size:30px;"></i><span>CSS3</span></div>
+  <div class="tech-logo" style="color:#F7DF1E;"><i class="ph ph-file-js" style="font-size:30px;"></i><span>JS</span></div>
+  <div class="tech-logo" style="color:#61DAFB;"><i class="ph ph-atom" style="font-size:30px;"></i><span>REACT</span></div>
+  <div class="tech-logo" style="color:#38BDF8;"><i class="ph ph-waves" style="font-size:30px;"></i><span>TAILWIND</span></div>
+  <div class="tech-logo" style="color:#339933;"><i class="ph ph-hexagon" style="font-size:30px;"></i><span>NODE</span></div>
+  <div class="tech-logo" style="color:#FF2D20;"><i class="ph ph-fire" style="font-size:30px;"></i><span>LARAVEL</span></div>
+  <div class="tech-logo" style="color:#F24E1E;"><i class="ph ph-figma-logo" style="font-size:30px;"></i><span>FIGMA</span></div>
+</div>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo"><i class="ph ph-terminal-window"></i>SAIF_OPS</div>
+      <p class="footer-desc">Architecting intelligent, high-performance web systems. Military-grade reliability meets cinematic design.</p>
+      <div style="display:flex;gap:10px;">
+        <a href="https://github.com/saifulislaam" target="_blank" class="sb-social-btn"><i class="ph ph-github-logo"></i></a>
+        <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="sb-social-btn" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);"><i class="ph ph-linkedin-logo"></i></a>
+        <a href="#" class="sb-social-btn" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);"><i class="ph ph-instagram-logo"></i></a>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Saif ul Islam. All rights reserved.</span>
-      <div class="footer-legal">
-        <a href="#">Privacy policy</a>
-        <a href="#">Terms of service</a>
+    <div>
+      <div class="footer-h">NAVIGATION</div>
+      <ul class="footer-links">
+        <li><a href="#hero">_HERO</a></li>
+        <li><a href="#about">_ABOUT</a></li>
+        <li><a href="#services">_SERVICES</a></li>
+        <li><a href="chat.html"><i class="ph ph-robot" style="color:var(--primary);"></i>AI_CHATBOT</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-h">COMMS_HUB</div>
+      <ul class="footer-links">
+        <li><a href="mailto:saifulislam.git@gmail.com"><i class="ph ph-envelope-simple" style="color:var(--primary);"></i>saifulislam.git@gmail.com</a></li>
+        <li><a href="tel:+923442864308"><i class="ph ph-phone" style="color:var(--secondary);"></i>+92 344 2864308</a></li>
+        <li style="display:flex;align-items:center;gap:8px;padding-top:8px;"><div class="sb-hud-dot" style="width:6px;height:6px;"></div><span style="font-family:var(--font-mono);font-size:9px;color:var(--primary);letter-spacing:2px;">AVAILABLE_FOR_HIRE</span></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-h">DEPLOYMENTS</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:180px;">
+        <a href="#projects" style="display:block;aspect-ratio:1;border:1px solid rgba(0,255,102,0.1);border-radius:2px;overflow:hidden;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(0,255,102,0.4)'" onmouseout="this.style.borderColor='rgba(0,255,102,0.1)'"><img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.3);transition:filter 0.3s;" onmouseover="this.style.filter='saturate(0.8)'" onmouseout="this.style.filter='saturate(0.3)'"></a>
+        <a href="#projects" style="display:block;aspect-ratio:1;border:1px solid rgba(0,255,102,0.1);border-radius:2px;overflow:hidden;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(0,255,102,0.4)'" onmouseout="this.style.borderColor='rgba(0,255,102,0.1)'"><img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.3);transition:filter 0.3s;" onmouseover="this.style.filter='saturate(0.8)'" onmouseout="this.style.filter='saturate(0.3)'"></a>
+        <a href="#projects" style="display:block;aspect-ratio:1;border:1px solid rgba(0,255,102,0.1);border-radius:2px;overflow:hidden;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(0,255,102,0.4)'" onmouseout="this.style.borderColor='rgba(0,255,102,0.1)'"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.3);transition:filter 0.3s;" onmouseover="this.style.filter='saturate(0.8)'" onmouseout="this.style.filter='saturate(0.3)'"></a>
       </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SAIF_UL_ISLAM // ALL_NODES_SECURED</span>
+    <div style="display:flex;gap:16px;">
+      <a href="#" style="color:inherit;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">PRIVACY_POLICY</a>
+      <a href="#" style="color:inherit;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">TERMS_OF_SERVICE</a>
     </div>
   </div>
 </footer>
-
-<script src="js/script.js"></script>
+</div><script src="js/script.js">
+</script>
 </body>
 </html>
