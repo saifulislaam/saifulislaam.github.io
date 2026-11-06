@@ -1,467 +1,868 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark scroll-smooth">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SAIF_UL_ISLAM // CYBER_OPS_TERMINAL</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SAIF UL ISLAM // AUTONOMOUS ARCHITECT PORTFOLIO</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts matching the exact video typography -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap"
+    rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: '#FF2E1A',
+            brandDark: '#CC2211',
+            figmaBlue: '#0C8CE9',
+            bgDark: '#070709',
+            cardDark: '#0E0E12',
+            borderDark: '#1E1E26'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+            script: ['Caveat', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
 
-<!-- =================== BOOT SCREEN =================== -->
-<div id="bootScreen">
-  <div class="boot-logo glitch">SAIF_OPS</div>
-  <div class="boot-sub">Cyber Intelligence Terminal // v4.2.1</div>
-  <div class="boot-lines" id="bootLines"></div>
-  <div class="boot-bar-wrap"><div class="boot-bar" id="bootBar"></div></div>
-</div>
+<body class="canvas-bg relative selection:bg-brand selection:text-white">
 
-<!-- =================== CYBER BACKGROUND =================== -->
-<div class="cyber-bg">
-  <div class="tac-grid"></div>
-  <canvas id="matrixCanvas"></canvas>
-  <div class="radar-ring"></div>
-  <div class="radar-ring"></div>
-  <div class="radar-ring"></div>
-  <div class="scanlines"></div>
-  <div class="noise"></div>
-</div>
-
-<!-- =================== MOBILE TOPBAR =================== -->
-<div class="mob-topbar" id="mobTopbar">
-  <div class="mob-logo">
-    <div class="mob-logo-sq"><i class="ph ph-terminal-window" style="font-size:12px;"></i></div>
-    SAIF_OPS
-  </div>
-  <button class="menu-btn" id="menuBtn"><i class="ph ph-list"></i></button>
-</div>
-
-<!-- =================== SIDEBAR =================== -->
-<aside class="sidebar" id="sidebar">
-
-  <div class="sb-hud">
-    <span>SYS_ACTIVE</span>
-    <div style="display:flex;align-items:center;gap:6px;">
-      <div class="sb-hud-dot"></div>
-      <span id="sidebarTime">--:--:--</span>
+  <!-- =================== INTRO SWARM VORTEX OVERLAY (00:00 - 00:02 in video) =================== -->
+  <div id="introOverlay"
+    class="fixed inset-0 bg-[#050507] z-[100] flex items-center justify-center transition-opacity duration-700">
+    <!-- Central Logo Badge -->
+    <div class="relative flex flex-col items-center">
+      <div
+        class="w-12 h-12 rounded-xl bg-zinc-900/90 border border-zinc-800 flex items-center justify-center shadow-2xl">
+        <span class="font-mono text-xs font-bold tracking-widest text-brand">SAIF</span>
+      </div>
     </div>
   </div>
 
-  <div class="profile-zone">
-    <div class="avatar-wrap">
-      <img src="https://plus.unsplash.com/premium_photo-1734637616808-14fc29f2a155?q=80&w=400&auto=format&fit=crop" alt="Saif ul Islam" class="avatar-img">
-    </div>
-    <div class="profile-name">Saif ul Islam</div>
-    <div class="profile-rank">FULL_STACK_DEV // UNIT_01</div>
-    <div class="status-badge"><div class="sb-hud-dot" style="width:5px;height:5px;"></div> AVAILABLE_FOR_HIRE</div>
+  <!-- =================== USER & AGENT MARQUEE BOXES =================== -->
+  <div id="userMarquee" class="marquee-box">
+    <div class="m-handle m-tl"></div>
+    <div class="m-handle m-tr"></div>
+    <div class="m-handle m-bl"></div>
+    <div class="m-handle m-br"></div>
+    <div class="m-size" id="userMarqueeSize">0 × 0</div>
   </div>
 
-  <div class="nav-section-label">// NAVIGATION_ARRAY</div>
-  <div class="nav-wrap" id="navWrap">
-    <div class="nav-indicator" id="navIndicator"></div>
-    <nav id="navMenu">
-      <a href="#hero" class="nav-item" data-color="#00FF66"><div class="nav-item-left"><i class="ph ph-terminal-window" style="color:#00FF66;"></i>_HERO</div><span class="nav-badge">01</span></a>
-      <a href="#about" class="nav-item" data-color="#00F0FF"><div class="nav-item-left"><i class="ph ph-user-focus" style="color:#00F0FF;"></i>_ABOUT</div><span class="nav-badge">02</span></a>
-      <a href="#tech" class="nav-item" data-color="#7A00FF"><div class="nav-item-left"><i class="ph ph-code" style="color:#7A00FF;"></i>_STACK</div><span class="nav-badge">03</span></a>
-      <a href="#services" class="nav-item" data-color="#00FF66"><div class="nav-item-left"><i class="ph ph-hard-drives" style="color:#00FF66;"></i>_SERVICES</div><span class="nav-badge">04</span></a>
-      <a href="#projects" class="nav-item" data-color="#FFD000"><div class="nav-item-left"><i class="ph ph-projector-screen" style="color:#FFD000;"></i>_PROJECTS</div><span class="nav-badge">05</span></a>
-      <a href="#experience" class="nav-item" data-color="#00F0FF"><div class="nav-item-left"><i class="ph ph-briefcase" style="color:#00F0FF;"></i>_EXP</div><span class="nav-badge">06</span></a>
-      <a href="#testimonials" class="nav-item" data-color="#7A00FF"><div class="nav-item-left"><i class="ph ph-star" style="color:#7A00FF;"></i>_REVIEWS</div><span class="nav-badge">07</span></a>
-      <a href="#contact" class="nav-item" data-color="#FF003C"><div class="nav-item-left"><i class="ph ph-envelope-simple" style="color:#FF003C;"></i>_CONTACT</div><span class="nav-badge">08</span></a>
+  <div id="agentMarquee1" class="marquee-box">
+    <div class="m-handle m-tl"></div>
+    <div class="m-handle m-tr"></div>
+    <div class="m-handle m-bl"></div>
+    <div class="m-handle m-br"></div>
+    <div class="m-size" id="agentMarqueeSize1">240 × 118</div>
+  </div>
+
+  <div id="agentMarquee2" class="marquee-box">
+    <div class="m-handle m-tl"></div>
+    <div class="m-handle m-tr"></div>
+    <div class="m-handle m-bl"></div>
+    <div class="m-handle m-br"></div>
+    <div class="m-size" id="agentMarqueeSize2">310 × 84</div>
+  </div>
+
+  <!-- =================== MULTI-AGENT CURSORS LAYER =================== -->
+  <div id="agentLayer" class="fixed inset-0 pointer-events-none z-[95] overflow-hidden"></div>
+
+  <!-- =================== FLOATING TOP PILL NAVBAR =================== -->
+  <header class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-xl">
+    <nav
+      class="bg-[#0E0E12]/90 backdrop-blur-xl border border-white/10 rounded-full px-3 py-2 flex items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
+      <!-- Brand Square -->
+      <a href="#hero"
+        class="w-7 h-7 rounded-md bg-brand flex items-center justify-center text-[10px] font-mono font-bold text-white tracking-tighter shadow-[0_0_15px_rgba(255,46,26,0.5)]">
+        SI.
+      </a>
+
+      <!-- Nav Links -->
+      <div class="flex items-center gap-1 sm:gap-5 text-xs font-medium text-zinc-400">
+        <a href="#hero" class="px-2 py-1 rounded hover:text-white transition-colors">Intro</a>
+        <a href="#about" class="px-2 py-1 rounded hover:text-white transition-colors">About</a>
+        <a href="#flagships" class="px-2 py-1 rounded hover:text-white transition-colors">Flagships</a>
+        <a href="#matrix" class="px-2 py-1 rounded hover:text-white transition-colors">Matrix</a>
+        <a href="#contact" class="px-2 py-1 rounded hover:text-white transition-colors">Contact</a>
+      </div>
+
+      <!-- Right Status Pill -->
+      <a href="#contact"
+        class="flex items-center gap-1.5 bg-zinc-900 border border-white/10 hover:border-brand/50 px-2.5 py-1 rounded-full transition-all">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="font-mono text-[10px] text-zinc-300 hidden sm:inline">Available</span>
+      </a>
     </nav>
-  </div>
+  </header>
 
-  <div style="flex:1;"></div>
+  <!-- =================== MAIN CANVAS CONTENT =================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-24 pb-36 relative z-10">
 
-  <div class="sb-sysinfo">
-    <div class="sys-row"><span>CPU_LOAD</span><div class="sys-bar-wrap"><div class="sys-bar" style="width:72%;"></div></div></div>
-    <div class="sys-row"><span>MEM_USAGE</span><div class="sys-bar-wrap"><div class="sys-bar" style="width:58%;background:var(--secondary);box-shadow:0 0 6px var(--secondary);"></div></div></div>
-    <div class="sys-row"><span>NET_STATUS</span><div class="sys-bar-wrap"><div class="sys-bar" style="width:91%;background:var(--primary);"></div></div></div>
-  </div>
+    <!-- 1. HERO SECTION -->
+    <section id="hero" class="min-h-[88vh] flex flex-col justify-between relative pt-4">
 
-  <div class="sb-socials">
-    <a href="https://github.com/saifulislaam" target="_blank" class="sb-social-btn"><i class="ph ph-github-logo"></i></a>
-    <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="sb-social-btn" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);"><i class="ph ph-linkedin-logo"></i></a>
-    <a href="#" class="sb-social-btn" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);"><i class="ph ph-instagram-logo"></i></a>
-    <a href="mailto:saifulislam.git@gmail.com" class="sb-social-btn" style="border-color:rgba(255,0,60,0.2);color:rgba(255,0,60,0.5);"><i class="ph ph-envelope-simple"></i></a>
-  </div>
+      <!-- Giant Outlined PORTFOLIO Header -->
+      <div class="relative w-full text-center my-2 inspectable p-2" data-label="HERO_VECTOR_HEADER">
+        <h1 class="portfolio-stroke text-[17vw] sm:text-[15.5vw] lg:text-[168px] select-none tracking-tight">
+          PORTFOLIO
+        </h1>
+      </div>
 
-</aside>
+      <!-- 3-Column Architectural Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mt-2">
 
-<!-- =================== MAIN CONTENT =================== -->
-<main class="main">
+        <!-- Left Column: Intro + Bio + CTAs -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="inspectable inline-block p-2" data-label="IDENTITY_BLOCK">
+            <p class="font-script text-2xl sm:text-3xl text-zinc-200 -mb-1 ml-1">Hello, I'm</p>
+            <div
+              class="bg-brand text-white font-black text-4xl sm:text-6xl px-4 py-1.5 inline-block tracking-tight shadow-[0_0_40px_rgba(255,46,26,0.35)]">
+              SAIF UL ISLAM.
+            </div>
+          </div>
 
-  <!-- HERO -->
-  <section id="hero">
-    <div class="hero-sys-line reveal active">
-      <div class="hero-sys-dot"></div>
-      <span>SYSTEM INITIALIZED // OPERATOR SAIF_UL_ISLAM // ACCESS_GRANTED</span>
-    </div>
-    <div class="hero-label">
-      <i class="ph ph-shield-check" style="font-size:10px;"></i>
-      CLASSIFIED // CLEARANCE LEVEL 5 // CYBER_OPS_TERMINAL
-    </div>
-    <h1 class="hero-h1 reveal active">
-      SAIF<br><span class="name-green">UL ISLAM</span>
-    </h1>
-    <div class="hero-sub reveal active d1">
-      <span id="typingText"></span><span class="cursor"></span>
-    </div>
-    <div class="hero-btns reveal active d2">
-      <a href="#projects" class="cmd-btn"><i class="ph ph-stack"></i> VIEW_SYSTEMS</a>
-      <a href="#contact" class="cmd-btn cmd-btn-ghost"><i class="ph ph-paper-plane-tilt"></i> OPEN_COMMS</a>
-    </div>
-    <div class="hero-stats reveal active d3">
-      <div class="stat-box"><div class="stat-val">3+</div><div class="stat-label">YRS_OPS</div></div>
-      <div class="stat-box"><div class="stat-val">50+</div><div class="stat-label">DEPLOYMENTS</div></div>
-      <div class="stat-box"><div class="stat-val">15+</div><div class="stat-label">TECH_STACK</div></div>
-      <div class="stat-box"><div class="stat-val">∞</div><div class="stat-label">UPTIME</div></div>
-    </div>
-  </section>
+          <div class="inspectable p-2" data-label="ROLE_BADGE">
+            <div class="inline-flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase text-brand">
+              <span class="w-2 h-2 rounded-full bg-brand animate-ping"></span>
+              FULL-STACK ARCHITECT &amp; AI SYSTEMS ENGINEER
+            </div>
+          </div>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="sec-title reveal"><span>OPERATOR_PROFILE</span><div class="sec-title-line"></div></div>
-    <div class="about-grid">
-      <div class="glass about-card reveal">
-        <div class="corner-tl"></div>
-        <div class="classified-tag"><i class="ph ph-warning" style="font-size:10px;"></i> CLASSIFIED_INTEL</div>
-        <p class="about-text">
-          I am <strong>Saif ul Islam</strong> — a Full-Stack Web Developer from Pakistan, operating at the intersection of engineering precision and design innovation.<br><br>
-          I specialize in building <strong>high-performance, intelligent web systems</strong> — from AI-powered tools to enterprise platforms — deployed with military-grade reliability and aesthetic excellence.
+          <p class="inspectable p-2 text-zinc-400 text-sm sm:text-base leading-relaxed max-w-md font-normal"
+            data-label="HERO_BIO_NODE">
+            Architecting 24/7 autonomous web ecosystems, LLM multi-agent workflows, and high-concurrency Laravel &amp;
+            React platforms from first principles — military-grade reliability, total precision.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap items-center gap-3 pt-1 inspectable p-2" data-label="CTA_CONTROL_GROUP">
+            <a href="#contact"
+              class="bg-brand hover:bg-brandDark text-white font-mono text-xs font-semibold tracking-wider uppercase px-5 py-3 rounded flex items-center gap-2 transition-all shadow-[0_0_25px_rgba(255,46,26,0.3)]">
+              INITIATE DISPATCH <i class="ph-bold ph-arrow-up-right"></i>
+            </a>
+            <a href="#flagships"
+              class="bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 border border-white/10 font-mono text-xs tracking-wider uppercase px-5 py-3 rounded transition-all">
+              EXPLORE ARCHITECTURE
+            </a>
+          </div>
+
+          <!-- Bottom Hero Metrics -->
+          <div class="grid grid-cols-3 gap-4 pt-4 border-t border-white/10 inspectable p-2"
+            data-label="TELEMETRY_COUNTERS">
+            <div>
+              <div class="text-xl sm:text-2xl font-black text-white">
+                <span class="text-brand">50+</span> <span
+                  class="text-xs font-mono font-normal text-zinc-400">Systems</span>
+              </div>
+              <div class="font-mono text-[10px] text-zinc-500 uppercase mt-0.5">Deployed</div>
+            </div>
+            <div>
+              <div class="text-xl sm:text-2xl font-black text-white">
+                3+ <span class="text-xs font-mono font-normal text-zinc-400">Yrs</span>
+              </div>
+              <div class="font-mono text-[10px] text-zinc-500 uppercase mt-0.5">Field Ops</div>
+            </div>
+            <div>
+              <div class="text-xl sm:text-2xl font-black text-white">
+                100% <span class="text-xs font-mono font-normal text-zinc-400">Full-Stack</span>
+              </div>
+              <div class="font-mono text-[10px] text-zinc-500 uppercase mt-0.5">Uptime</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center Column: Red Neon Portrait Frame -->
+        <div class="lg:col-span-3 flex flex-col items-center">
+          <div
+            class="inspectable relative w-full max-w-[270px] aspect-[4/5] rounded bg-gradient-to-b from-brand via-brand/80 to-black p-1 shadow-[0_0_50px_rgba(255,46,26,0.22)] group overflow-hidden"
+            data-label="OPERATOR_PORTRAIT">
+            <div class="w-full h-full bg-[#120707] relative overflow-hidden flex items-end justify-center">
+              <!-- High contrast red/dark stylised portrait -->
+              <img
+                src="https://plus.unsplash.com/premium_photo-1734637616808-14fc29f2a155?q=80&w=600&auto=format&fit=crop"
+                onerror="this.src='https://placehold.co/400x500/180808/FF2E1A?text=SAIF+UL+ISLAM'" alt="Saif ul Islam"
+                class="w-full h-full object-cover object-top mix-blend-luminosity contrast-125 brightness-90 group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-brand/20"></div>
+            </div>
+            <!-- Caption Bar -->
+            <div class="w-full bg-[#09090C] border-t border-white/10 py-2 px-3 flex items-center justify-center gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+              <span class="font-mono text-[9px] tracking-widest text-zinc-400 uppercase">SOVEREIGN FULL-STACK
+                ARCHITECT</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: 3 Architectural Spec Cards -->
+        <div class="lg:col-span-4 space-y-3">
+          <div class="arch-card p-4 rounded inspectable" data-label="MODULE_01_CARD">
+            <div class="flex items-center justify-between font-mono text-[10px] text-zinc-500 mb-1">
+              <span class="text-brand font-bold">01</span>
+              <span>ARCHITECTURE</span>
+            </div>
+            <h3 class="text-sm font-bold text-white mb-1">Autonomous AI Core</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              Multi-model LLM routing • RAG vector memory • Real-time streaming • OpenAI &amp; Diffusion pipelines
+            </p>
+          </div>
+
+          <div class="arch-card p-4 rounded inspectable" data-label="MODULE_02_CARD">
+            <div class="flex items-center justify-between font-mono text-[10px] text-zinc-500 mb-1">
+              <span class="text-brand font-bold">02</span>
+              <span>INFRASTRUCTURE</span>
+            </div>
+            <h3 class="text-sm font-bold text-white mb-1">Laravel &amp; Node Microservices</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              High-concurrency REST &amp; GraphQL APIs • Redis caching • Dockerized PostgreSQL &amp; MySQL clusters
+            </p>
+          </div>
+
+          <div class="arch-card p-4 rounded inspectable" data-label="MODULE_03_CARD">
+            <div class="flex items-center justify-between font-mono text-[10px] text-zinc-500 mb-1">
+              <span class="text-brand font-bold">03</span>
+              <span>EXECUTION</span>
+            </div>
+            <h3 class="text-sm font-bold text-white mb-1">Sub-Millisecond Reactive UI</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">
+              React.js &amp; TypeScript • Tailwind CSS design systems • Zero-latency state synchronization
+            </p>
+          </div>
+
+          <!-- Bottom mini tags -->
+          <div
+            class="flex flex-wrap items-center justify-between gap-2 pt-2 px-1 font-mono text-[10px] text-zinc-500 inspectable"
+            data-label="LOC_TAGS">
+            <span>Swat, PK</span>
+            <span>•</span>
+            <span>BS Software Eng</span>
+            <span>•</span>
+            <span>React / Laravel</span>
+            <span>•</span>
+            <span class="text-zinc-300">Remote Global</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Section Index Divider -->
+      <div
+        class="mt-16 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[11px] text-zinc-500">
+        <span>// [01.00] SEC_ABOUT INDEX [01/05]</span>
+        <span>CLEARANCE: LEVEL_5</span>
+      </div>
+    </section>
+
+    <!-- 2. ENGINEER PROFILE: BACKGROUND & PHILOSOPHY -->
+    <section id="about" class="py-20">
+      <div class="mb-10 inspectable inline-block p-2" data-label="SEC_HEADER_ABOUT">
+        <div class="font-mono text-[10px] tracking-widest uppercase text-brand mb-2">ENGINEER PROFILE</div>
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white">Background &amp; Philosophy</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <!-- Left Bio Narrative -->
+        <div class="lg:col-span-7 space-y-5">
+          <p class="inspectable p-3 rounded border border-transparent text-zinc-300 text-sm sm:text-base leading-relaxed"
+            data-label="BIO_PARAGRAPH_1">
+            I am <strong class="text-white">Saif ul Islam</strong> — an independent Full-Stack Systems Architect
+            operating from Pakistan for global clients. My formal academic foundation is rooted in a <strong
+              class="text-white">Bachelor of Science in Software Engineering</strong> from the <strong
+              class="text-white">University of Swat</strong> (2023 — Present), paired with intensive hands-on deployment
+            of commercial SaaS and AI platforms.
+          </p>
+
+          <p class="inspectable p-3 rounded border border-transparent text-zinc-400 text-sm sm:text-base leading-relaxed"
+            data-label="BIO_PARAGRAPH_2">
+            However, my defining capabilities were forged in production terminals: building <strong
+              class="text-zinc-200">Generative AI studios, Liquid Context RAG chatbots, multi-gateway fintech payment
+              hubs, and decoupled microservices</strong>. I view software engineering not as simple template assembly,
+            but as the orchestration of database concurrency, clean API contracts, and cinematic interface design.
+          </p>
+
+          <!-- Highlighted Quote Block -->
+          <div class="inspectable p-5 border-l-2 border-brand bg-zinc-900/50 rounded-r" data-label="PHILOSOPHY_QUOTE">
+            <p class="text-sm sm:text-base italic text-zinc-200 leading-relaxed">
+              "I design and deploy intelligent web systems that operate 24/7 with military-grade reliability, seamless
+              LLM orchestration, and sub-second responsiveness — built from first principles."
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Numbered Principles -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="arch-card p-5 rounded inspectable" data-label="PRINCIPLE_01">
+            <div class="flex items-center gap-3 mb-1.5">
+              <span class="font-mono text-xs font-bold text-brand">01</span>
+              <h3 class="text-sm font-bold text-white">Sovereign Full-Stack Execution</h3>
+            </div>
+            <p class="text-xs text-zinc-400 leading-relaxed pl-7">
+              Complete ownership from React/TypeScript frontend state machines down to Laravel/Node.js APIs, Docker
+              containers, and PostgreSQL indexing.
+            </p>
+          </div>
+
+          <div class="arch-card p-5 rounded inspectable" data-label="PRINCIPLE_02">
+            <div class="flex items-center gap-3 mb-1.5">
+              <span class="font-mono text-xs font-bold text-brand">02</span>
+              <h3 class="text-sm font-bold text-white">First-Principles AI Integration</h3>
+            </div>
+            <p class="text-xs text-zinc-400 leading-relaxed pl-7">
+              Direct integration with OpenAI, Diffusion pipelines, and vector databases using WebSockets and RAG for
+              real-time contextual intelligence.
+            </p>
+          </div>
+
+          <div class="arch-card p-5 rounded inspectable" data-label="PRINCIPLE_03">
+            <div class="flex items-center gap-3 mb-1.5">
+              <span class="font-mono text-xs font-bold text-brand">03</span>
+              <h3 class="text-sm font-bold text-white">High-Concurrency Reliability</h3>
+            </div>
+            <p class="text-xs text-zinc-400 leading-relaxed pl-7">
+              Event-sourced commerce engines, Redis caching layers, and fault-tolerant Stripe/Crypto webhook processors
+              engineered for 10x traffic spikes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. FLAGSHIP DEPLOYMENTS (Interactive 7-Layer Stack + 3 Cards) -->
+    <section id="flagships" class="py-20 border-t border-white/10">
+      <div class="mb-10 inspectable inline-block p-2" data-label="SEC_HEADER_FLAGSHIPS">
+        <div class="font-mono text-[10px] tracking-widest uppercase text-brand mb-2">ARCHITECTURAL SHOWCASE</div>
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white">Flagship Deployments</h2>
+        <p class="text-zinc-400 text-sm mt-2">Production-grade systems running 24/7 across cloud clusters, AI endpoints,
+          and commercial gateways.</p>
+      </div>
+
+      <!-- Main Featured Flagship Card -->
+      <div class="arch-card rounded-lg p-6 sm:p-8 mb-8 border border-white/10 relative overflow-hidden inspectable"
+        data-label="CORE_ECOSYSTEM_PANEL">
+        <div
+          class="inline-flex items-center gap-2 bg-brand/15 border border-brand/40 text-brand font-mono text-[10px] px-2.5 py-1 rounded mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand animate-ping"></span> CORE ECOSYSTEM
+        </div>
+
+        <h3 class="text-2xl sm:text-3xl font-black text-white mb-3">
+          SAIF_OPS — 7-Layer Full-Stack &amp; AI Architecture
+        </h3>
+        <p class="text-zinc-400 text-sm max-w-3xl leading-relaxed mb-8">
+          A persistent, modular web &amp; AI engineering stack powering enterprise applications, generative AI studios,
+          and high-load e-commerce platforms. Engineered for zero-downtime scalability and instant UI reactivity.
         </p>
-      </div>
-      <div class="glass about-card reveal d1">
-        <div class="corner-tl"></div>
-        <ul class="intel-list">
-          <li>BS Software Engineering // University of Swat</li>
-          <li>Full-Stack: React + Laravel Specialist</li>
-          <li>AI Integration & LLM API Expert</li>
-          <li>Mobile-first, Performance Obsessed</li>
-          <li>Freelance Contractor // Open to Remote</li>
-          <li>Location: Pakistan // Remote Capable</li>
-          <li>Clearance: Available_for_hire</li>
-        </ul>
-      </div>
-    </div>
-  </section>
 
-  <!-- TECH STACK -->
-  <section id="tech">
-    <div class="sec-title reveal"><span>TECH_ARSENAL</span><div class="sec-title-line"></div></div>
-    <div class="stack-grid">
-      <!-- Frontend -->
-      <div class="glass stack-card reveal">
-        <div class="corner-tl"></div>
-        <div class="stack-cat">FRONTEND</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#E34F26;border-color:rgba(227,79,38,0.2);"><i class="ph ph-file-html"></i></div>HTML5 &amp; CSS3</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#F7DF1E;border-color:rgba(247,223,30,0.2);"><i class="ph ph-file-js"></i></div>JavaScript ES6+</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#61DAFB;border-color:rgba(97,218,251,0.2);"><i class="ph ph-atom"></i></div>React.js</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#38BDF8;border-color:rgba(56,189,248,0.2);"><i class="ph ph-waves"></i></div>Tailwind CSS</div>
-      </div>
-      <!-- Backend -->
-      <div class="glass stack-card reveal d1">
-        <div class="corner-tl"></div>
-        <div class="stack-cat" style="color:var(--secondary);">BACKEND</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#FF2D20;border-color:rgba(255,45,32,0.2);"><i class="ph ph-fire"></i></div>Laravel (PHP)</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#339933;border-color:rgba(51,153,51,0.2);"><i class="ph ph-hexagon"></i></div>Node.js</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#4479A1;border-color:rgba(68,121,161,0.2);"><i class="ph ph-database"></i></div>MySQL / PostgreSQL</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#4EA94B;border-color:rgba(78,169,75,0.2);"><i class="ph ph-cylinder"></i></div>MongoDB</div>
-      </div>
-      <!-- AI & Tools -->
-      <div class="glass stack-card reveal d2">
-        <div class="corner-tl"></div>
-        <div class="stack-cat" style="color:var(--accent);">AI / TOOLS</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#74AA9C;border-color:rgba(116,170,156,0.2);"><i class="ph ph-robot"></i></div>OpenAI / LLM APIs</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#F24E1E;border-color:rgba(242,78,30,0.2);"><i class="ph ph-figma-logo"></i></div>Figma / UI Design</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#2496ED;border-color:rgba(36,150,237,0.2);"><i class="ph ph-cube"></i></div>Docker</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#F05032;border-color:rgba(240,80,50,0.2);"><i class="ph ph-git-branch"></i></div>Git / GitHub</div>
-      </div>
-      <!-- Advanced -->
-      <div class="glass stack-card reveal d3">
-        <div class="corner-tl"></div>
-        <div class="stack-cat" style="color:var(--warning);">ADVANCED</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#3178C6;border-color:rgba(49,120,198,0.2);"><i class="ph ph-file-ts"></i></div>TypeScript</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#FF4154;border-color:rgba(255,65,84,0.2);"><i class="ph ph-vector-two"></i></div>Redis / Cache</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#764ABC;border-color:rgba(118,74,188,0.2);"><i class="ph ph-arrows-left-right"></i></div>REST / GraphQL</div>
-        <div class="stack-item"><div class="stack-item-icon" style="color:#00FF66;border-color:rgba(0,255,102,0.2);"><i class="ph ph-cloud"></i></div>AWS / Cloud Deploy</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="sec-title reveal"><span>SERVICE_MODULES</span><div class="sec-title-line"></div></div>
-    <div class="svc-grid">
-      <div class="glass svc-card reveal" style="--icon-color:#00FF66;">
-        <div class="corner-tl"></div>
-        <div class="svc-icon"><i class="ph ph-layout"></i></div>
-        <div class="svc-title">FRONTEND_OPS</div>
-        <div class="svc-desc">Precision-engineered interfaces built with React, Tailwind CSS, and advanced animation systems. Pixel-perfect, blazing fast.</div>
-        <div><span class="svc-tag">REACT</span><span class="svc-tag">TAILWIND</span><span class="svc-tag">ANIMATION</span></div>
-      </div>
-      <div class="glass svc-card reveal d1" style="--icon-color:#00F0FF;">
-        <div class="corner-tl"></div>
-        <div class="svc-icon" style="border-color:rgba(0,240,255,0.3);color:var(--secondary);"><i class="ph ph-hard-drives"></i></div>
-        <div class="svc-title">BACKEND_SYSTEMS</div>
-        <div class="svc-desc">Scalable server architectures, REST APIs, database design, and microservices using Laravel and Node.js.</div>
-        <div><span class="svc-tag" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);">LARAVEL</span><span class="svc-tag" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);">NODE.JS</span></div>
-      </div>
-      <div class="glass svc-card reveal d2" style="--icon-color:#7A00FF;">
-        <div class="corner-tl"></div>
-        <div class="svc-icon" style="border-color:rgba(122,0,255,0.3);color:var(--accent);"><i class="ph ph-robot"></i></div>
-        <div class="svc-title">AI_ENHANCEMENT</div>
-        <div class="svc-desc">LLM integrations, AI chatbots, image generation pipelines, and intelligent automation modules for modern applications.</div>
-        <div><span class="svc-tag" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);">LLM_API</span><span class="svc-tag" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);">RAG</span></div>
-      </div>
-      <div class="glass svc-card reveal d3" style="--icon-color:#FFD000;">
-        <div class="corner-tl"></div>
-        <div class="svc-icon" style="border-color:rgba(255,208,0,0.3);color:var(--warning);"><i class="ph ph-device-mobile"></i></div>
-        <div class="svc-title">MOBILE_READY</div>
-        <div class="svc-desc">Every deployment is mobile-first, touch-optimized, and tested across all device classes with fluid responsive systems.</div>
-        <div><span class="svc-tag" style="border-color:rgba(255,208,0,0.15);color:rgba(255,208,0,0.5);">PWA</span><span class="svc-tag" style="border-color:rgba(255,208,0,0.15);color:rgba(255,208,0,0.5);">RESPONSIVE</span></div>
-      </div>
-      <div class="glass svc-card reveal" style="--icon-color:#FF003C;">
-        <div class="corner-tl"></div>
-        <div class="svc-icon" style="border-color:rgba(255,0,60,0.3);color:var(--danger);"><i class="ph ph-plugs-connected"></i></div>
-        <div class="svc-title">API_INTEGRATION</div>
-        <div class="svc-desc">Seamless third-party integrations: payment gateways, CRMs, analytics, maps, and custom webhook systems.</div>
-        <div><span class="svc-tag" style="border-color:rgba(255,0,60,0.15);color:rgba(255,0,60,0.5);">STRIPE</span><span class="svc-tag" style="border-color:rgba(255,0,60,0.15);color:rgba(255,0,60,0.5);">WEBHOOKS</span></div>
-      </div>
-      <div class="glass svc-card reveal d1" style="--icon-color:#00FF66;">
-        <div class="corner-tl"></div>
-        <div class="svc-icon"><i class="ph ph-magic-wand"></i></div>
-        <div class="svc-title">UI_DESIGN</div>
-        <div class="svc-desc">Luxury UI/UX design with Figma, custom design systems, dark interfaces, glassmorphism, and cinematic aesthetics.</div>
-        <div><span class="svc-tag">FIGMA</span><span class="svc-tag">DESIGN_SYS</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section id="projects">
-    <div class="sec-title reveal"><span>DEPLOYED_SYSTEMS</span><div class="sec-title-line"></div></div>
-    <div class="proj-grid">
-      <!-- Proj 1 -->
-      <div class="glass proj-card reveal">
-        <div class="proj-img-wrap">
-          <img src="img/AIimg.jpeg" loading="lazy" alt="AI Image Editor">
-          <div class="proj-overlay"></div>
-          <div class="proj-badge" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">AI_VISION</div>
-          <div class="proj-scan"></div>
+        <!-- 4 Telemetry Metrics Row -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 py-5 border-y border-white/10 mb-8">
+          <div class="text-center sm:text-left">
+            <div class="text-2xl sm:text-3xl font-black text-brand">50+</div>
+            <div class="font-mono text-[10px] text-zinc-500 uppercase mt-1">DEPLOYED SYSTEMS</div>
+          </div>
+          <div class="text-center sm:text-left">
+            <div class="text-2xl sm:text-3xl font-black text-brand">15+</div>
+            <div class="font-mono text-[10px] text-zinc-500 uppercase mt-1">CORE TECHNOLOGIES</div>
+          </div>
+          <div class="text-center sm:text-left">
+            <div class="text-2xl sm:text-3xl font-black text-brand">10x</div>
+            <div class="font-mono text-[10px] text-zinc-500 uppercase mt-1">LOAD THROUGHPUT</div>
+          </div>
+          <div class="text-center sm:text-left">
+            <div class="text-2xl sm:text-3xl font-black text-brand">99.9%</div>
+            <div class="font-mono text-[10px] text-zinc-500 uppercase mt-1">UPTIME SLA</div>
+          </div>
         </div>
-        <div class="proj-body">
-          <div class="proj-title">NEXT-GEN AI IMAGE EDITOR</div>
-          <div class="proj-desc">Sophisticated image manipulation studio integrating Generative AI models. High-fidelity upscaling, inpainting, and real-time generation.</div>
-          <div class="proj-tags">
-            <span class="proj-tag" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">REACT</span>
-            <span class="proj-tag">NODE.JS</span><span class="proj-tag">DIFFUSION_API</span>
+
+        <!-- 7-LAYER CONSTITUTIONAL STACK (Interactive Tabs) -->
+        <div>
+          <div class="font-mono text-[10px] tracking-widest uppercase text-zinc-400 mb-1">7-LAYER CONSTITUTIONAL STACK
+          </div>
+          <div class="text-xs text-zinc-500 mb-4">Click any layer to inspect its architectural specifications</div>
+
+          <!-- Layer Buttons -->
+          <div class="flex flex-wrap gap-2 mb-6" id="layerTabs">
+            <button onclick="selectLayer(0)"
+              class="layer-btn bg-brand text-white font-mono text-xs px-3.5 py-2 rounded border border-brand transition-all">
+              L1 · Reactive UI
+            </button>
+            <button onclick="selectLayer(1)"
+              class="layer-btn bg-zinc-900/90 text-zinc-400 hover:text-white font-mono text-xs px-3.5 py-2 rounded border border-white/10 transition-all">
+              L2 · API Gateway
+            </button>
+            <button onclick="selectLayer(2)"
+              class="layer-btn bg-zinc-900/90 text-zinc-400 hover:text-white font-mono text-xs px-3.5 py-2 rounded border border-white/10 transition-all">
+              L3 · Core Backend
+            </button>
+            <button onclick="selectLayer(3)"
+              class="layer-btn bg-zinc-900/90 text-zinc-400 hover:text-white font-mono text-xs px-3.5 py-2 rounded border border-white/10 transition-all">
+              L4 · AI &amp; RAG Engine
+            </button>
+            <button onclick="selectLayer(4)"
+              class="layer-btn bg-zinc-900/90 text-zinc-400 hover:text-white font-mono text-xs px-3.5 py-2 rounded border border-white/10 transition-all">
+              L5 · Data &amp; Cache
+            </button>
+            <button onclick="selectLayer(5)"
+              class="layer-btn bg-zinc-900/90 text-zinc-400 hover:text-white font-mono text-xs px-3.5 py-2 rounded border border-white/10 transition-all">
+              L6 · Fintech Webhooks
+            </button>
+            <button onclick="selectLayer(6)"
+              class="layer-btn bg-zinc-900/90 text-zinc-400 hover:text-white font-mono text-xs px-3.5 py-2 rounded border border-white/10 transition-all">
+              L7 · Cloud &amp; Docker
+            </button>
+          </div>
+
+          <!-- Active Layer Inspector Box -->
+          <div id="layerDetailBox" class="bg-[#09090D] border border-white/10 rounded p-5 transition-all">
+            <div id="layerTag" class="font-mono text-[10px] text-brand uppercase tracking-widest mb-1">
+              LAYER 01 // FRONTEND PRESENTATION CORE
+            </div>
+            <h4 id="layerTitle" class="text-lg font-bold text-white mb-2">
+              Component-Driven Reactive Glass UI
+            </h4>
+            <p id="layerDesc" class="text-xs sm:text-sm text-zinc-400 leading-relaxed mb-4">
+              Built with React.js, TypeScript, and Tailwind CSS. Delivers 60fps micro-interactions, mobile-first fluid
+              layouts, and zero-latency state updates across desktop and mobile viewports.
+            </p>
+            <div id="layerBadges" class="flex flex-wrap gap-2">
+              <span
+                class="font-mono text-[10px] bg-zinc-900 border border-white/10 px-2.5 py-1 rounded text-zinc-300">React.js
+                18</span>
+              <span
+                class="font-mono text-[10px] bg-zinc-900 border border-white/10 px-2.5 py-1 rounded text-zinc-300">Tailwind
+                CSS</span>
+              <span
+                class="font-mono text-[10px] bg-zinc-900 border border-white/10 px-2.5 py-1 rounded text-zinc-300">TypeScript</span>
+            </div>
           </div>
         </div>
       </div>
-      <!-- Proj 2 -->
-      <div class="glass proj-card reveal d1">
-        <div class="proj-img-wrap">
-          <img src="img/chatbot.jpeg" loading="lazy" alt="AI Chatbot">
-          <div class="proj-overlay"></div>
-          <div class="proj-badge" style="color:var(--accent);border-color:rgba(122,0,255,0.2);">LLM_NLP</div>
-          <div class="proj-scan" style="background:linear-gradient(90deg,transparent,var(--accent),transparent);"></div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">LIQUID CONTEXT AI CHATBOT</div>
-          <div class="proj-desc">Intelligent conversational agent using RAG. Deep context memory, real-time token streaming, multi-model routing inside a glass UI.</div>
-          <div class="proj-tags">
-            <span class="proj-tag" style="color:rgba(122,0,255,0.8);border-color:rgba(122,0,255,0.2);">OPENAI_API</span>
-            <span class="proj-tag">WEBSOCKETS</span><span class="proj-tag">VECTOR_DB</span>
+
+      <!-- 3 Sub-Flagship Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Card 1 -->
+        <div class="arch-card rounded-lg p-6 flex flex-col justify-between inspectable" data-label="FLAGSHIP_AI_EDITOR">
+          <div>
+            <div
+              class="inline-block bg-brand/15 border border-brand/30 text-brand font-mono text-[9px] uppercase px-2 py-0.5 rounded mb-4">
+              GEN_AI // VISION STUDIO
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Next-Gen AI Image Editor</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Sophisticated image manipulation studio integrating Generative AI diffusion models for real-time upscaling
+              and inpainting.
+            </p>
+            <ul class="space-y-1.5 text-xs text-zinc-300 mb-6 font-mono">
+              <li class="flex items-center gap-2"><span class="text-brand">•</span> Generative Inpainting &amp;
+                Outpainting</li>
+              <li class="flex items-center gap-2"><span class="text-brand">•</span> Real-time Diffusion API Pipeline
+              </li>
+              <li class="flex items-center gap-2"><span class="text-brand">•</span> Interactive Canvas Layer Engine</li>
+            </ul>
+          </div>
+          <div
+            class="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[10px] text-zinc-500">
+            <span>React.js</span>
+            <span>Node.js · Diffusion API</span>
           </div>
         </div>
-      </div>
-      <!-- Proj 3 -->
-      <div class="glass proj-card reveal d2">
-        <div class="proj-img-wrap">
-          <img src="img/payload.jpeg" loading="lazy" alt="Payment Hub">
-          <div class="proj-overlay"></div>
-          <div class="proj-badge" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">FINTECH</div>
-          <div class="proj-scan"></div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">GLOBAL PAYMENT HUB API</div>
-          <div class="proj-desc">Payment routing system for SaaS platform. Seamless checkout flows handling Stripe, PayPal, and Crypto gateways under high load.</div>
-          <div class="proj-tags">
-            <span class="proj-tag" style="color:var(--primary);border-color:rgba(0,255,102,0.2);">LARAVEL</span>
-            <span class="proj-tag">STRIPE_API</span><span class="proj-tag">WEBHOOKS</span>
+
+        <!-- Card 2 -->
+        <div class="arch-card rounded-lg p-6 flex flex-col justify-between inspectable"
+          data-label="FLAGSHIP_RAG_CHATBOT">
+          <div>
+            <div
+              class="inline-block bg-brand/15 border border-brand/30 text-brand font-mono text-[9px] uppercase px-2 py-0.5 rounded mb-4">
+              LLM_NLP // COMMERCIAL AI
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Liquid Context AI Chatbot</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Intelligent conversational agent powered by Retrieval-Augmented Generation (RAG) with deep context memory
+              and token streaming.
+            </p>
+            <ul class="space-y-1.5 text-xs text-zinc-300 mb-6 font-mono">
+              <li class="flex items-center gap-2"><span class="text-brand">•</span> Vector DB Semantic Memory</li>
+              <li class="flex items-center gap-2"><span class="text-brand">•</span> WebSocket Real-Time Token Stream
+              </li>
+              <li class="flex items-center gap-2"><span class="text-brand">•</span> Multi-Model LLM Routing</li>
+            </ul>
+          </div>
+          <div
+            class="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[10px] text-zinc-500">
+            <span>OpenAI API</span>
+            <span>WebSockets · Vector DB</span>
           </div>
         </div>
-      </div>
-      <!-- Proj 4 -->
-      <div class="glass proj-card reveal d3">
-        <div class="proj-img-wrap">
-          <img src="img/ecom.jpeg" loading="lazy" alt="Commerce Engine">
-          <div class="proj-overlay"></div>
-          <div class="proj-badge" style="color:var(--warning);border-color:rgba(255,208,0,0.2);">ARCHITECTURE</div>
-          <div class="proj-scan" style="background:linear-gradient(90deg,transparent,var(--warning),transparent);"></div>
-        </div>
-        <div class="proj-body">
-          <div class="proj-title">SCALABLE COMMERCE ENGINE</div>
-          <div class="proj-desc">Headless e-commerce backend for high concurrency. Decoupled inventory, auth, and orders into microservices with event sourcing.</div>
-          <div class="proj-tags">
-            <span class="proj-tag" style="color:var(--warning);border-color:rgba(255,208,0,0.2);">TYPESCRIPT</span>
-            <span class="proj-tag">DOCKER</span><span class="proj-tag">POSTGRESQL</span>
+
+        <!-- Card 3 -->
+        <div class="arch-card rounded-lg p-6 flex flex-col justify-between inspectable"
+          data-label="FLAGSHIP_PAYMENT_HUB">
+          <div>
+            <div
+              class="inline-block bg-brand/15 border border-brand/30 text-brand font-mono text-[9px] uppercase px-2 py-0.5 rounded mb-4">
+              FINTECH // HIGH-CONCURRENCY
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Global Payment Hub &amp; Commerce</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Unified payment routing and headless commerce engine handling Stripe, PayPal, and Crypto webhooks under
+              high load.
+            </p>
+            <ul class="space-y-1.5 text-xs text-zinc-300 mb-6 font-mono">
+              <li class="flex items-center gap-2"><span class="text-brand">•</span> Multi-Gateway Checkout Routing</li>
+              <li class="flex items-center gap-2"><span class="text-brand">•</span> Idempotent Webhook Verification</li>
+              <li class="flex items-center gap-2"><span class="text-brand">•</span> Event-Sourced Inventory Sync</li>
+            </ul>
+          </div>
+          <div
+            class="pt-4 border-t border-white/10 flex items-center justify-between font-mono text-[10px] text-zinc-500">
+            <span>Laravel</span>
+            <span>Stripe · PostgreSQL</span>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- EXPERIENCE & EDUCATION -->
-  <section id="experience">
-    <div class="sec-title reveal"><span>MISSION_LOG</span><div class="sec-title-line"></div></div>
-    <div class="exp-grid">
-      <div class="reveal">
-        <div class="nav-section-label" style="padding:0 0 20px;">// FIELD_EXPERIENCE</div>
-        <div class="timeline">
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">2023 — PRESENT</div>
-            <div class="tl-title">FREELANCE FULL-STACK DEVELOPER</div>
-            <div class="tl-desc">Built CMS platforms, eCommerce systems, dashboards, AI web apps, and management systems for diverse global clients with high delivery standards.</div>
+      </div>
+    </section>
+
+    <!-- 4. THE SYSTEMS MATRIX (Filterable Modules, Services & Credentials) -->
+    <section id="matrix" class="py-20 border-t border-white/10">
+      <div class="mb-8 inspectable inline-block p-2" data-label="SEC_HEADER_MATRIX">
+        <div class="font-mono text-[10px] tracking-widest uppercase text-brand mb-2">ENGINEERING INDEX</div>
+        <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white">The Systems Matrix</h2>
+        <p class="text-zinc-400 text-sm mt-2">Specialized service modules, technical arsenal, and verified field
+          reports.</p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex flex-wrap gap-2 mb-8 inspectable p-1" data-label="MATRIX_FILTER_BAR">
+        <button onclick="filterMatrix('all')" data-filter="all"
+          class="matrix-tab bg-brand text-white font-mono text-xs px-4 py-2 rounded transition-all">
+          All Systems (9)
+        </button>
+        <button onclick="filterMatrix('services')" data-filter="services"
+          class="matrix-tab bg-zinc-900 text-zinc-400 hover:text-white border border-white/10 font-mono text-xs px-4 py-2 rounded transition-all">
+          Service Modules (4)
+        </button>
+        <button onclick="filterMatrix('stack')" data-filter="stack"
+          class="matrix-tab bg-zinc-900 text-zinc-400 hover:text-white border border-white/10 font-mono text-xs px-4 py-2 rounded transition-all">
+          Tech Arsenal (3)
+        </button>
+        <button onclick="filterMatrix('intel')" data-filter="intel"
+          class="matrix-tab bg-zinc-900 text-zinc-400 hover:text-white border border-white/10 font-mono text-xs px-4 py-2 rounded transition-all">
+          Field Reports &amp; Logs (2)
+        </button>
+      </div>
+
+      <!-- Matrix Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="matrixGrid">
+
+        <!-- Item 1 -->
+        <div class="matrix-item arch-card p-5 rounded flex flex-col justify-between inspectable" data-cat="services"
+          data-label="SYS_FRONTEND_OPS">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[10px] mb-2">
+              <span class="text-brand uppercase">FRONTEND_OPS</span>
+              <span class="text-zinc-500">MOD_01</span>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">Precision React &amp; Tailwind UI</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Pixel-perfect, blazing-fast interfaces built with React.js, TypeScript, Tailwind CSS, and custom
+              interactive canvas animations.
+            </p>
           </div>
-          <div class="tl-item">
-            <div class="tl-dot" style="background:rgba(0,240,255,0.2);border-color:var(--secondary);box-shadow:0 0 10px rgba(0,240,255,0.3);"></div>
-            <div class="tl-date" style="color:var(--secondary);">2023 — PRESENT</div>
-            <div class="tl-title">UNIVERSITY PROJECTS</div>
-            <div class="tl-desc">Developed robust DBMS, interactive dashboards, and web tools using Laravel and React for academic and research initiatives.</div>
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5 font-mono text-[10px] text-zinc-400">
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">React</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Tailwind</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">UI/UX</span>
           </div>
         </div>
-      </div>
-      <div id="education" class="reveal d1">
-        <div class="nav-section-label" style="padding:0 0 20px;">// TRAINING_RECORDS</div>
-        <div class="glass edu-card">
-          <div class="corner-tl"></div>
-          <div class="edu-title">BS. SOFTWARE ENGINEERING</div>
-          <div class="edu-org">UNIVERSITY OF SWAT // 2023 — PRESENT</div>
+
+        <!-- Item 2 -->
+        <div class="matrix-item arch-card p-5 rounded flex flex-col justify-between inspectable" data-cat="services"
+          data-label="SYS_BACKEND_OPS">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[10px] mb-2">
+              <span class="text-brand uppercase">BACKEND_SYSTEMS</span>
+              <span class="text-zinc-500">MOD_02</span>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">Scalable Laravel &amp; Node Architectures</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              High-throughput REST &amp; GraphQL APIs, relational database schema design, authentication, and
+              microservice orchestration.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5 font-mono text-[10px] text-zinc-400">
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Laravel</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Node.js</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">PostgreSQL</span>
+          </div>
         </div>
-        <div class="glass edu-card" style="border-left-color:var(--secondary);">
-          <div class="corner-tl"></div>
-          <div class="edu-title">CERTIFIED WEB DEVELOPER</div>
-          <div class="edu-org">FREELANCE / ONLINE // 2023</div>
+
+        <!-- Item 3 -->
+        <div class="matrix-item arch-card p-5 rounded flex flex-col justify-between inspectable" data-cat="services"
+          data-label="SYS_AI_ENHANCE">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[10px] mb-2">
+              <span class="text-brand uppercase">AI_ENHANCEMENT</span>
+              <span class="text-zinc-500">MOD_03</span>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">LLM Pipelines &amp; RAG Automation</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Custom OpenAI integrations, context-aware chatbots, diffusion image pipelines, and automated business
+              intelligence workflows.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5 font-mono text-[10px] text-zinc-400">
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">OpenAI API</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">RAG</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Vector DB</span>
+          </div>
         </div>
-        <div class="glass edu-card" style="border-left-color:var(--accent);">
-          <div class="corner-tl"></div>
-          <div class="edu-title">AI & ML FUNDAMENTALS</div>
-          <div class="edu-org">SELF-DIRECTED STUDY // 2024</div>
+
+        <!-- Item 4 -->
+        <div class="matrix-item arch-card p-5 rounded flex flex-col justify-between inspectable" data-cat="services"
+          data-label="SYS_API_INTEGRATION">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[10px] mb-2">
+              <span class="text-brand uppercase">API_INTEGRATION</span>
+              <span class="text-zinc-500">MOD_04</span>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">Fintech Gateways &amp; Mobile-First</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Seamless third-party webhooks, Stripe/PayPal payment hubs, CRM synchronization, and responsive PWA
+              deployments.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5 font-mono text-[10px] text-zinc-400">
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Stripe</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Webhooks</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">PWA</span>
+          </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="matrix-item arch-card p-5 rounded flex flex-col justify-between inspectable" data-cat="stack"
+          data-label="ARSENAL_FRONTEND">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[10px] mb-2">
+              <span class="text-brand uppercase">TECH_ARSENAL</span>
+              <span class="text-zinc-500">STACK_01</span>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">Frontend &amp; Interface Engineering</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              HTML5, CSS3, JavaScript ES6+, TypeScript, React.js, Tailwind CSS, and Figma Design Systems for dark luxury
+              interfaces.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5 font-mono text-[10px] text-zinc-400">
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">TypeScript</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">React 18</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Figma</span>
+          </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="matrix-item arch-card p-5 rounded flex flex-col justify-between inspectable" data-cat="stack"
+          data-label="ARSENAL_BACKEND">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[10px] mb-2">
+              <span class="text-brand uppercase">TECH_ARSENAL</span>
+              <span class="text-zinc-500">STACK_02</span>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">Server, Database &amp; Cloud Ops</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Laravel (PHP), Node.js, MySQL, PostgreSQL, MongoDB, Redis caching, Docker containerization, Git/GitHub,
+              and AWS Cloud.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5 font-mono text-[10px] text-zinc-400">
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Laravel</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Docker</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Redis</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">AWS</span>
+          </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="matrix-item arch-card p-5 rounded flex flex-col justify-between inspectable" data-cat="stack"
+          data-label="MISSION_TIMELINE">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[10px] mb-2">
+              <span class="text-brand uppercase">MISSION_LOG</span>
+              <span class="text-zinc-500">2023 — PRESENT</span>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">Field Experience &amp; Education</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-4">
+              Freelance Full-Stack Developer delivering global SaaS &amp; AI platforms. BS Software Engineering
+              candidate at University of Swat.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5 font-mono text-[10px] text-zinc-400">
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">University of Swat</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Global Freelance</span>
+          </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="matrix-item arch-card p-5 rounded flex flex-col justify-between inspectable" data-cat="intel"
+          data-label="REPORT_TECHCORP">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[10px] mb-2">
+              <span class="text-brand uppercase">FIELD_REPORT // ★★★★★</span>
+              <span class="text-zinc-500">VERIFIED</span>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">CTO // TECHCORP_USA &amp; AI_STARTUP</h3>
+            <p class="text-xs text-zinc-400 italic leading-relaxed mb-4">
+              "Saif delivered a blazing fast dashboard and RAG AI chatbot ahead of schedule. His attention to UI quality
+              and clean LLM architecture is on another level."
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5 font-mono text-[10px] text-zinc-400">
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">5.0 Rating</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Executive Endorsement</span>
+          </div>
+        </div>
+
+        <!-- Item 9 -->
+        <div class="matrix-item arch-card p-5 rounded flex flex-col justify-between inspectable" data-cat="intel"
+          data-label="REPORT_ECOMMERCE">
+          <div>
+            <div class="flex items-center justify-between font-mono text-[10px] mb-2">
+              <span class="text-brand uppercase">FIELD_REPORT // ★★★★★</span>
+              <span class="text-zinc-500">VERIFIED</span>
+            </div>
+            <h3 class="text-base font-bold text-white mb-2">ENGINEERING_LEAD // E-COMMERCE</h3>
+            <p class="text-xs text-zinc-400 italic leading-relaxed mb-4">
+              "Our e-commerce platform handles 10x more load after Saif's microservices refactor. Exceptional backend
+              engineering skills."
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/5 font-mono text-[10px] text-zinc-400">
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">10x Concurrency</span>
+            <span class="bg-zinc-900 px-2 py-0.5 rounded">Microservices</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. DIRECT DISPATCH / CONTACT SECTION -->
+    <section id="contact" class="py-24 border-t border-white/10 text-center relative">
+      <div class="max-w-2xl mx-auto space-y-6">
+        <div class="font-mono text-[10px] tracking-widest uppercase text-brand">DIRECT DISPATCH</div>
+
+        <h2 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-[1.05] inspectable p-3"
+          data-label="CONTACT_HEADLINE">
+          Let's Architect Something Extraordinary.
+        </h2>
+
+        <p class="text-zinc-400 text-sm sm:text-base leading-relaxed inspectable p-2" data-label="CONTACT_SUBTEXT">
+          Available for full-stack web applications, custom AI &amp; LLM integrations, scalable Laravel/React platforms,
+          and technical advisory worldwide.
+        </p>
+
+        <!-- Email Copy & Dispatch Bar -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4 inspectable p-3"
+          data-label="DISPATCH_TERMINAL">
+          <button onclick="copyEmail()"
+            class="w-full sm:w-auto bg-zinc-900 hover:bg-zinc-800 border border-white/15 px-5 py-3.5 rounded font-mono text-xs text-zinc-200 flex items-center justify-center gap-2.5 transition-all">
+            <i class="ph ph-copy text-brand"></i>
+            <span id="emailText">saifulislam.git@gmail.com</span>
+          </button>
+
+          <a href="mailto:saifulislam.git@gmail.com"
+            class="w-full sm:w-auto bg-brand hover:bg-brandDark text-white font-mono text-xs font-semibold uppercase tracking-wider px-6 py-3.5 rounded flex items-center justify-center gap-2 shadow-[0_0_30px_rgba(255,46,26,0.4)] transition-all">
+            <i class="ph-bold ph-paper-plane-tilt"></i> Dispatch Message
+          </a>
+        </div>
+
+        <!-- Social & Comms Links -->
+        <div
+          class="flex flex-wrap items-center justify-center gap-6 pt-6 font-mono text-xs text-zinc-400 inspectable p-2"
+          data-label="SOCIAL_LINKS">
+          <a href="https://github.com/saifulislaam" target="_blank"
+            class="hover:text-white flex items-center gap-1.5 transition-colors">
+            <i class="ph ph-github-logo text-brand"></i> github.com/saifulislaam
+          </a>
+          <a href="https://www.linkedin.com/in/saifxeven/" target="_blank"
+            class="hover:text-white flex items-center gap-1.5 transition-colors">
+            <i class="ph ph-linkedin-logo text-brand"></i> linkedin.com/in/saifxeven
+          </a>
+          <a href="tel:+923442864308" class="hover:text-white flex items-center gap-1.5 transition-colors">
+            <i class="ph ph-phone text-brand"></i> +92 344 2864308
+          </a>
+        </div>
+
+        <div class="pt-12 font-mono text-[10px] text-zinc-600">
+          © 2026 Saif ul Islam. Engineered from first principles in Pakistan // All Nodes Secured.
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- TESTIMONIALS -->
-  <section id="testimonials">
-    <div class="sec-title reveal"><span>FIELD_REPORTS</span><div class="sec-title-line"></div></div>
-    <div class="test-grid">
-      <div class="glass test-card reveal">
-        <div class="corner-tl"></div>
-        <div class="test-stars">★★★★★</div>
-        <div class="test-text">"Saif delivered a blazing fast dashboard ahead of schedule. His attention to detail and UI quality is on another level. Highly recommended."</div>
-        <div class="test-author">........</div>
-        <div class="test-role">CTO // TECHCORP_USA</div>
-      </div>
-      <div class="glass test-card reveal d1">
-        <div class="corner-tl"></div>
-        <div class="test-stars">★★★★★</div>
-        <div class="test-text">"The AI chatbot he built for us exceeded expectations. Deep understanding of LLMs and clean code architecture. Will hire again."</div>
-        <div class="test-author">......</div>
-        <div class="test-role">FOUNDER // AI_STARTUP</div>
-      </div>
-      <div class="glass test-card reveal d2">
-        <div class="corner-tl"></div>
-        <div class="test-stars">★★★★★</div>
-        <div class="test-text">"Our e-commerce platform handles 10x more load after Saif's microservices refactor. Exceptional backend engineering skills."</div>
-        <div class="test-author">..........</div>
-        <div class="test-role">ENGINEERING_LEAD // E-COMMERCE</div>
-      </div>
-    </div>
-  </section>
+  </main>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="sec-title reveal"><span>OPEN_COMMS_CHANNEL</span><div class="sec-title-line"></div></div>
-    <div class="glass contact-wrap reveal">
-      <div class="corner-tl"></div>
-      <div class="classified-tag" style="margin:0 auto 20px;"><i class="ph ph-shield-check" style="font-size:10px;"></i>SECURE_CHANNEL_AVAILABLE</div>
-      <div class="contact-icon"><i class="ph ph-envelope-simple-open"></i></div>
-      <div class="contact-h2">INITIATE HANDSHAKE</div>
-      <p class="contact-p">Open a secure comms channel for freelance contracts, enterprise deployments, or technical collaborations. Response within 24 mission hours.</p>
-      <div class="contact-btns">
-        <a href="mailto:saifulislam.git@gmail.com" class="cmd-btn"><i class="ph ph-paper-plane-right"></i> SEND_MESSAGE</a>
-        <a href="chat.html" class="cmd-btn cmd-btn-ghost"><i class="ph ph-robot"></i> AI_CHATBOT</a>
-      </div>
-    </div>
-  </section>
+  <!-- =================== BOTTOM FLOATING MULTI-AGENT CONTROL DOCK =================== -->
+  <div class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-md">
+    <div
+      class="bg-[#0D0D12]/95 backdrop-blur-xl border border-white/15 rounded-full px-4 py-2 flex items-center justify-between shadow-[0_10px_40px_rgba(0,0,0,0.85)]">
 
-</main>
+      <!-- Overlapping Agent Color Dots + Count -->
+      <div class="flex items-center gap-2.5">
+        <div class="flex -space-x-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#FF2E1A] ring-2 ring-[#0D0D12]"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-[#00F0FF] ring-2 ring-[#0D0D12]"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-[#10B981] ring-2 ring-[#0D0D12]"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B] ring-2 ring-[#0D0D12]"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-[#A855F7] ring-2 ring-[#0D0D12]"></span>
+        </div>
+        <span class="font-mono text-[11px] font-semibold text-zinc-200">20 agents</span>
+      </div>
 
-<!-- =================== FOOTER =================== -->
-<div style="position:relative;z-index:10;" id="footerWrap">
-<div class="tech-bar" style="margin-left:0;" id="techBar">
-  <div class="tech-logo" style="color:#E34F26;"><i class="ph ph-file-html" style="font-size:30px;"></i><span>HTML5</span></div>
-  <div class="tech-logo" style="color:#1572B6;"><i class="ph ph-file-css" style="font-size:30px;"></i><span>CSS3</span></div>
-  <div class="tech-logo" style="color:#F7DF1E;"><i class="ph ph-file-js" style="font-size:30px;"></i><span>JS</span></div>
-  <div class="tech-logo" style="color:#61DAFB;"><i class="ph ph-atom" style="font-size:30px;"></i><span>REACT</span></div>
-  <div class="tech-logo" style="color:#38BDF8;"><i class="ph ph-waves" style="font-size:30px;"></i><span>TAILWIND</span></div>
-  <div class="tech-logo" style="color:#339933;"><i class="ph ph-hexagon" style="font-size:30px;"></i><span>NODE</span></div>
-  <div class="tech-logo" style="color:#FF2D20;"><i class="ph ph-fire" style="font-size:30px;"></i><span>LARAVEL</span></div>
-  <div class="tech-logo" style="color:#F24E1E;"><i class="ph ph-figma-logo" style="font-size:30px;"></i><span>FIGMA</span></div>
-</div>
-<footer>
-  <div class="footer-grid">
-    <div>
-      <div class="footer-logo"><i class="ph ph-terminal-window"></i>SAIF_OPS</div>
-      <p class="footer-desc">Architecting intelligent, high-performance web systems. Military-grade reliability meets cinematic design.</p>
-      <div style="display:flex;gap:10px;">
-        <a href="https://github.com/saifulislaam" target="_blank" class="sb-social-btn"><i class="ph ph-github-logo"></i></a>
-        <a href="https://www.linkedin.com/in/saifxeven/" target="_blank" class="sb-social-btn" style="border-color:rgba(0,240,255,0.15);color:rgba(0,240,255,0.5);"><i class="ph ph-linkedin-logo"></i></a>
-        <a href="#" class="sb-social-btn" style="border-color:rgba(122,0,255,0.2);color:rgba(122,0,255,0.6);"><i class="ph ph-instagram-logo"></i></a>
+      <!-- Mode Indicator / Toggle (Touring vs Swarm around cursor) -->
+      <div class="flex items-center gap-1 bg-zinc-900/90 border border-white/10 rounded-full p-0.5">
+        <button id="btnTouring" onclick="setAgentMode('touring')"
+          class="px-2.5 py-1 rounded-full font-mono text-[10px] bg-brand text-white transition-all">
+          Touring
+        </button>
+        <button id="btnSwarm" onclick="setAgentMode('swarm')"
+          class="px-2.5 py-1 rounded-full font-mono text-[10px] text-zinc-400 hover:text-white transition-all">
+          Swarm
+        </button>
       </div>
-    </div>
-    <div>
-      <div class="footer-h">NAVIGATION</div>
-      <ul class="footer-links">
-        <li><a href="#hero">_HERO</a></li>
-        <li><a href="#about">_ABOUT</a></li>
-        <li><a href="#services">_SERVICES</a></li>
-        <li><a href="chat.html"><i class="ph ph-robot" style="color:var(--primary);"></i>AI_CHATBOT</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-h">COMMS_HUB</div>
-      <ul class="footer-links">
-        <li><a href="mailto:saifulislam.git@gmail.com"><i class="ph ph-envelope-simple" style="color:var(--primary);"></i>saifulislam.git@gmail.com</a></li>
-        <li><a href="tel:+923442864308"><i class="ph ph-phone" style="color:var(--secondary);"></i>+92 344 2864308</a></li>
-        <li style="display:flex;align-items:center;gap:8px;padding-top:8px;"><div class="sb-hud-dot" style="width:6px;height:6px;"></div><span style="font-family:var(--font-mono);font-size:9px;color:var(--primary);letter-spacing:2px;">AVAILABLE_FOR_HIRE</span></li>
-      </ul>
-    </div>
-    <div>
-      <div class="footer-h">DEPLOYMENTS</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:180px;">
-        <a href="#projects" style="display:block;aspect-ratio:1;border:1px solid rgba(0,255,102,0.1);border-radius:2px;overflow:hidden;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(0,255,102,0.4)'" onmouseout="this.style.borderColor='rgba(0,255,102,0.1)'"><img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.3);transition:filter 0.3s;" onmouseover="this.style.filter='saturate(0.8)'" onmouseout="this.style.filter='saturate(0.3)'"></a>
-        <a href="#projects" style="display:block;aspect-ratio:1;border:1px solid rgba(0,255,102,0.1);border-radius:2px;overflow:hidden;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(0,255,102,0.4)'" onmouseout="this.style.borderColor='rgba(0,255,102,0.1)'"><img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.3);transition:filter 0.3s;" onmouseover="this.style.filter='saturate(0.8)'" onmouseout="this.style.filter='saturate(0.3)'"></a>
-        <a href="#projects" style="display:block;aspect-ratio:1;border:1px solid rgba(0,255,102,0.1);border-radius:2px;overflow:hidden;transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(0,255,102,0.4)'" onmouseout="this.style.borderColor='rgba(0,255,102,0.1)'"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=100&auto=format&fit=crop" style="width:100%;height:100%;object-fit:cover;filter:saturate(0.3);transition:filter 0.3s;" onmouseover="this.style.filter='saturate(0.8)'" onmouseout="this.style.filter='saturate(0.3)'"></a>
+
+      <!-- Pause / Resume & Drag Hint -->
+      <div class="flex items-center gap-2">
+        <button id="btnPauseAgents" onclick="togglePauseAgents()" title="Pause/Resume Autonomous Agents"
+          class="w-6 h-6 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-white/10 flex items-center justify-center text-zinc-300 transition-colors">
+          <i id="pauseIcon" class="ph-fill ph-pause text-xs"></i>
+        </button>
       </div>
+
     </div>
   </div>
-  <div class="footer-bottom">
-    <span>© 2026 SAIF_UL_ISLAM // ALL_NODES_SECURED</span>
-    <div style="display:flex;gap:16px;">
-      <a href="#" style="color:inherit;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">PRIVACY_POLICY</a>
-      <a href="#" style="color:inherit;text-decoration:none;transition:color 0.3s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">TERMS_OF_SERVICE</a>
-    </div>
+
+  <!-- =================== TOAST NOTIFICATION =================== -->
+  <div id="toastMsg"
+    class="fixed top-20 right-6 z-50 bg-zinc-900 border border-brand text-white font-mono text-xs px-4 py-2.5 rounded shadow-2xl opacity-0 pointer-events-none transition-opacity duration-300">
+    Copied to clipboard!
   </div>
-</footer>
-</div><script src="js/script.js">
-</script>
+
+  <!-- =================== JAVASCRIPT ENGINE =================== -->
+  <script src="js/script.js">
+
+  </script>
 </body>
+
 </html>
